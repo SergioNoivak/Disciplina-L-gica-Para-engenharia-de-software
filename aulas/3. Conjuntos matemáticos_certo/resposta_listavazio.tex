@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor, 
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Respostas da Lista — Provas com Conjuntos}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+
+\section*{Resolução dos Exercícios}
+
+\begin{block}{Exercício 1 — Inexistência de elementos no vazio}
+\textbf{Provar que não existe elemento pertencente ao conjunto vazio.} \\
+Pela definição axiomática do conjunto vazio, temos o fato fundamental: $\forall x, \; x \notin \varnothing$. Isso significa que para qualquer $x$ no universo de discurso, a afirmação $x \in \varnothing$ é falsa. Portanto, por definição, não existe nenhum elemento que pertença a ele.
+\end{block}
+
+\begin{block}{Exercício 2 — Inclusão no vazio implies no elements}
+\textbf{Demonstre que não existe conjunto $A$ tal que $A \subseteq \varnothing$ e $A$ possua elementos.} \\
+Suponha, por absurdo, que existe um conjunto $A$ tal que $A \subseteq \varnothing$ e $A$ possui pelo menos um elemento $k$. \\
+Pela definição de inclusão, se $k \in A$, então $k \in \varnothing$. \\
+Contudo, pelo fato fundamental (Ex. 1), $k \notin \varnothing$ para qualquer $k$. \\
+Isso gera uma contradição. Portanto, se $A \subseteq \varnothing$, $A$ não pode possuir elementos.
+\end{block}
+
+\begin{block}{Exercício 3 — Contradição na interseção com o vazio}
+\textbf{Prove que, se $x \in A \cap \varnothing$, então ocorre uma contradição.} \\
+$x \in A \cap \varnothing \iff (x \in A \land x \in \varnothing)$. \\
+Pelo fato fundamental, $x \in \varnothing$ é falso. \\
+Assim, a afirmação $(x \in A \land \text{Falso})$ é equivalente a Falso. \\
+A suposição de que existe tal $x$ leva diretamente ao valor lógico Falso, caracterizando uma contradição.
+\end{block}
+
+\begin{block}{Exercício 4 — Inexistência de elemento comum}
+\textbf{Demonstre que, para qualquer conjunto $A$, não existe elemento comum entre $A$ e o conjunto vazio.} \\
+Um elemento comum entre $A$ e $\varnothing$ seria um elemento da interseção $A \cap \varnothing$. \\
+Vimos no Exercício 3 que a existência de tal elemento gera uma contradição. Logo, $A \cap \varnothing = \varnothing$, o que prova que não há elementos comuns.
+\end{block}
+
+\begin{block}{Exercício 5 — Verdade Vacuidade}
+\textbf{Prove que toda proposição da forma $x \in \varnothing \Rightarrow P(x)$ é verdadeira.} \\
+Em lógica proposicional, uma implicação $P \Rightarrow Q$ é verdadeira se o antecedente $P$ é falso. \\
+Como $x \in \varnothing$ é falso para qualquer $x$, o antecedente da implicação é sempre falso. \\
+Portanto, a sentença é vacuamente verdadeira, independentemente do que afirma $P(x)$.
+\end{block}
+
+\begin{block}{Exercício 6 — $A \subseteq \varnothing \implies A = \varnothing$}
+\textbf{Suponha que $A \subseteq \varnothing$. Prove que $A=\varnothing$.} \\
+Do Exercício 2, sabemos que se $A \subseteq \varnothing$, então $A$ não possui elementos. \\
+O único conjunto que não possui elementos é o conjunto vazio. Além disso, pelo Axioma da Extensionalidade, se $\forall x (x \in A \iff x \in \varnothing)$ (ambos sendo falsos), então $A = \varnothing$.
+\end{block}
+
+\begin{block}{Exercício 7 — Disjunção de conjuntos}
+\textbf{Se $A \cap B=\varnothing$, prove que $x \in A \Rightarrow x \notin B$.} \\
+Suponha $x \in A$. \\
+Se $x \in B$ fosse verdadeiro, então teríamos $x \in A \land x \in B$, logo $x \in A \cap B$. \\
+Mas foi dado que $A \cap B = \varnothing$, logo $x \notin A \cap B$. \\
+Por contradição, se $x \in A$, então é necessário que $x \notin B$.
+\end{block}
+
+\begin{block}{Exercício 8 — Implicação vacuidade na inclusão}
+\textbf{Prove que $(A \cap \varnothing) \subseteq B$ para qualquer $B$.} \\
+Sabemos que $A \cap \varnothing = \varnothing$. \\
+A afirmação torna-se $\varnothing \subseteq B$. \\
+Como vimos anteriormente (e no Exercício 5), a definição de inclusão $\forall x (x \in \varnothing \Rightarrow x \in B)$ é uma implicação com antecedente falso, sendo portanto verdadeira para qualquer $B$.
+\end{block}
+
+\begin{block}{Exercício 9 — União com interseção vazia}
+\textbf{Demonstre que $A \cup (A \cap \varnothing)=A$.} \\
+1. $A \cap \varnothing = \varnothing$ (pelo Ex. 4). \\
+2. Então $A \cup (A \cap \varnothing) = A \cup \varnothing$. \\
+3. $x \in A \cup \varnothing \iff (x \in A \lor x \in \varnothing)$. \\
+4. Como $x \in \varnothing$ é Falso, $(x \in A \lor \text{Falso}) \equiv x \in A$. \\
+Logo, o conjunto é igual a $A$.
+\end{block}
+
+ 
+\begin{block}{Exercício 10 — Unicidade do conjunto vazio}
+\textbf{Prove a unicidade do conjunto vazio.} \\
+Suponha que existam dois conjuntos vazios, $\varnothing_1$ e $\varnothing_2$. \\
+Como $\varnothing_1$ é vazio, para qualquer conjunto $X$, $\varnothing_1 \subseteq X$. Escolhendo $X = \varnothing_2$, temos $\varnothing_1 \subseteq \varnothing_2$. \\
+Como $\varnothing_2$ é vazio, para qualquer conjunto $X$, $\varnothing_2 \subseteq X$. Escolhendo $X = \varnothing_1$, temos $\varnothing_2 \subseteq \varnothing_1$. \\
+Pela propriedade da antissimetria da inclusão, se $\varnothing_1 \subseteq \varnothing_2$ e $\varnothing_2 \subseteq \varnothing_1$, então $\varnothing_1 = \varnothing_2$.
+\end{block}
+
+\end{document}

@@ -1,0 +1,1329 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova} 
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox} 
+\usepackage{lmodern}
+
+% TikZ e CircuiTikZ
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{circuitikz}
+\usetikzlibrary{arrows.meta, positioning, circuits.logic.US, calc}
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Introdução à Teoria dos Grafos
+}}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Introdução}
+
+\begin{frame}
+    \frametitle{Motivação Inicial}
+    \begin{itemize}
+        \item Por que estudar Grafos?
+        \item Grafos estão em toda parte! Eles são a base matemática para modelar relacionamentos e conexões entre objetos.
+        \item Na Engenharia de Software, quase todo sistema moderno possui elementos que se comunicam ou se relacionam.
+        \item Vamos explorar algumas \textbf{aplicações reais} e como os grafos estão escondidos por trás delas.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo 1: Redes Sociais}
+    \begin{itemize}
+        \item \textbf{Vértices:} Pessoas.
+        \item \textbf{Arestas:} Amizades ou "Seguidores".
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=2cm and 2.5cm,
+            vertex/.style={circle, draw=structure, fill=structure!20, thick, minimum size=1.2cm, align=center}
+        ]
+            \node[vertex] (A) {Ana};
+            \node[vertex] (B) [above right=of A] {Bia};
+            \node[vertex] (C) [right=of B] {Carlos};
+            \node[vertex] (D) [below right=of A] {Daniel};
+            \node[vertex] (E) [right=of D] {Edu};
+
+            \draw[thick, <->] (A) -- (B) node[midway, sloped, above, font=\scriptsize] {Amigos};
+            \draw[thick, <->] (B) -- (C);
+            \draw[thick, <->] (A) -- (D);
+            \draw[thick, <->] (D) -- (E);
+            \draw[thick, <->] (B) -- (D);
+            \draw[thick, ->] (C) -- (E) node[midway, sloped, above, font=\scriptsize] {Segue};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo 2: GPS e Mapas}
+    \begin{itemize}
+        \item \textbf{Vértices:} Cidades ou Cruzamentos.
+        \item \textbf{Arestas:} Estradas, ruas ou rodovias.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=orange!80!black, fill=orange!20, thick, minimum size=1cm, align=center},
+            edge/.style={draw=gray, thick, double=gray!30, double distance=2pt}
+        ]
+            \node[vertex] (RVD) at (0,0) {Rio\\Verde};
+            \node[vertex] (JAT) at (-2,2) {Jataí};
+            \node[vertex] (GYN) at (4,1) {Goiânia};
+            \node[vertex] (BSB) at (6,3) {Brasília};
+            \node[vertex] (ITZ) at (2,-1) {Itumbiara};
+
+            \draw[edge] (RVD) -- (JAT) node[midway, sloped, above, font=\scriptsize, text=black] {BR-060};
+            \draw[edge] (RVD) -- (GYN) node[midway, sloped, above, font=\scriptsize, text=black] {BR-060};
+            \draw[edge] (GYN) -- (BSB) node[midway, sloped, above, font=\scriptsize, text=black] {BR-060};
+            \draw[edge] (RVD) -- (ITZ) node[midway, sloped, below, font=\scriptsize, text=black] {BR-452};
+            \draw[edge] (GYN) -- (ITZ) node[midway, sloped, below, font=\scriptsize, text=black] {BR-153};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo 3: A Internet e Redes}
+    \begin{itemize}
+        \item \textbf{Vértices:} Roteadores, Servidores, Computadores.
+        \item \textbf{Arestas:} Conexões de rede (Cabo, Fibra, Wi-Fi).
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            router/.style={rectangle, rounded corners, draw=blue!80!black, fill=blue!10, thick, minimum size=0.8cm},
+            server/.style={rectangle, draw=purple!80!black, fill=purple!10, thick, minimum size=0.8cm},
+            pc/.style={circle, draw=teal!80!black, fill=teal!10, thick, minimum size=0.6cm}
+        ]
+            \node[router] (R1) at (0,0) {Roteador A};
+            \node[router] (R2) at (3,1) {Roteador B};
+            \node[router] (R3) at (3,-1) {Roteador C};
+            
+            \node[server] (S1) at (6,1) {Servidor Web};
+            \node[server] (S2) at (6,-1) {BD};
+            
+            \node[pc] (P1) at (-2,1) {PC 1};
+            \node[pc] (P2) at (-2,-1) {PC 2};
+
+            \draw[thick, blue] (R1) -- (R2);
+            \draw[thick, blue] (R1) -- (R3);
+            \draw[thick, blue] (R2) -- (R3);
+            
+            \draw[thick, purple] (R2) -- (S1);
+            \draw[thick, purple] (R3) -- (S2);
+            \draw[thick, purple, dashed] (S1) -- (S2);
+            
+            \draw[thick, teal, dashed] (P1) -- (R1) node[midway, sloped, above, font=\tiny, text=black] {Wi-Fi};
+            \draw[thick, teal] (P2) -- (R1) node[midway, sloped, below, font=\tiny, text=black] {Cabo};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo 4: Agricultura de Precisão (IoT)}
+    \begin{itemize}
+        \item \textbf{Vértices:} Sensores (umidade, temperatura), Drones, Estação Base.
+        \item \textbf{Arestas:} Fluxo de dados (Wireless, LoRa).
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            sensor/.style={circle, draw=green!60!black, fill=green!10, thick, minimum size=0.8cm, font=\scriptsize},
+            base/.style={rectangle, draw=red!80!black, fill=red!10, thick, minimum size=1cm, align=center},
+            drone/.style={rectangle, rounded corners, draw=gray!80!black, fill=gray!20, thick, minimum size=0.8cm, font=\scriptsize}
+        ]
+            \node[base] (B) at (0,0) {Estação\\Base};
+            
+            \node[sensor] (S1) at (-3,1.5) {Umidade};
+            \node[sensor] (S2) at (-2,-1.5) {Temp.};
+            \node[sensor] (S3) at (2,-1.5) {Nutrientes};
+            \node[sensor] (S4) at (3,0) {Clima};
+            
+            \node[drone] (D1) at (2,2) {Drone};
+
+            \draw[thick, green!60!black, -stealth, dashed] (S1) -- (B);
+            \draw[thick, green!60!black, -stealth, dashed] (S2) -- (B);
+            \draw[thick, green!60!black, -stealth, dashed] (S3) -- (B);
+            \draw[thick, green!60!black, -stealth, dashed] (S4) -- (B);
+            
+            \draw[thick, gray!80!black, stealth-stealth, dotted] (D1) -- (B);
+            \draw[thick, gray!80!black, -stealth, dotted] (S1) -- (D1);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Desenhando um Grafo: Vértices}
+    A melhor forma de entender é \textbf{desenhando no quadro}!\\
+    \vspace{0.5cm}
+    \textbf{Passo 1:} Identificar as entidades do problema. Ignoramos os detalhes visuais e representamos cada entidade como um \textbf{Vértice} (ou Nó).
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+        ]
+            \node[vertex, label=above:Entidade A] (A) at (0,2) {};
+            \node[vertex, label=left:Entidade B] (B) at (-2,0) {};
+            \node[vertex, label=right:Entidade C] (C) at (2,0) {};
+            \node[vertex, label=below:Entidade D] (D) at (0,-2) {};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Desenhando um Grafo: Arestas}
+    \textbf{Passo 2:} Identificar os relacionamentos entre as entidades e traçar linhas conectando os pares, que são chamadas de \textbf{Arestas}.
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+        ]
+            \node[vertex, label=above:Entidade A] (A) at (0,2) {};
+            \node[vertex, label=left:Entidade B] (B) at (-2,0) {};
+            \node[vertex, label=right:Entidade C] (C) at (2,0) {};
+            \node[vertex, label=below:Entidade D] (D) at (0,-2) {};
+
+            \draw[thick, -] (A) -- (B) node[midway, sloped, above, font=\scriptsize] {relação 1};
+            \draw[thick, -] (A) -- (C) node[midway, sloped, above, font=\scriptsize] {relação 2};
+            \draw[thick, -] (B) -- (D) node[midway, sloped, below, font=\scriptsize] {relação 3};
+            \draw[thick, -] (C) -- (D) node[midway, sloped, below, font=\scriptsize] {relação 4};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+
+\begin{frame}
+    \frametitle{O Poder da Abstração}
+    O que os exemplos (Redes Sociais, GPS, Internet, IoT) têm em comum?
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item \textbf{Universalidade:} O algoritmo que encontra a rota mais rápida no mapa pode ser o mesmo que encontra o caminho mais rápido para um pacote de dados.
+        \item \textbf{Foco na Estrutura:} A aparência física das coisas não importa, apenas como elas estão conectadas.
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \node (Mundo) at (-3,0) {\textbf{Problema Real}};
+            \node (Grafo) at (3,0) {\textbf{Modelo Matemático}};
+            
+            \draw[thick, ->, >=stealth] (Mundo) -- (Grafo) node[midway, above] {\textit{Abstração}};
+            
+            \node at (0, -1) {Grafos $= (V, E)$};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+
+\section{Conceito de Grafo}
+
+\begin{frame}
+    \frametitle{Conceito de Grafo: Definição Lógico-Matemática}
+    Para modelar grafos computacionalmente, recorremos à Teoria dos Conjuntos e à Lógica:
+    \vspace{0.5cm}
+    \begin{block}{Definição Formal de um Grafo Simples Não Direcionado}
+        Um grafo é um par ordenado $G = (V, E)$, onde:
+        \begin{itemize}
+            \item $V$ é um conjunto finito e não vazio de vértices:
+            \[ V \neq \emptyset \]
+            \item $E$ é um conjunto de arestas, tal que cada aresta é um subconjunto de 2 elementos de $V$:
+            \[ E \subseteq \big\{ \{u, v\} \mid u, v \in V \land u \neq v \big\} \]
+        \end{itemize}
+    \end{block}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Isso significa que $\forall e \in E, \exists u, v \in V$ tal que $e = \{u, v\}$.
+        \item A condição $u \neq v$ formaliza a ausência de "laços" (arestas de um vértice para si mesmo) em grafos simples.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Componentes de um Grafo}
+    Qualquer grafo é formado essencialmente po1r dois conjuntos independentes:
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Um conjunto de elementos} (as entidades que queremos conectar).
+        \item \textbf{Um conjunto de ligações} (as conexões entre pares desses elementos).
+    \end{enumerate}
+    \vspace{0.5cm}
+    Chamamos esses elementos de \textbf{Vértices} e essas ligações de \textbf{Arestas}.
+\end{frame}
+
+\begin{frame}
+    \frametitle{O Conjunto de Vértices ($V$)}
+    \begin{itemize}
+        \item Denotamos o conjunto de vértices pela letra \textbf{$V$}.
+        \item $V$ é um conjunto finito e não vazio de elementos.
+        \item Cada elemento representa um "nó" no grafo.
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Entendendo os Vértices}
+        Se quisermos representar uma rede de 4 computadores, teríamos:
+        \begin{center}
+            $V = \{ \text{PC1}, \text{PC2}, \text{PC3}, \text{PC4} \}$
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{O Conjunto de Arestas ($E$)}
+    \begin{itemize}
+        \item Denotamos o conjunto de arestas pela letra \textbf{$E$} (do inglês \textit{Edges}).
+        \item Cada elemento de $E$ é um par de vértices que indica uma conexão.
+        \item As arestas representam o relacionamento entre os elementos de $V$.
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Entendendo as Arestas}
+        Se o PC1 está conectado ao PC2:
+        \begin{center}
+            $E = \{ (\text{PC1}, \text{PC2}) \}$
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{A Definição Formal}
+    Juntando os dois conjuntos, temos a definição clássica:
+    \vspace{0.8cm}
+    \begin{block}{Equação Fundamental dos Grafos}
+        \begin{center}
+            \Huge $\mathbf{G = (V, E)}$
+        \end{center}
+    \end{block}
+    \vspace{0.5cm}
+    \begin{center}
+        \Large \textbf{Onde:}
+    \end{center}
+    \begin{itemize}
+        \item \textbf{$V$} é o conjunto de \textbf{vértices};
+        \item \textbf{$E$} é o conjunto de \textbf{arestas}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo Prático: Definindo os Conjuntos}
+    Vamos aplicar a definição $G = (V,E)$ passo a passo.
+    \vspace{0.5cm}
+    \textbf{Considere:}
+    Temos quatro entidades rotuladas como A, B, C e D.
+    \vspace{0.5cm}
+    Logo, nosso conjunto de vértices é:
+    \begin{center}
+        \Large $V = \{A, B, C, D\}$
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo Prático: Definindo as Relações}
+    Agora, vamos estabelecer conexões entre essas entidades. Considere o seguinte conjunto de arestas:
+    \vspace{0.5cm}
+    \begin{center}
+        \Large $E = \{(A, B), (A, C), (B, D)\}$
+    \end{center}
+    \vspace{0.5cm}
+    Isso significa que:
+    \begin{itemize}
+        \item A está conectado com B
+        \item A está conectado com C
+        \item B está conectado com D
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Desenhando o Grafo Correspondente}
+    \textbf{Então:} $\mathbf{G = (V,E)}$ com
+    $V = \{A, B, C, D\}$ e $E = \{(A, B), (A, C), (B, D)\}$
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+        ]
+            % Vértices
+            \node[vertex] (A) at (0, 1.5) {A};
+            \node[vertex] (B) at (2, 1.5) {B};
+            \node[vertex] (C) at (0, -0.5) {C};
+            \node[vertex] (D) at (2, -0.5) {D};
+
+            % Arestas
+            \draw[thick] (A) -- (B);
+            \draw[thick] (A) -- (C);
+            \draw[thick] (B) -- (D);
+            
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\section{Direcionamento das Arestas}
+
+\begin{frame}
+    \frametitle{Direcionamento das Arestas}
+    \begin{itemize}
+        \item Até agora vimos que as arestas conectam vértices.
+        \item Mas será que \textbf{a ordem} dessa conexão importa?
+        \item Dependendo do problema que estamos modelando, a resposta é \textbf{sim} ou \textbf{não}.
+        \item Isso divide os grafos em duas categorias principais: \textbf{Direcionados} e \textbf{Não Direcionados}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Grafo Não Direcionado}
+    \begin{itemize}
+        \item As arestas \textbf{não possuem direção}.
+        \item A relação é mútua e de via dupla.
+        \item Matematicamente:
+        \begin{center}
+            \Large $(A, B) = (B, A)$
+        \end{center}
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Exemplo do Mundo Real}
+        \textbf{Amizade no Facebook:} Se Ana é amiga de Bia, obrigatoriamente Bia é amiga de Ana.
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Grafo Direcionado (Digrafo)}
+    \begin{itemize}
+        \item As arestas \textbf{possuem um sentido} (uma origem e um destino).
+        \item A relação é de mão única.
+        \item Matematicamente:
+        \begin{center}
+            \Large $(A, B) \neq (B, A)$
+        \end{center}
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Exemplos do Mundo Real}
+        \begin{itemize}
+            \item \textbf{Seguir no Instagram:} Ana pode seguir Bia, sem que Bia siga Ana.
+            \item \textbf{Ruas de mão única.}
+            \item \textbf{Fluxo de dados} em uma rede (ex: do sensor para o servidor).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Representação Visual}
+    Como diferenciamos esses grafos nos diagramas?
+    \vspace{0.5cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Não Direcionado}\\
+            (Linha Simples)
+            \vspace{0.5cm}
+            
+            \begin{tikzpicture}[
+                vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+            ]
+                \node[vertex] (A) at (0, 1.5) {A};
+                \node[vertex] (B) at (0, -1.5) {B};
+                
+                \draw[thick] (A) -- (B) node[midway, right] {$(A, B) = (B, A)$};
+            \end{tikzpicture}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Direcionado}\\
+            (Seta)
+            \vspace{0.5cm}
+            
+            \begin{tikzpicture}[
+                vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+            ]
+                \node[vertex] (A) at (0, 1.5) {A};
+                \node[vertex] (B) at (0, -1.5) {B};
+                
+                \draw[thick, -stealth] (A) -- (B) node[midway, right] {$(A, B) \neq (B, A)$};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exercício 1: Modelagem de Grafo Direcionado}
+    \textbf{Cenário:} Um sistema de rotas de entrega.
+    \vspace{0.3cm}
+    
+    Considere 4 pontos de entrega: A, B, C e D.
+    As seguintes ruas são de \textbf{mão única}:
+    \begin{itemize}
+        \item De A para B
+        \item De B para C
+        \item De C para A
+        \item De C para D
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Tarefa:} 
+    \begin{enumerate}
+        \item Defina os conjuntos $V$ (vértices) e $E$ (arestas).
+        \item Desenhe o grafo correspondente.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resposta do Exercício 1}
+    \textbf{Conjuntos Matemáticos:}
+    \begin{itemize}
+        \item $V = \{A, B, C, D\}$
+        \item $E = \{(A,B), (B,C), (C,A), (C,D)\}$
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        \textbf{Grafo Resultante:}\\
+        \vspace{0.2cm}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+        ]
+            \node[vertex] (A) at (0, 1.5) {A};
+            \node[vertex] (B) at (2, 1.5) {B};
+            \node[vertex] (C) at (2, -0.5) {C};
+            \node[vertex] (D) at (0, -0.5) {D};
+
+            \draw[thick, -stealth] (A) -- (B);
+            \draw[thick, -stealth] (B) -- (C);
+            \draw[thick, -stealth] (C) -- (A);
+            \draw[thick, -stealth] (C) -- (D);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exercício 2: Modelagem de Grafo Não Direcionado}
+    \textbf{Cenário:} Uma rede de computadores em um laboratório.
+    \vspace{0.3cm}
+    
+    Considere 5 computadores: PC1, PC2, PC3, PC4 e PC5.
+    Os seguintes cabos de rede \textbf{bidirecionais} foram conectados:
+    \begin{itemize}
+        \item Entre PC1 e PC2
+        \item Entre PC1 e PC3
+        \item Entre PC2 e PC4
+        \item Entre PC3 e PC4
+        \item Entre PC4 e PC5
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Tarefa:} 
+    \begin{enumerate}
+        \item Defina os conjuntos $V$ (vértices) e $E$ (arestas).
+        \item Desenhe o grafo correspondente.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resposta do Exercício 2}
+    \textbf{Conjuntos Matemáticos:}
+    \begin{itemize}
+        \item $V = \{PC1, PC2, PC3, PC4, PC5\}$
+        \item $E = \{(PC1,PC2), (PC1,PC3), (PC2,PC4), (PC3,PC4), (PC4,PC5)\}$
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \textbf{Grafo Resultante:}\\
+        \vspace{0.2cm}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm, font=\small}
+        ]
+            \node[vertex] (PC1) at (0, 1.5) {PC1};
+            \node[vertex] (PC2) at (2, 2.5) {PC2};
+            \node[vertex] (PC3) at (2, 0.5) {PC3};
+            \node[vertex] (PC4) at (4, 1.5) {PC4};
+            \node[vertex] (PC5) at (6, 1.5) {PC5};
+
+            \draw[thick] (PC1) -- (PC2);
+            \draw[thick] (PC1) -- (PC3);
+            \draw[thick] (PC2) -- (PC4);
+            \draw[thick] (PC3) -- (PC4);
+            \draw[thick] (PC4) -- (PC5);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\section{Representação Computacional dos Grafos}
+
+\begin{frame}
+    \frametitle{Do Papel para o Computador}
+    \begin{itemize}
+        \item Já sabemos desenhar um grafo e expressá-lo matematicamente como $G=(V,E)$.
+        \item Mas como informamos isso para um programa de computador?
+        \item O computador não "vê" o desenho. Ele precisa de estruturas de dados.
+    \end{itemize}
+    \vspace{0.5cm}
+    Existem duas estruturas principais na programação para armazenar grafos:
+    \begin{enumerate}
+        \item \textbf{Lista de Adjacência}
+        \item \textbf{Matriz de Adjacência}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{a) Lista de Adjacência}
+    \begin{itemize}
+        \item Para cada vértice do grafo, armazenamos uma \textbf{lista} contendo todos os vértices que estão conectados diretamente a ele.
+        \item Em linguagens como Python, isso é frequentemente implementado usando um \textit{Dicionário} (onde a chave é o vértice e o valor é uma lista de vizinhos).
+        \item Em C/C++ ou Java, usamos Arrays de Listas Encadeadas.
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{block}{Principal Vantagem}
+        \textbf{Eficiência de Memória:} É muito eficiente para \textbf{grafos esparsos} (grafos com muitas entidades, mas com poucas conexões entre elas).
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Exemplo: Lista de Adjacência}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+                ]
+                    \node[vertex] (A) at (0, 1.5) {A};
+                    \node[vertex] (B) at (2, 1.5) {B};
+                    \node[vertex] (C) at (0, -0.5) {C};
+                    \node[vertex] (D) at (2, -0.5) {D};
+
+                    \draw[thick] (A) -- (B);
+                    \draw[thick] (A) -- (C);
+                    \draw[thick] (B) -- (D);
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \textbf{Representação (Estilo Cormen):}
+            \vspace{0.3cm}
+            \begin{center}
+                \begin{tikzpicture}[
+                    head/.style={rectangle, draw=black, thick, minimum width=0.6cm, minimum height=0.6cm, align=center, fill=structure!20},
+                    val/.style={rectangle, draw=black, thick, minimum width=0.6cm, minimum height=0.6cm, align=center, inner sep=0pt},
+                    ptr/.style={rectangle, draw=black, thick, minimum width=0.4cm, minimum height=0.6cm, align=center, inner sep=0pt}
+                ]
+                
+                % Array
+                \node[head] (A) at (0, 1.5) {A};
+                \node[head] (B) at (0, 0.5) {B};
+                \node[head] (C) at (0, -0.5) {C};
+                \node[head] (D) at (0, -1.5) {D};
+                
+                % List A
+                \node[val, anchor=west] (A1v) at (1.0, 1.5) {B};
+                \node[ptr, anchor=west] (A1p) at (A1v.east) {};
+                \filldraw (A1p.center) circle (1.5pt);
+                
+                \node[val, anchor=west] (A2v) at (2.5, 1.5) {C};
+                \node[ptr, anchor=west] (A2p) at (A2v.east) {};
+                \draw[thick] (A2p.north west) -- (A2p.south east); % null
+                
+                \draw[thick, -stealth] (A.east) -- (A1v.west);
+                \draw[thick, -stealth] (A1p.center) -- (A2v.west);
+                
+                % List B
+                \node[val, anchor=west] (B1v) at (1.0, 0.5) {A};
+                \node[ptr, anchor=west] (B1p) at (B1v.east) {};
+                \filldraw (B1p.center) circle (1.5pt);
+                
+                \node[val, anchor=west] (B2v) at (2.5, 0.5) {D};
+                \node[ptr, anchor=west] (B2p) at (B2v.east) {};
+                \draw[thick] (B2p.north west) -- (B2p.south east);
+                
+                \draw[thick, -stealth] (B.east) -- (B1v.west);
+                \draw[thick, -stealth] (B1p.center) -- (B2v.west);
+                
+                % List C
+                \node[val, anchor=west] (C1v) at (1.0, -0.5) {A};
+                \node[ptr, anchor=west] (C1p) at (C1v.east) {};
+                \draw[thick] (C1p.north west) -- (C1p.south east);
+                
+                \draw[thick, -stealth] (C.east) -- (C1v.west);
+                
+                % List D
+                \node[val, anchor=west] (D1v) at (1.0, -1.5) {B};
+                \node[ptr, anchor=west] (D1p) at (D1v.east) {};
+                \draw[thick] (D1p.north west) -- (D1p.south east);
+                
+                \draw[thick, -stealth] (D.east) -- (D1v.west);
+                
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{b) Matriz de Adjacência}
+    \begin{itemize}
+        \item É uma tabela bidimensional (matriz) quadrada $N \times N$, onde $N$ é o número de vértices.
+        \item As linhas e colunas representam os vértices do grafo.
+        \item Preenchemos a célula $(linha, coluna)$ com \textbf{1} se existe uma aresta conectando a linha à coluna, e \textbf{0} caso contrário.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo: Matriz de Adjacência}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+                ]
+                    \node[vertex] (A) at (0, 1.5) {A};
+                    \node[vertex] (B) at (2, 1.5) {B};
+                    \node[vertex] (C) at (0, -0.5) {C};
+                    \node[vertex] (D) at (2, -0.5) {D};
+
+                    \draw[thick] (A) -- (B);
+                    \draw[thick] (A) -- (C);
+                    \draw[thick] (B) -- (D);
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \textbf{Representação na Tabela:}
+            \vspace{0.3cm}
+            \begin{table}[]
+                \centering
+                \renewcommand{\arraystretch}{1.5}
+                \begin{tabular}{c|cccc}
+                     & \textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} \\ \hline
+                    \textbf{A} & 0 & 1 & 1 & 0 \\
+                    \textbf{B} & 1 & 0 & 0 & 1 \\
+                    \textbf{C} & 1 & 0 & 0 & 0 \\
+                    \textbf{D} & 0 & 1 & 0 & 0 \\
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Discussão: Lista vs. Matriz}
+    \begin{itemize}
+        \item \textbf{Custo de Memória:} 
+        \begin{itemize}
+            \item A \textbf{Matriz} sempre usa $N^2$ espaços de memória. Se temos 1 milhão de vértices, a matriz terá 1 trilhão de células. Desperdício para grafos não conectados.
+            \item A \textbf{Lista} só guarda as conexões reais. Ocupa muito menos memória.
+        \end{itemize}
+        \item \textbf{Aplicações Computacionais:}
+        \begin{itemize}
+            \item Usamos \textbf{Matriz} quando o grafo é muito "denso" ou quando precisamos responder em $O(1)$ se existe conexão entre $X$ e $Y$.
+            \item Usamos \textbf{Lista} no dia a dia (redes sociais, mapas), pois na vida real a maioria dos grafos é "esparso".
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Teorema do Aperto de Mãos}
+
+\begin{frame}
+    \frametitle{O Grau de um Vértice}
+    Antes de falar sobre o teorema, precisamos de uma definição simples:
+    \vspace{0.3cm}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{block}{Grau do Vértice ($deg(v)$)}
+                O \textbf{grau} de um vértice $v$ em um grafo não direcionado é o número de arestas incidentes (conectadas) a ele.
+                Denotamos por $deg(v)$ ou $d(v)$.
+            \end{block}
+            \vspace{0.3cm}
+            \textbf{Por exemplo:} Se uma pessoa tem 5 amigos em uma rede social, o grau do vértice que a representa é 5.
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm},
+                    friend/.style={circle, draw=gray, fill=gray!20, thick, minimum size=0.6cm}
+                ]
+                    \node[vertex] (V) at (0,0) {$v$};
+                    \node[friend] (F1) at (0, 1.5) {};
+                    \node[friend] (F2) at (1.4, 0.5) {};
+                    \node[friend] (F3) at (0.9, -1.2) {};
+                    \node[friend] (F4) at (-0.9, -1.2) {};
+                    \node[friend] (F5) at (-1.4, 0.5) {};
+                    
+                    \draw[thick] (V) -- (F1);
+                    \draw[thick] (V) -- (F2);
+                    \draw[thick] (V) -- (F3);
+                    \draw[thick] (V) -- (F4);
+                    \draw[thick] (V) -- (F5);
+                    
+                    \node at (0, -2) {\textbf{$deg(v) = 5$}};
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{A Lógica do Aperto de Mãos}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            Imagine uma festa onde várias pessoas apertam as mãos.
+            \begin{itemize}
+                \item Cada "aperto de mão" envolve exatamente \textbf{duas pessoas}.
+                \item Se contarmos o número total de mãos apertadas por cada pessoa individualmente e somarmos tudo, o resultado será exatamente o \textbf{dobro} do número de apertos de mão que realmente ocorreram.
+            \end{itemize}
+            \vspace{0.3cm}
+            Por quê? Porque cada aperto de mão contribui com $+1$ para a pessoa A e $+1$ para a pessoa B!
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    person/.style={circle, draw=black, fill=structure!20, thick, minimum size=0.8cm}
+                ]
+                    \node[person] (A) at (0, 2) {A};
+                    \node[person] (B) at (0, -0.5) {B};
+                    
+                    \draw[ultra thick, structure] (A) -- (B) node[midway, right=0.2cm, text=black, align=left] {1 Aperto \\ de Mão};
+                    
+                    \node[font=\small, text=structure] at (1.2, 2) {Grau: $+1$};
+                    \node[font=\small, text=structure] at (1.2, -0.5) {Grau: $+1$};
+                    
+                    \draw[->, dashed, thick, gray] (2, 0.75) -- (3, 0.75) node[right, text=black] {\textbf{Soma: 2}};
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{O Teorema do Aperto de Mãos}
+    Essa lógica simples nos leva a um dos teoremas mais fundamentais da Teoria dos Grafos, formulado por Leonhard Euler em 1736:
+    \vspace{0.5cm}
+    \begin{block}{Teorema (Handshaking Lemma)}
+        Seja $G = (V, E)$ um grafo não direcionado com $m$ arestas (ou seja, $|E| = m$). Então, a soma dos graus de todos os vértices de $V$ é igual ao dobro do número de arestas.
+        \vspace{0.3cm}
+        \begin{center}
+            \Large $\sum_{v \in V} deg(v) = 2|E|$
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo Prático}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+                ]
+                    \node[vertex] (A) at (0, 1.5) {A};
+                    \node[vertex] (B) at (2, 1.5) {B};
+                    \node[vertex] (C) at (0, -0.5) {C};
+                    \node[vertex] (D) at (2, -0.5) {D};
+
+                    \draw[thick] (A) -- (B);
+                    \draw[thick] (A) -- (C);
+                    \draw[thick] (B) -- (D);
+                    \draw[thick] (C) -- (D);
+                    \draw[thick] (A) -- (D);
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            Vamos contar os graus:
+            \begin{itemize}
+                \item $deg(A) = 3$ (conectado a B, C, D)
+                \item $deg(B) = 2$ (conectado a A, D)
+                \item $deg(C) = 2$ (conectado a A, D)
+                \item $deg(D) = 3$ (conectado a A, B, C)
+            \end{itemize}
+            \vspace{0.3cm}
+            Soma dos graus $= 3 + 2 + 2 + 3 = \mathbf{10}$ \\
+            Número de arestas $|E| = \mathbf{5}$
+            \vspace{0.3cm}
+            \\Verificando o Teorema:
+            \begin{center}
+                $10 = 2 \times 5$
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Corolário Importante}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            Uma consequência direta e muito útil do Teorema do Aperto de Mãos:
+            \vspace{0.3cm}
+            \begin{block}{Corolário}
+                Em qualquer grafo não direcionado, \textbf{o número de vértices com grau ímpar é sempre par.}
+            \end{block}
+            \vspace{0.3cm}
+            \begin{itemize}
+                \item Se houvesse um número ímpar de vértices de grau ímpar, a soma total dos graus seria um número ímpar.
+                \item Mas o Teorema garante que a soma é $2|E|$ (sempre par!).
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \textbf{Impossível!} (3 vérti. grau 1)\\
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=red!20, thick, minimum size=0.6cm}
+                ]
+                    \node[vertex, label=left:{\scriptsize deg:1}] (A) at (0, 1) {};
+                    \node[vertex, label=right:{\scriptsize deg:1}] (B) at (1.5, 1) {};
+                    \node[vertex, label=below:{\scriptsize deg:1}] (C) at (0.75, 0) {};
+                    
+                    \draw[thick] (A) -- (B);
+                    \draw[thick, dashed, red] (C) -- (0.75, 0.6);
+                    \node at (0.75, -0.8) {\footnotesize Soma $= 3$ (Ímpar)};
+                \end{tikzpicture}
+                
+                \vspace{0.5cm}
+                \textbf{Possível!} (2 vérti. grau 1)\\
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=green!20, thick, minimum size=0.6cm}
+                ]
+                    \node[vertex, label=left:{\scriptsize deg:1}] (A) at (0, 0) {};
+                    \node[vertex, label=above:{\scriptsize deg:2}] (B) at (1, 0) {};
+                    \node[vertex, label=right:{\scriptsize deg:1}] (C) at (2, 0) {};
+                    
+                    \draw[thick] (A) -- (B) -- (C);
+                    \node at (1, -0.8) {\footnotesize Soma $= 4$ (Par)};
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exercício 1: Teorema do Aperto de Mãos}
+    \textbf{Problema:} Em uma rede de computadores, existem exatamente 7 roteadores. 
+    É possível que cada um desses roteadores esteja conectado a exatamente 3 outros roteadores?
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item Utilize o Teorema do Aperto de Mãos ou seu Corolário para justificar sua resposta.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resposta do Exercício 1}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Não, isso é impossível.}
+            \vspace{0.3cm}
+            \begin{block}{Justificativa}
+                Se cada um dos 7 roteadores (vértices) estiver conectado a 3 outros, teremos 7 vértices de grau 3 (ímpar).
+                \vspace{0.2cm}\\
+                Pelo \textbf{Corolário do Teorema do Aperto de Mãos}: "O número de vértices com grau ímpar deve ser sempre PAR".
+                \vspace{0.2cm}\\
+                Como 7 é um número ímpar, não podemos ter 7 vértices com grau ímpar em nenhum grafo não direcionado.
+            \end{block}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \textbf{Tentativa Falha:}\\
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=red!20, thick, minimum size=0.5cm, inner sep=0pt}
+                ]
+                    \node[vertex] (v1) at (90:1.2) {};
+                    \node[vertex] (v2) at (38:1.2) {};
+                    \node[vertex] (v3) at (347:1.2) {};
+                    \node[vertex] (v4) at (295:1.2) {};
+                    \node[vertex] (v5) at (244:1.2) {};
+                    \node[vertex] (v6) at (192:1.2) {};
+                    \node[vertex] (v7) at (141:1.2) {};
+                    
+                    \draw[thick] (v1) -- (v2) -- (v3) -- (v4) -- (v5) -- (v6) -- (v7) -- (v1);
+                    \draw[thick] (v1) -- (v4);
+                    \draw[thick] (v2) -- (v5);
+                    \draw[thick] (v3) -- (v6);
+                    
+                    \node[draw, red, thick, circle, minimum size=0.7cm] at (v7) {};
+                    \node[text=red, font=\scriptsize, align=center] at (0, -1.8) {v7 fica só com\\grau 2!};
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exercício 2: Calculando Arestas}
+    \textbf{Problema:} Um grupo de 5 amigos se encontra em uma festa. 
+    \begin{itemize}
+        \item Duas pessoas apertaram as mãos de 4 pessoas.
+        \item As outras três pessoas apertaram as mãos de 2 pessoas.
+    \end{itemize}
+    \vspace{0.5cm}
+    Modele esse problema como um grafo. Quantos apertos de mão ocorreram no total na festa?
+    \begin{itemize}
+        \item Utilize o Teorema do Aperto de Mãos ($\sum deg(v) = 2|E|$).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resposta do Exercício 2}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Modelagem:}
+            \begin{itemize}
+                \item Vértices ($V$): as 5 pessoas.
+                \item Graus ($deg(v)$): qts apertos de mão.
+            \end{itemize}
+            \vspace{0.3cm}
+            \textbf{Soma dos graus:}
+            \begin{itemize}
+                \item 2 pessoas c/ grau 4: $2 \times 4 = 8$
+                \item 3 pessoas c/ grau 2: $3 \times 2 = 6$
+                \item $\sum deg(v) = 8 + 6 = 14$
+            \end{itemize}
+            \vspace{0.3cm}
+            \textbf{Teorema:}
+            \[ \sum deg(v) = 2|E| \]
+            \[ 14 = 2|E| \implies |E| = 7 \]
+            \textbf{Resposta:} 7 apertos de mão.
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{center}
+                \textbf{O Grafo (1 aresta = 1 aperto):}\\
+                \vspace{0.2cm}
+                \begin{tikzpicture}[
+                    p4/.style={circle, draw=black, fill=green!30, thick, minimum size=0.7cm, font=\scriptsize},
+                    p2/.style={circle, draw=black, fill=blue!20, thick, minimum size=0.7cm, font=\scriptsize}
+                ]
+                    \node[p4] (A) at (-1, 1.5) {P1};
+                    \node[p4] (B) at (1, 1.5) {P2};
+                    
+                    \node[p2] (C) at (-1.5, 0) {P3};
+                    \node[p2] (D) at (0, 0) {P4};
+                    \node[p2] (E) at (1.5, 0) {P5};
+                    
+                    \draw[thick] (A) -- (B);
+                    
+                    \draw[thick] (A) -- (C);
+                    \draw[thick] (A) -- (D);
+                    \draw[thick] (A) -- (E);
+                    
+                    \draw[thick] (B) -- (C);
+                    \draw[thick] (B) -- (D);
+                    \draw[thick] (B) -- (E);
+                \end{tikzpicture}
+                \vspace{0.2cm}\\
+                \scriptsize P1 e P2 (verde) têm grau 4.\\
+                \scriptsize P3, P4, P5 (azul) têm grau 2.\\
+                \scriptsize Contando as arestas, temos exatas 7.
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Grafos Ponderados}
+
+\begin{frame}
+    \frametitle{1. O que são Grafos Ponderados?}
+    Até agora, nossas arestas indicavam apenas \textbf{se existe ou não} uma conexão entre dois vértices.
+    \vspace{0.3cm}
+    \begin{block}{Definição}
+        Um \textbf{Grafo Ponderado} (ou valorado) é um grafo em que cada aresta possui um valor associado, chamado de \textbf{peso} ou \textbf{custo}.
+    \end{block}
+    \vspace{0.3cm}
+    Matematicamente, adicionamos uma função de peso $W$:
+    \[ G = (V, E, W) \]
+    Onde $W: E \to \mathbb{R}$ mapeia cada aresta para um número real.
+\end{frame}
+
+\begin{frame}
+    \frametitle{2. O que o "Peso" representa na vida real?}
+    O significado numérico do peso depende inteiramente do problema que estamos modelando:
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item \textbf{GPS e Mapas:} O peso pode ser a \textit{distância em km} entre duas cidades ou o \textit{tempo estimado} em minutos para percorrer a rua.
+        \item \textbf{Redes de Computadores:} O peso pode ser a \textit{latência} (ping em ms) ou a \textit{largura de banda} do link.
+        \item \textbf{Logística:} O custo financeiro para transportar carga entre dois pontos.
+        \item \textbf{Aviação:} O preço da passagem de avião.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{3. Exemplo Visual: Grafo Ponderado}
+    As arestas agora são rotuladas com seus respectivos pesos.
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+        ]
+            \node[vertex] (A) at (0, 2) {A};
+            \node[vertex] (B) at (3, 2) {B};
+            \node[vertex] (C) at (1.5, 0) {C};
+
+            \draw[thick] (A) -- (B) node[midway, above] {10};
+            \draw[thick] (A) -- (C) node[midway, sloped, above] {5};
+            \draw[thick] (B) -- (C) node[midway, sloped, above] {2};
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    \textbf{Leitura:} Ir de $A$ para $B$ diretamente tem "custo 10".
+\end{frame}
+
+\begin{frame}
+    \frametitle{4. Como representar computacionalmente?}
+    Como os computadores armazenam esse "peso"?
+    \vspace{0.5cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Lista de Adjacência:}\\
+            Guardamos pares (Destino, Peso).
+            \vspace{0.3cm}
+            \begin{center}
+                \begin{tikzpicture}[
+                    head/.style={rectangle, draw=black, thick, minimum width=0.6cm, minimum height=0.6cm, align=center, fill=structure!20},
+                    val/.style={rectangle, draw=black, thick, minimum width=0.8cm, minimum height=0.6cm, align=center, inner sep=0pt, font=\scriptsize},
+                    ptr/.style={rectangle, draw=black, thick, minimum width=0.4cm, minimum height=0.6cm, align=center, inner sep=0pt}
+                ]
+                
+                % Array
+                \node[head] (A) at (0, 1) {A};
+                \node[head] (B) at (0, 0) {B};
+                \node[head] (C) at (0, -1) {C};
+                
+                % List A
+                \node[val, anchor=west] (A1v) at (0.9, 1) {B, 10};
+                \node[ptr, anchor=west] (A1p) at (A1v.east) {};
+                \filldraw (A1p.center) circle (1.5pt);
+                
+                \node[val, anchor=west] (A2v) at (2.4, 1) {C, 5};
+                \node[ptr, anchor=west] (A2p) at (A2v.east) {};
+                \draw[thick] (A2p.north west) -- (A2p.south east); % null
+                
+                \draw[thick, -stealth] (A.east) -- (A1v.west);
+                \draw[thick, -stealth] (A1p.center) -- (A2v.west);
+                
+                % List B
+                \node[val, anchor=west] (B1v) at (0.9, 0) {A, 10};
+                \node[ptr, anchor=west] (B1p) at (B1v.east) {};
+                \filldraw (B1p.center) circle (1.5pt);
+                
+                \node[val, anchor=west] (B2v) at (2.4, 0) {C, 2};
+                \node[ptr, anchor=west] (B2p) at (B2v.east) {};
+                \draw[thick] (B2p.north west) -- (B2p.south east);
+                
+                \draw[thick, -stealth] (B.east) -- (B1v.west);
+                \draw[thick, -stealth] (B1p.center) -- (B2v.west);
+                
+                % List C
+                \node[val, anchor=west] (C1v) at (0.9, -1) {A, 5};
+                \node[ptr, anchor=west] (C1p) at (C1v.east) {};
+                \filldraw (C1p.center) circle (1.5pt);
+                
+                \node[val, anchor=west] (C2v) at (2.4, -1) {B, 2};
+                \node[ptr, anchor=west] (C2p) at (C2v.east) {};
+                \draw[thick] (C2p.north west) -- (C2p.south east);
+                
+                \draw[thick, -stealth] (C.east) -- (C1v.west);
+                \draw[thick, -stealth] (C1p.center) -- (C2v.west);
+                
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Matriz de Adjacência:}\\
+            Em vez de 1, guardamos o peso. Se não há conexão, guardamos $\infty$.
+            \vspace{0.2cm}\\
+            \begin{tabular}{c|ccc}
+                 & \textbf{A} & \textbf{B} & \textbf{C} \\ \hline
+                \textbf{A} & 0 & 10 & 5 \\
+                \textbf{B} & 10 & 0 & 2 \\
+                \textbf{C} & 5 & 2 & 0 \\
+            \end{tabular}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{5. Exercício de Modelagem}
+    \textbf{Cenário:} Malha aérea e preços de passagens.\\
+    Considere 4 cidades: São Paulo (SP), Rio de Janeiro (RJ), Curitiba (CTB) e Belo Horizonte (BH).
+    \vspace{0.3cm}
+    Temos as seguintes opções de voos diretos e seus preços:
+    \begin{itemize}
+        \item SP $\leftrightarrow$ RJ: R\$ 500
+        \item SP $\leftrightarrow$ BH: R\$ 250
+        \item SP $\leftrightarrow$ CTB: R\$ 200
+        \item CTB $\leftrightarrow$ RJ: R\$ 150
+        \item BH $\leftrightarrow$ RJ: R\$ 300
+    \end{itemize}
+    \vspace{0.3cm}
+    \textbf{Tarefa:} Modele esse cenário desenhando um \textbf{grafo ponderado não direcionado}.
+\end{frame}
+
+\begin{frame}
+    \frametitle{6. Resposta do Exercício de Modelagem}
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=1cm, font=\small}
+        ]
+            \node[vertex] (SP) at (0, 1.5) {SP};
+            \node[vertex] (RJ) at (4, 1.5) {RJ};
+            \node[vertex] (BH) at (2, 3.5) {BH};
+            \node[vertex] (CTB) at (2, -0.5) {CTB};
+
+            \draw[thick] (SP) -- (RJ) node[midway, below] {500};
+            \draw[thick] (SP) -- (BH) node[midway, sloped, above] {250};
+            \draw[thick] (SP) -- (CTB) node[midway, sloped, below] {200};
+            \draw[thick] (BH) -- (RJ) node[midway, sloped, above] {300};
+            \draw[thick] (CTB) -- (RJ) node[midway, sloped, below] {150};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+    \frametitle{7. Exercício: O Caminho Mais Curto (Barato)}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    scale=0.8, transform shape,
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=1cm}
+                ]
+                    \node[vertex] (SP) at (0, 1.5) {SP};
+                    \node[vertex] (RJ) at (4, 1.5) {RJ};
+                    \node[vertex] (BH) at (2, 3.5) {BH};
+                    \node[vertex] (CTB) at (2, -0.5) {CTB};
+
+                    \draw[thick] (SP) -- (RJ) node[midway, below] {500};
+                    \draw[thick] (SP) -- (BH) node[midway, sloped, above] {250};
+                    \draw[thick] (SP) -- (CTB) node[midway, sloped, below] {200};
+                    \draw[thick] (BH) -- (RJ) node[midway, sloped, above] {300};
+                    \draw[thick] (CTB) -- (RJ) node[midway, sloped, below] {150};
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            Um dos problemas mais famosos em Computação é encontrar o "Caminho Mais Curto" (\textit{Shortest Path}).
+            \vspace{0.5cm}
+            
+            \textbf{Pergunta:}\\
+            Qual é a forma mais barata de viajar de \textbf{São Paulo (SP)} para o \textbf{Rio de Janeiro (RJ)}?
+            \vspace{0.3cm}
+            \begin{itemize}
+                \item É o voo direto?
+                \item Ou é fazer conexões?
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Aplicação: Malhas de Resistores}
+
+\begin{frame}
+    \frametitle{Circuitos Elétricos como Grafos}
+    Na engenharia elétrica e eletrônica, \textbf{qualquer circuito} pode ser analisado usando a Teoria dos Grafos.
+    \vspace{0.5cm}
+    \begin{block}{Modelagem de um Circuito}
+        \begin{itemize}
+            \item \textbf{Vértices ($V$):} São os \textbf{nós} do circuito (pontos de junção onde os terminais dos componentes se encontram).
+            \item \textbf{Arestas ($E$):} São os \textbf{componentes} (resistores, capacitores, fontes) que conectam os nós.
+            \item \textbf{Pesos ($W$):} Pode ser a \textbf{resistência} em Ohms ($\Omega$) ou a \textit{condutância} ($1/R$).
+        \end{itemize}
+    \end{block}
+    \vspace{0.3cm}
+    Ao modelar um circuito como um grafo, podemos programar computadores para resolver sistemas complexos (ex: SPICE).
+\end{frame}
+
+\begin{frame}
+    \frametitle{Exemplo: Circuito vs. Grafo}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Malha de Resistores}\\
+            \vspace{0.3cm}
+            \begin{circuitikz}[scale=0.8, transform shape]
+                \draw (0,3) to[R, l=$10\Omega$, *-*] (3,3);
+                \draw (0,3) to[R, l=$5\Omega$, *-*] (0,0);
+                \draw (3,3) to[R, l=$20\Omega$, *-*] (3,0);
+                \draw (0,0) to[R, l=$15\Omega$, *-*] (3,0);
+                \draw (0,3) to[R, l=$8\Omega$] (3,0); % Diagonal
+                
+                \node[above left] at (0,3) {A};
+                \node[above right] at (3,3) {B};
+                \node[below left] at (0,0) {C};
+                \node[below right] at (3,0) {D};
+            \end{circuitikz}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Grafo Ponderado Equivalente}\\
+            \vspace{0.3cm}
+            \begin{tikzpicture}[
+                vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.6cm}
+            ]
+                \node[vertex] (A) at (0,3) {A};
+                \node[vertex] (B) at (3,3) {B};
+                \node[vertex] (C) at (0,0) {C};
+                \node[vertex] (D) at (3,0) {D};
+
+                \draw[thick] (A) -- (B) node[midway, above] {10};
+                \draw[thick] (A) -- (C) node[midway, left] {5};
+                \draw[thick] (B) -- (D) node[midway, right] {20};
+                \draw[thick] (C) -- (D) node[midway, below] {15};
+                \draw[thick] (A) -- (D) node[midway, sloped, above] {8};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\end{document}

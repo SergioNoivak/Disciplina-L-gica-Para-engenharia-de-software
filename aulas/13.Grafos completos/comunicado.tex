@@ -1,0 +1,92 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+\usepackage{setspace}
+
+\geometry{margin=2.5cm}
+
+\definecolor{darkblue}{RGB}{0,51,102}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ── Cabeçalho com logo ───────────────────────────────────────────────────────
+\noindent
+\begin{minipage}{0.22\textwidth}
+    \includegraphics[width=3cm]{Universidade_de_Rio_Verde.jpg}
+\end{minipage}
+\begin{minipage}{0.76\textwidth}
+    \centering
+    {\small\textbf{Universidade de Rio Verde --- UniRV}\\
+    Curso de Engenharia de Software\\
+    Disciplina: Lógica para Engenharia de Software}
+\end{minipage}
+
+\vspace{0.8cm}
+\noindent\rule{\linewidth}{1.5pt}
+\vspace{0.4cm}
+
+% ── Título do comunicado ─────────────────────────────────────────────────────
+\begin{center}
+    {\LARGE\bfseries COMUNICADO}\\[0.3cm]
+    {\large\color{darkblue} Ausência do Professor}
+\end{center}
+
+\vspace{0.6cm}
+
+% ── Corpo do comunicado ──────────────────────────────────────────────────────
+\begin{tcolorbox}[
+    colback=white,
+    colframe=darkblue,
+    boxrule=1.5pt,
+    arc=4mm,
+    left=10pt, right=10pt, top=10pt, bottom=10pt
+]
+\onehalfspacing
+\noindent Informamos aos alunos do Curso de \textbf{Engenharia de Software} que o professor \textbf{Me. Sergio Souza Novak} \textbf{não poderá comparecer à aula} da presente data em virtude de uma \textbf{convocação oficial da Prefeitura Municipal de Rio Verde}, para participação em reunião institucional de alinhamento.
+
+\vspace{0.4cm}
+
+\noindent Como atividade para este período, os alunos deverão resolver a \textbf{Lista de Revisão} distribuída, que abrange os tópicos de \textit{Binômio de Newton}, \textit{Multinômio de Newton} e \textit{Álgebra Booleana}. A entrega da lista ao término da aula será considerada como \textbf{presença} no dia.
+
+\vspace{0.4cm}
+
+\noindent Agradecemos a compreensão e cooperação de todos.
+\end{tcolorbox}
+
+\vspace{1.2cm}
+
+% ── Assinatura ───────────────────────────────────────────────────────────────
+\noindent
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \rule{6cm}{0.5pt}\\[4pt]
+    \textbf{Me. Sergio Souza Novak}\\
+    \small Professor da Disciplina
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+    \centering
+    \rule{6cm}{0.5pt}\\[4pt]
+    \textbf{Rio Verde, 27 de abril de 2026}\\
+    \small Data
+\end{minipage}
+
+\vspace{1.5cm}
+\noindent\rule{\linewidth}{1.5pt}
+
+\begin{center}
+    \small\color{gray}
+    Universidade de Rio Verde --- UniRV $\cdot$ Campus Rio Verde\\
+    Curso de Engenharia de Software
+\end{center}
+
+\end{document}

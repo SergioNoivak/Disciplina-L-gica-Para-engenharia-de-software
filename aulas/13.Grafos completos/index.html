@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Grafos</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.1/cytoscape.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-family: sans-serif;
+        }
+
+        #topnavbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        #topnavbar button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #0074D9;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        #topnavbar button:hover {
+            background-color: #0056b3;
+        }
+
+        #main-container {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            height: calc(100vh - 50px);
+            overflow: hidden;
+        }
+
+        #cy {
+            flex-grow: 1;
+            display: block;
+            background-color: #f5f5f5;
+        }
+
+        #sidebar {
+            width: 350px;
+            background-color: #fff;
+            border-left: 2px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        #sidebar h3 {
+            margin: 0;
+            padding: 15px;
+            background-color: #0074D9;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #log-container {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="topnavbar">
+        <span style="font-weight: bold;">Editor de Grafos</span>
+        <button id="btn-kruskal">Executar Kruskal (Árvore Geradora Mínima)</button>
+    </div>
+
+    <div id="main-container">
+        <div id="cy"></div>
+        <div id="sidebar">
+            <h3>Log do Algoritmo de Kruskal</h3>
+            <div id="log-container">
+                <div style="color: #666; text-align: center; margin-top: 20px;">
+                    Crie nós e arestas e clique em "Executar Kruskal" para visualizar o passo a passo e os conjuntos auxiliares.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        let nodeCount = 0;
+        let edgeCount = 0;
+        let origem = null;
+
+        const cy = cytoscape({
+            container: document.getElementById('cy'),
+
+            elements: [],
+
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'background-color': '#0074D9',
+                        'label': 'data(label)',
+                        'text-valign': 'center',
+                        'color': '#fff'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 3,
+                        'line-color': '#555',
+                        'target-arrow-color': '#555',
+                        'target-arrow-shape': 'triangle',
+                        'label': 'data(weight)',
+                        'text-rotation': 'autorotate',
+                        'text-margin-y': -10,
+                        'font-size': '12px'
+                    }
+                },
+                {
+                    selector: '.selecionado',
+                    style: {
+                        'background-color': 'red'
+                    }
+                },
+                {
+                    selector: 'edge.mst',
+                    style: {
+                        'line-color': '#2ECC40',
+                        'target-arrow-color': '#2ECC40',
+                        'width': 5
+                    }
+                }
+            ]
+        });
+
+        // Criar nó ao clicar no fundo
+        cy.on('tap', function (evt) {
+
+            if (evt.target === cy) {
+
+                const pos = evt.position;
+
+                nodeCount++;
+
+                cy.add({
+                    group: 'nodes',
+                    data: {
+                        id: 'n' + nodeCount,
+                        label: 'N' + nodeCount
+                    },
+                    position: {
+                        x: pos.x,
+                        y: pos.y
+                    }
+                });
+            }
+        });
+
+        // Selecionar nós e criar arestas
+        cy.on('tap', 'node', function (evt) {
+
+            const node = evt.target;
+
+            if (origem === null) {
+
+                origem = node;
+                node.addClass('selecionado');
+
+            } else {
+
+                if (origem.id() !== node.id()) {
+
+                    const dx = origem.position('x') - node.position('x');
+                    const dy = origem.position('y') - node.position('y');
+                    const dist = Math.round(Math.sqrt(dx * dx + dy * dy));
+
+                    edgeCount++;
+
+                    cy.add({
+                        group: 'edges',
+                        data: {
+                            id: 'e' + edgeCount,
+                            source: origem.id(),
+                            target: node.id(),
+                            weight: dist
+                        }
+                    });
+                }
+
+                origem.removeClass('selecionado');
+                origem = null;
+            }
+        });
+
+        // Alterar peso da aresta ao clicar nela
+        cy.on('tap', 'edge', function (evt) {
+            const edge = evt.target;
+            const currentWeight = edge.data('weight');
+            const newWeightStr = prompt('Digite o novo peso para a aresta:', currentWeight);
+            
+            if (newWeightStr !== null) {
+                const newWeight = parseFloat(newWeightStr);
+                if (!isNaN(newWeight)) {
+                    edge.data('weight', newWeight);
+                    cy.edges().removeClass('mst'); // Remove destaque anterior para indicar que precisa recalcular
+                } else {
+                    alert('Por favor, insira um número válido.');
+                }
+            }
+        });
+
+        // Excluir nó ou aresta ao clicar com botão direito (ou toque longo no celular)
+        cy.on('cxttap', 'node, edge', function (evt) {
+            const element = evt.target;
+
+            // Se o elemento excluído for o nó de origem selecionado, limpamos a variável
+            if (element.isNode() && origem !== null && origem.id() === element.id()) {
+                origem = null;
+            }
+
+            cy.remove(element);
+            cy.edges().removeClass('mst'); // Remove destaque para recalcular a árvore geradora
+        });
+
+        // Implementação do Union-Find para exibir os conjuntos
+        class UnionFind {
+            constructor(nodes) {
+                this.parent = {};
+                nodes.forEach(n => {
+                    this.parent[n.id()] = n.id();
+                });
+            }
+
+            find(i) {
+                if (this.parent[i] === i) {
+                    return i;
+                }
+                return this.parent[i] = this.find(this.parent[i]);
+            }
+
+            union(i, j) {
+                let root_i = this.find(i);
+                let root_j = this.find(j);
+                if (root_i !== root_j) {
+                    this.parent[root_i] = root_j;
+                }
+            }
+
+            getSets(cy) {
+                let sets = {};
+                for (let nodeId in this.parent) {
+                    let root = this.find(nodeId);
+                    if (!sets[root]) sets[root] = [];
+                    sets[root].push(cy.getElementById(nodeId).data('label'));
+                }
+                return Object.values(sets).map(s => '{' + s.join(', ') + '}').join(', ');
+            }
+        }
+
+        // Algoritmo de Kruskal Customizado com Log
+        document.getElementById('btn-kruskal').addEventListener('click', () => {
+            cy.edges().removeClass('mst');
+            const logContainer = document.getElementById('log-container');
+            logContainer.innerHTML = '';
+
+            const addLog = (msg) => {
+                const p = document.createElement('div');
+                p.style.marginBottom = '10px';
+                p.style.paddingBottom = '10px';
+                p.style.borderBottom = '1px solid #eee';
+                p.innerHTML = msg;
+                logContainer.appendChild(p);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            };
+
+            const nodes = cy.nodes();
+            const edges = cy.edges().toArray();
+
+            // Ordena arestas por peso
+            edges.sort((a, b) => {
+                const wA = a.data('weight') || 1;
+                const wB = b.data('weight') || 1;
+                return wA - wB;
+            });
+
+            const uf = new UnionFind(nodes);
+            let A = []; // Conjunto de arestas da árvore
+
+            addLog('<b>Início do Algoritmo</b><br>Conjunto A = { }<br>Conjuntos Iniciais:<br>' + uf.getSets(cy));
+
+            edges.forEach((edge, index) => {
+                const u = edge.source();
+                const v = edge.target();
+                const uLabel = u.data('label');
+                const vLabel = v.data('label');
+                const weight = edge.data('weight') || 1;
+
+                let logMsg = `<b>Iteração ${index + 1}:</b><br>`;
+                logMsg += `Menor aresta disponível: (${uLabel}, ${vLabel}) com peso ${weight}.<br>`;
+
+                const rootU = uf.find(u.id());
+                const rootV = uf.find(v.id());
+
+                if (rootU !== rootV) {
+                    logMsg += `<span style="color: green;">✔ Vértices em conjuntos diferentes. Aresta adicionada a A.</span><br>`;
+                    A.push(`(${uLabel}, ${vLabel})`);
+                    uf.union(u.id(), v.id());
+                    edge.addClass('mst');
+                } else {
+                    logMsg += `<span style="color: red;">✖ Vértices já no mesmo conjunto. Forma ciclo, aresta ignorada.</span><br>`;
+                }
+
+                logMsg += `Conjunto A = { ${A.join(', ')} }<br>`;
+                logMsg += `Conjuntos Atuais:<br>${uf.getSets(cy)}`;
+
+                addLog(logMsg);
+            });
+
+            addLog('<b>Fim do Algoritmo!</b><br>Árvore Geradora Mínima concluída.');
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,241 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix}
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Gabarito -- Lista de Exercícios -- Cálculo de Complexidade}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  } 
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=green!5, colframe=forestgreen, boxrule=0.5pt, arc=0pt] \textbf{Resposta:} #1 \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=0.8cm]
+
+    \item \textbf{Cálculo Linear}: O algoritmo abaixo percorre um vetor $A$ de $n$ elementos para somá-los. Preencha a tabela de custos:
+    \begin{center}
+        \begin{tikzpicture}
+            \draw[thick] (0,0) grid (5,0.6);
+            \node at (0.5,0.3) {$A[1]$}; \node at (1.5,0.3) {$A[2]$}; \node at (2.5,0.3) {\dots}; \node at (3.5,0.3) {\dots}; \node at (4.5,0.3) {$A[n]$};
+            \draw[->, thick] (0.5,-0.3) -- (0.5,-0.05); \node[below] at (2.5,-0.3) {Percorre as posições sequencialmente};
+            \draw[->, thick] (4.5,-0.3) -- (4.5,-0.05);
+        \end{tikzpicture}
+    \end{center}
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{SOMA-VETOR($A, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & $soma = 0$ & $c_1$ & 1 \\
+            2 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_2$ & $n+1$ \\
+            3 & \quad $soma = soma + A[i]$ & $c_3$ & $n$ \\
+            4 & \textbf{retornar} $soma$ & $c_4$ & 1 \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \quadro{Custo total: $T(n) = c_1 + c_2(n+1) + c_3n + c_4$. O termo dominante é linear, portanto a complexidade é $\mathbf{O(n)}$.}
+
+    \item \textbf{Cálculo Quadrático}: Duas matrizes $A$ e $B$ de ordem $n \times n$ são somadas. Analise o impacto dos laços aninhados:
+    \begin{center}
+        \begin{tikzpicture}[scale=0.8]
+            \draw[thick] (0,0) grid (2,2); \node at (1,1) {$A_{n \times n}$};
+            \node at (2.5, 1) {$+$};
+            \draw[thick] (3,0) grid (5,2); \node at (4,1) {$B_{n \times n}$};
+            \node at (5.5, 1) {$=$};
+            \draw[thick] (6,0) grid (8,2); \node at (7,1) {$C_{n \times n}$};
+            \node[below] at (4, -0.2) {Cada célula $(i,j)$ exige um cálculo};
+        \end{tikzpicture}
+    \end{center}
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{SOMA-MATRIZ($A, B, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n$: & $c_2$ & $n(n+1)$ \\
+            3 & \quad \quad $C[i,j] = A[i,j] + B[i,j]$ & $c_3$ & $n^2$ \\
+            4 & \textbf{retornar} $C$ & $c_4$ & 1 \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \quadro{Custo total: $T(n) = c_1(n+1) + c_2(n^2+n) + c_3n^2 + c_4$. O termo dominante é quadrático ($n^2$), portanto a complexidade é $\mathbf{O(n^2)}$.}
+
+
+    \item \textbf{Análise Gráfica de Pontos}: Com base no comportamento das curvas no gráfico abaixo, assinale a alternativa que associa corretamente a cor/formato do ponto à sua respectiva complexidade:
+    \begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=11cm, height=7cm,
+            axis lines = left,
+            xlabel = {$n$ (Entrada)},
+            ylabel = {$T(n)$ (Custo)},
+            ymin=0, ymax=1000, xmin=0, xmax=45,
+            grid=both,
+            grid style={line width=.1pt, draw=black!10},
+            legend pos=outer north east,
+            legend style={font=\tiny},
+            restrict y to domain=0:1100,
+        ]
+            % n log n - Azul (Círculo)
+            \addplot[blue, only marks, mark=*, samples=40, domain=1:40] {x*(ln(x)/ln(2))};
+            \addlegendentry{Pontos Azuis ($\bullet$)}
+            
+            % n^3 - Vermelho (Quadrado)
+            \addplot[red, only marks, mark=square*, samples=40, domain=1:40] {x^3};
+            \addlegendentry{Pontos Vermelhos ($\blacksquare$)}
+            
+            % n! - Verde (Triângulo)
+            \addplot[green!60!black, only marks, mark=triangle*, samples=40, domain=1:40] {sqrt(2*pi*x)*(x/e)^x};
+            \addlegendentry{Pontos Verdes ($\blacktriangle$)}
+        \end{axis}
+    \end{tikzpicture}
+    \end{center}
+    
+    \begin{enumerate}[label=\alph*)]
+        \item Azul: $O(n^3)$; Vermelho: $O(n!)$; Verde: $O(n \log n)$.
+        \item Azul: $O(n!)$; Vermelho: $O(n^3)$; Verde: $O(n \log n)$.
+        \item[\textcolor{forestgreen}{\textbf{c)}}] \textcolor{forestgreen}{\textbf{Azul: $O(n \log n)$; Vermelho: $O(n^3)$; Verde: $O(n!)$.}}
+        \item Azul: $O(n \log n)$; Vermelho: $O(n!)$; Verde: $O(n^3)$.
+    \end{enumerate}
+
+    \item \textbf{Busca em Matriz (Busca Exaustiva)}: 
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{BUSCA-MATRIZ($M, n, alvo$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} (Pior Caso) \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n$: & $c_2$ & $n(n+1)$ \\
+            3 & \quad \quad \textbf{se} $M[i,j] == alvo$: & $c_3$ & $n^2$ \\
+            4 & \quad \quad \quad \textbf{retornar} $(i,j)$ & $c_4$ & $0 \text{ ou } 1$ \\
+            5 & \textbf{retornar} NULO & $c_5$ & $0 \text{ ou } 1$ \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \quadro{No pior caso (o elemento não está na matriz ou está na última posição), o algoritmo percorrerá todos os $n^2$ elementos da matriz, resultando em uma complexidade de $\mathbf{O(n^2)}$.}
+
+    \item \textbf{Laços Independentes vs Aninhados}: O algoritmo abaixo processa o vetor $A$ de duas formas diferentes. Qual termo domina o custo final?
+
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{ALGORITMO-MISTO($A, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad print($A[i]$) & $c_2$ & $n$ \\
+            3 & \textbf{para} $j = 1$ \textbf{até} $n$: & $c_3$ & $n+1$ \\
+            4 & \quad \textbf{para} $k = 1$ \textbf{até} $n$: & $c_4$ & $n(n+1)$ \\
+            5 & \quad \quad print($A[j] + A[k]$) & $c_5$ & $n^2$ \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \quadro{O laço das linhas 1 e 2 tem complexidade $O(n)$, enquanto os laços aninhados das linhas 3 a 5 têm complexidade $O(n^2)$. Pela regra da soma para o Big-O, $O(n) + O(n^2) = O(n^2)$. Portanto, o termo $n^2$ domina o custo final.}
+
+    \item \textbf{Infeção de Rede (Ransomware)}: 
+    \quadro{A cada novo nível, o número de servidores infectados dobra (uma função recursiva fazendo 2 chamadas para $n-1$). A complexidade forma uma árvore binária de chamadas. Portanto, a complexidade Big-O é Exponencial: $\mathbf{O(2^n)}$, onde $n$ é o nível de profundidade.}
+    
+    \item \textbf{Simplificação Assintótica}: Dada a função de custo $T(n) = 5n^2 + 100n + 500$, identifique a complexidade Big-O.
+    \quadro{Ao analisar a função, descartamos os termos de menor ordem ($100n$ e $500$) e as constantes multiplicativas ($5$). O termo dominante é $n^2$, logo a complexidade é $\mathbf{O(n^2)}$.}
+
+    \item \textbf{Busca Binária}: 
+    \quadro{Complexidade: $\mathbf{O(\log_2 n)}$ (crescimento logarítmico). \\ Para $n = 1.000.000$, o número máximo de comparações é aproximadamente $\mathbf{\log_2(1.000.000) \approx 20}$ comparações.}
+
+    \item O algoritmo abaixo compara pares adjacentes e os troca. Preencha a tabela de análise:
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{ORDENA($A, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} (Pior Caso) \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n - 1$: & $c_2$ & $n(n)$ \\
+            3 & \quad \quad \textbf{se} $A[j] > A[j+1]$: & $c_3$ & $n(n-1)$ \\
+            4 & \quad \quad \quad Troca($A[j], A[j+1]$) & $c_4$ & $n(n-1)$ \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \quadro{A presença de dois laços aninhados que iteram proporcionalmente a $n$ resulta em complexidade quadrática: $\mathbf{O(n^2)}$.}
+
+    \item \textbf{Comparação de Curvas}: O algoritmo A possui $100n$ e o algoritmo B possui $n^2$. Determine a partir de qual valor de $n$ o Algoritmo A torna-se mais eficiente.
+    \quadro{Para encontrar o ponto de intersecção, igualamos as funções: $n^2 = 100n \Rightarrow n = 100$. A partir de $\mathbf{n > 100}$, a função linear $100n$ cresce menos que a quadrática $n^2$, tornando o Algoritmo A mais eficiente.}
+
+    \item \textbf{Questão de Concurso (CESPE / CEBRASPE - 2025 - Polícia Federal)}: 
+    \begin{itemize}
+        \item[($\quad$)] Certo
+        \item[(\textcolor{forestgreen}{\textbf{X}})] \textcolor{forestgreen}{\textbf{Errado}}
+    \end{itemize}
+    \quadro{\textbf{Justificativa:} A afirmação está incorreta. O crescimento linear $O(n)$ é \textbf{mais lento} e mais eficiente do que o crescimento loglinear $O(n \log n)$.}
+
+    \item \textbf{Questão de Concurso (IV - UFG - 2025 - Câmara de Morrinhos - GO - Analista de TI)}:
+    \begin{enumerate}[label=\Alph*)]
+        \item $O(1)$
+        \item $O(n)$
+        \item $O(n^2)$
+        \item[\textcolor{forestgreen}{\textbf{D)}}] \textcolor{forestgreen}{\textbf{$O(\log n)$}}
+        \item $O(n!)$
+    \end{enumerate}
+
+    \item \textbf{Questão de Concurso (COPEVE-UFAL - 2023 - UFAL - Analista de TI)}: 
+    \begin{enumerate}[label=\Alph*)]
+        \item $O(n)$
+        \item[\textcolor{forestgreen}{\textbf{B)}}] \textcolor{forestgreen}{\textbf{$O(n^2)$}}
+        \item $O(n^3)$
+        \item $O(\log n)$
+        \item $O(n \log n)$
+    \end{enumerate}
+    \quadro{\textbf{Justificativa:} A função tem dois blocos principais. No caso verdadeiro (`n > 1000`), existem dois laços `para` aninhados percorrendo até $n$, gerando custo $O(n^2)$. No pior caso para grandes entradas, a complexidade é $O(n^2)$.}
+
+\end{enumerate}
+
+\end{document}

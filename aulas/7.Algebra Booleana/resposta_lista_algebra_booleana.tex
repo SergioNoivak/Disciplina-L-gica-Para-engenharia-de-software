@@ -1,0 +1,332 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.gates.logic.US, positioning}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm, headheight=53pt, top=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Gabarito: Lista de Exercícios — Álgebra Booleana}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\newtcolorbox{solucao}{%
+  colback=green!5,
+  colframe=forestgreen,
+  title=Resolução,
+  fonttitle=\bfseries,
+  arc=2mm,
+  boxrule=1pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  breakable
+}
+
+\begin{document}
+
+\section*{Gabarito — Álgebra Booleana}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+% Ex 1
+\item \textbf{Enunciado:} if (usuarioAtivo == true \&\& processamentoConcluido == true)
+\begin{solucao}
+Aplicando a propriedade do Elemento Neutro ($A \cdot 1 = A$):
+\begin{align*}
+    F &= (\text{usuarioAtivo} \cdot 1) \cdot (\text{processamentoConcluido} \cdot 1) \\
+    \mathbf{F} &= \mathbf{\text{usuarioAtivo} \ \&\& \ \text{processamentoConcluido}}
+\end{align*}
+\end{solucao}
+
+% Ex 2
+\item \textbf{Enunciado:} if (isAdmin || (isAdmin \&\& temPermissaoEspecial))
+\begin{solucao}
+Aplicando a Lei da Absorção ($A + A \cdot B = A$):
+\begin{align*}
+    F &= \text{isAdmin} + (\text{isAdmin} \cdot \text{temPermissaoEspecial}) \\
+    \mathbf{F} &= \mathbf{\text{isAdmin}}
+\end{align*}
+\end{solucao}
+
+% Ex 3
+\item \textbf{Enunciado:} NOT (itemValido = 1 AND itemExpirado = 0)
+\begin{solucao}
+Aplicando o Teorema de De Morgan ($\overline{A \cdot B} = \overline{A} + \overline{B}$):
+\begin{align*}
+    F &= \text{NOT } (\text{itemValido} = 1 \text{ AND } \text{itemExpirado} = 0) \\
+    \mathbf{F} &= \mathbf{\text{itemValido} <> 1 \text{ OR } \text{itemExpirado} <> 0}
+\end{align*}
+\end{solucao}
+
+% Ex 4
+\item \textbf{Enunciado:} if ((logado \&\& ativo) || (logado \&\& ativo))
+\begin{solucao}
+Aplicando a Idempotência ($A + A = A$):
+\begin{align*}
+    F &= (\text{logado} \cdot \text{ativo}) + (\text{logado} \cdot \text{ativo}) \\
+    \mathbf{F} &= \mathbf{\text{logado} \ \&\& \ \text{ativo}}
+\end{align*}
+\end{solucao}
+
+% Ex 5
+\item \textbf{Enunciado:} if ((podeEditar \&\& usuarioDono) || (podeEditar \&\& !usuarioDono))
+\begin{solucao}
+\begin{align*}
+    F &= (\text{podeEditar} \cdot \text{usuarioDono}) + (\text{podeEditar} \cdot \overline{\text{usuarioDono}}) \\
+    F &= \text{podeEditar} \cdot (\text{usuarioDono} + \overline{\text{usuarioDono}}) \quad \text{(Distributividade)} \\
+    F &= \text{podeEditar} \cdot 1 \quad \text{(Complemento)} \\
+    \mathbf{F} &= \mathbf{\text{podeEditar}} \quad \text{(Elemento Neutro)}
+\end{align*}
+\end{solucao}
+
+% Ex 6
+\item \textbf{Enunciado:} if (!(!conexaoEstavel || !servidorOnline))
+\begin{solucao}
+\begin{align*}
+    F &= \overline{\overline{\text{conexaoEstavel}} + \overline{\text{servidorOnline}}} \\
+    F &= \overline{\overline{\text{conexaoEstavel}}} \cdot \overline{\overline{\text{servidorOnline}}} \quad \text{(De Morgan)} \\
+    \mathbf{F} &= \mathbf{\text{conexaoEstavel} \ \&\& \ \text{servidorOnline}} \quad \text{(Dupla Negação)}
+\end{align*}
+\end{solucao}
+
+% Ex 7
+\item \textbf{Enunciado:} if (estoque > 0 \&\& (estoque >= 0 || pedidoUrgente))
+\begin{solucao}
+Seja $A: \text{estoque} > 0$ e $B: \text{estoque} \geq 0$. Note que $A \implies B$ (se $A$ é verdadeiro, $B$ é obrigatoriamente verdadeiro).
+\begin{align*}
+    F &= A \cdot (B + \text{pedidoUrgente}) \\
+    F &= A \cdot B + A \cdot \text{pedidoUrgente} \quad \text{(Distributividade)} \\
+    F &= A + A \cdot \text{pedidoUrgente} \quad \text{(Pois } A \cdot B = A \text{ quando } A \implies B) \\
+    \mathbf{F} &= \mathbf{A} \quad \text{(Absorção)}
+\end{align*}
+Portanto: \textbf{if (estoque > 0)}
+\end{solucao}
+
+% Ex 8
+\item \textbf{Enunciado:} int deveProcessar(int A, int B) \{ if ((A \&\& B) || (A \&\& !B) || (!A \&\& B)) ... \}
+\begin{solucao}
+\begin{align*}
+    F &= AB + A\overline{B} + \overline{A}B \\
+    F &= A(B + \overline{B}) + \overline{A}B \quad \text{(Distributividade)} \\
+    F &= A(1) + \overline{A}B \quad \text{(Complemento)} \\
+    F &= A + \overline{A}B \quad \text{(Elemento Neutro)} \\
+    \mathbf{F} &= \mathbf{A + B} \quad \text{(Cobertura / Absorção Complementar)}
+\end{align*}
+Lógica simplificada: \textbf{return A || B;}
+\end{solucao}
+
+% Ex 9
+\item \textbf{Enunciado:} if (!(estaChovendo || estaNublado) || (estaChovendo \&\& !estaNublado))
+\begin{solucao}
+Seja $A$: chovendo, $B$: nublado.
+\begin{align*}
+    F &= \overline{A + B} + A\overline{B} \\
+    F &= \overline{A}\overline{B} + A\overline{B} \quad \text{(De Morgan)} \\
+    F &= \overline{B}(\overline{A} + A) \quad \text{(Distributividade)} \\
+    F &= \overline{B}(1) \quad \text{(Complemento)} \\
+    \mathbf{F} &= \mathbf{\overline{B}} \quad \text{(Elemento Neutro)}
+\end{align*}
+Lógica simplificada: \textbf{if (!estaNublado)}
+\end{solucao}
+
+% Ex 10
+\item \textbf{Enunciado:} if ((sensorA > 50 \&\& sensorB < 20) || (sensorA > 50 \&\& !(sensorB < 20)))
+\begin{solucao}
+Seja $A: \text{sensorA} > 50$ e $B: \text{sensorB} < 20$.
+\begin{align*}
+    F &= AB + A\overline{B} \\
+    F &= A(B + \overline{B}) \quad \text{(Distributividade)} \\
+    F &= A(1) \quad \text{(Complemento)} \\
+    \mathbf{F} &= \mathbf{A} \quad \text{(Elemento Neutro)}
+\end{align*}
+Lógica simplificada: \textbf{if (sensorA > 50)}
+\end{solucao}
+
+% Ex 11
+\item \textbf{Enunciado:} if (!(!bloqueado || !conectado) || !(bloqueado || !conectado))
+\begin{solucao}
+Seja $B$: bloqueado, $C$: conectado.
+\begin{align*}
+    F &= \overline{\overline{B} + \overline{C}} + \overline{B + \overline{C}} \\
+    F &= BC + \overline{B}C \quad \text{(De Morgan e Dupla Negação)} \\
+    F &= C(B + \overline{B}) \quad \text{(Distributividade)} \\
+    F &= C(1) \quad \text{(Complemento)} \\
+    \mathbf{F} &= \mathbf{C} \quad \text{(Elemento Neutro)}
+\end{align*}
+Lógica simplificada: \textbf{if (conectado)}
+\end{solucao}
+
+% Ex 12
+\item \textbf{Enunciado:} if ((A \&\& B \&\& C) || (A \&\& B \&\& !C) || (A \&\& !B))
+\begin{solucao}
+\begin{align*}
+    F &= ABC + AB\overline{C} + A\overline{B} \\
+    F &= AB(C + \overline{C}) + A\overline{B} \quad \text{(Distributividade)} \\
+    F &= AB(1) + A\overline{B} \quad \text{(Complemento)} \\
+    F &= A(B + \overline{B}) \quad \text{(Distributiva)} \\
+    \mathbf{F} &= \mathbf{A} \quad \text{(Complemento e Identidade)}
+\end{align*}
+\end{solucao}
+
+% Ex 13
+\item \textbf{Enunciado:} (isAdmin \&\& canEdit) || (!isAdmin \&\& isOwner) || (canEdit \&\& isOwner)
+\begin{solucao}
+Seja $A$: isAdmin, $B$: canEdit, $C$: isOwner.
+\begin{align*}
+    F &= AB + \overline{A}C + BC \\
+    \mathbf{F} &= \mathbf{AB + \overline{A}C} \quad \text{(Teorema do Consenso)}
+\end{align*}
+Simplificação: \textbf{(isAdmin \&\& canEdit) || (!isAdmin \&\& isOwner)}
+\end{solucao}
+
+% Ex 14
+\item \textbf{Enunciado:} !(permiteAcesso || !(permiteAcesso \&\& temToken))
+\begin{solucao}
+Seja $A$: permiteAcesso, $B$: temToken.
+\begin{align*}
+    F &= \overline{A + \overline{AB}} \\
+    F &= \overline{A + (\overline{A} + \overline{B})} \quad \text{(De Morgan)} \\
+    F &= \overline{(A + \overline{A}) + \overline{B}} \quad \text{(Associatividade)} \\
+    F &= \overline{1 + \overline{B}} \quad \text{(Complemento)} \\
+    F &= \overline{1} \quad \text{(Elemento Nulo: } 1+X=1) \\
+    \mathbf{F} &= \mathbf{0}
+\end{align*}
+Resultado: \textbf{A condição é sempre falsa (false).}
+\end{solucao}
+
+% Ex 15
+\item \textbf{Enunciado:} ((isValid \&\& hasNetwork) || isCached) \&\& ((!isValid || isCached) \&\& (isAuthorized || isCached))
+\begin{solucao}
+Seja $V$: isValid, $N$: hasNetwork, $C$: isCached, $A$: isAuthorized.
+\begin{align*}
+    F &= (VN + C) \cdot [(\overline{V} + C) \cdot (A + C)] \\
+    F &= (VN + C) \cdot [C + \overline{V}A] \quad \text{(Distributividade forma OR: } (X+Y)(X+Z)=X+YZ) \\
+    F &= C + (VN \cdot \overline{V}A) \quad \text{(Distributividade forma OR aplicada novamente)} \\
+    F &= C + (V \cdot \overline{V} \cdot N \cdot A) \quad \text{(Associatividade/Comutatividade)} \\
+    F &= C + (0 \cdot N \cdot A) \quad \text{(Complemento)} \\
+    F &= C + 0 \quad \text{(Elemento Nulo)} \\
+    \mathbf{F} &= \mathbf{C} \quad \text{(Identidade)}
+\end{align*}
+Lógica simplificada: \textbf{if (isCached)}
+\end{solucao}
+
+% Ex 16
+\item \textbf{Enunciado:} Usina Nuclear - alarme = !( (A \&\& !B) || (C \&\& !D) ) \&\& ( (A || C) \&\& !(B \&\& D) )
+\begin{solucao}
+Seja $A$: temp alta, $B$: pressão OK, $C$: bomba ON, $D$: radiação OK.
+\begin{align*}
+    F &= \overline{A\overline{B} + C\overline{D}} \cdot (A + C) \cdot \overline{BD} \\
+    F &= (\overline{A\overline{B}}) \cdot (\overline{C\overline{D}}) \cdot (A + C) \cdot (\overline{B} + \overline{D}) \quad \text{(De Morgan)} \\
+    F &= (\overline{A} + B)(\overline{C} + D)(A + C)(\overline{B} + \overline{D}) \quad \text{(De Morgan e Involução)} \\
+    F &= [(\overline{A} + B)(A + C)] \cdot [(\overline{C} + D)(\overline{B} + \overline{D})] \\
+    F &= [\overline{A}A + \overline{A}C + BA + BC] \cdot [\overline{C}\overline{B} + \overline{C}\overline{D} + D\overline{B} + D\overline{D}] \\
+    F &= [\overline{A}C + AB + BC] \cdot [\overline{B}\overline{C} + \overline{C}\overline{D} + \overline{B}D] \\
+    F &= [\overline{A}C + AB] \cdot [\overline{C}\overline{D} + \overline{B}D] \quad \text{(Teorema do Consenso em ambos os parênteses)} \\
+    F &= \overline{A}C\overline{C}\overline{D} + \overline{A}C\overline{B}D + AB\overline{C}\overline{D} + AB\overline{B}D \quad \text{(Distributiva)} \\
+    F &= 0 + \overline{A}\overline{B}CD + AB\overline{C}\overline{D} + 0 \quad \text{(Complemento)} \\
+    \mathbf{F} &= \mathbf{AB\overline{C}\overline{D} + \overline{A}\overline{B}CD}
+\end{align*}
+Condição mínima de disparo: \textbf{(Temp alta e Pressão OK e Bomba OFF e Radiação NO-OK) OU (Temp OK e Pressão NO-OK e Bomba ON e Radiação OK).}
+\end{solucao}
+
+% Ex 17
+\item \textbf{Circuito:} $F = A \cdot A$
+\begin{solucao}
+$F = A$ (Idempotência). O circuito reduz-se a um simples fio passando o sinal de $A$.
+\end{solucao}
+
+% Ex 18
+\item \textbf{Circuito:} $F = A + \overline{A}$
+\begin{solucao}
+$F = 1$ (Complemento). A saída é uma constante lógica alta.
+\end{solucao}
+
+% Ex 19
+\item \textbf{Circuito:} $F = AB + A$
+\begin{solucao}
+$F = A$ (Absorção).
+\end{solucao}
+
+% Ex 20
+\item \textbf{Circuito:} $F = (A+B)(A+C)$
+\begin{solucao}
+$F = A + BC$ (Distributividade). Reduz o circuito para uma porta AND entre B e C, seguida de uma porta OR com A.
+\end{solucao}
+
+% Ex 21
+\item \textbf{Circuito:} $F = \overline{A \cdot B}$
+\begin{solucao}
+$F = \overline{A} + \overline{B}$ (De Morgan). Equivalente a uma porta OR com entradas negadas.
+\end{solucao}
+
+% Ex 22
+\item \textbf{Circuito:} $F = AB + \overline{A}B$
+\begin{solucao}
+$F = B(A + \overline{A}) = B(1) = B$. A saída depende apenas da variável $B$.
+\end{solucao}
+
+% Ex 23
+\item \textbf{Circuito:} $F = A(\overline{A} + B)$
+\begin{solucao}
+$F = A\overline{A} + AB = 0 + AB = AB$ (Cobertura). Equivalente a uma porta AND entre A e B.
+\end{solucao}
+
+% Ex 24
+\item \textbf{Circuito:} $F = \overline{\overline{A} + \overline{B}}$
+\begin{solucao}
+$F = \overline{\overline{A}} \cdot \overline{\overline{B}} = AB$ (De Morgan e Dupla Negação). Equivalente a uma porta AND entre A e B.
+\end{solucao}
+
+% Ex 25
+\item \textbf{Circuito:} $F = ABC + AB\overline{C}$
+\begin{solucao}
+$F = AB(C + \overline{C}) = AB(1) = AB$.
+\end{solucao}
+
+% Ex 26
+\item \textbf{Desafio:} $F = AB + \overline{A}C + BC$
+\begin{solucao}
+$F = AB + \overline{A}C$ (Teorema do Consenso).
+\end{solucao}
+
+\end{enumerate}
+
+\end{document}

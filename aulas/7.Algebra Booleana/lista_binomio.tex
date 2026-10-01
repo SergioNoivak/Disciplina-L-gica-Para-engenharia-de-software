@@ -1,0 +1,154 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Binômio e Multinômio de Newton}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Exercícios — Binômio de Newton e Multinômio de Newton}
+
+\begin{enumerate}
+
+% -------------------------------------------------------
+\item \textbf{(Expansão Direta — Binômio)} Expanda as expressões abaixo utilizando o Teorema do Binômio de Newton e simplifique os coeficientes:
+\begin{enumerate}[label=\alph*)]
+    \item $(x + 2)^5$
+    \item $(3a - b)^4$ \quad (\textit{Dica: escreva como $(3a + (-b))^4$})
+    \item $\left(1 - \dfrac{x}{2}\right)^6$
+\end{enumerate}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=12cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+% -------------------------------------------------------
+
+
+% -------------------------------------------------------
+\item \textbf{(Termo Geral)} Na expansão de $(a+b)^n$, o termo geral de índice $k$ é $T_{k+1} = \binom{n}{k}a^{n-k}b^k$.
+\begin{enumerate}[label=\alph*)]
+    \item Determine o $5^\circ$ termo da expansão de $(2x + y)^8$.
+    \item Encontre o coeficiente de $x^3$ na expansão de $(1 + 3x)^7$.
+    \item Em $(x^2 - 1/x)^9$, determine para qual valor de $k$ o expoente de $x$ no termo $T_{k+1}$ se anula, e calcule esse termo independente de $x$.
+\end{enumerate}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=12cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+% -------------------------------------------------------
+\item \textbf{(Identidade de Pascal)} A Identidade de Pascal afirma que:
+\[
+\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Use o triângulo construído para verificar a expansão de $(a+b)^6$.
+\end{enumerate}
+\[
+\begin{array}{ccccccccccccc}
+&&&&&&1&&&&&& \\
+&&&&&1&&1&&&&& \\
+&&&&1&&2&&1&&&& \\
+&&&1&&3&&3&&1&&& \\
+&&1&&4&&6&&4&&1&& \\
+&1&&5&&10&&10&&5&&1& \\
+1&&6&&15&&20&&15&&6&&1 \\
+\end{array}
+\]
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=12cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+% -------------------------------------------------------
+\item \textbf{(Multinômio de Newton — Coeficientes)} O Teorema Multinomial afirma que:
+\[
+(x_1 + x_2 + \cdots + x_m)^n = \sum_{\substack{k_1+k_2+\cdots+k_m = n\\k_i \geq 0}} \frac{n!}{k_1!\,k_2!\,\cdots\,k_m!}\; x_1^{k_1}x_2^{k_2}\cdots x_m^{k_m}
+\]
+
+Determine os coeficientes pedidos:
+\begin{enumerate}[label=\alph*)]
+    \item Coeficiente de $x^2 y^2 z$ na expansão de $(x + y + z)^5$.
+    \item Coeficiente de $a^3 b^2 c$ na expansão de $(a + b + c)^6$.
+    \item Coeficiente de $x^2 y z^2 w$ na expansão de $(x + y + z + w)^6$.
+\end{enumerate}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=8cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+% -------------------------------------------------------
+\item \textbf{(Multinômio de Newton — Expansão Parcial)} Expanda completamente a expressão $(x + y + z)^3$ utilizando o Teorema Multinomial.
+
+\begin{enumerate}[label=\alph*)]
+    \item Liste todos os monômios possíveis da forma $x^{k_1}y^{k_2}z^{k_3}$ com $k_1+k_2+k_3=3$, $k_i \geq 0$.
+    \item Para cada monômio, calcule o coeficiente multinomial $\dfrac{3!}{k_1!\,k_2!\,k_3!}$.
+\end{enumerate}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=8cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,224 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Funções}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  } 
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=1cm]
+
+    \item Determine o domínio de definição das seguintes funções reais, indicando as restrições necessárias em cada caso:
+    \begin{enumerate}[label=\alph*)]
+        \item $f(x) = \dfrac{x + 5}{x - 7}$
+        \item $g(x) = \sqrt{2x - 10}$
+        \item $h(x) = \ln(x^2 - 16)$
+        \item $i(x) = \dfrac{\sqrt{x + 2}}{x - 3}$
+        \item $j(x) = \sqrt[3]{x - 8}$
+        \item $k(x) = \dfrac{1}{x^2 - 5x + 6}$
+        \item $l(x) = \log(x - 2) + \sqrt{10 - x}$
+        \item $m(x) = \dfrac{1}{\sqrt{x^2 - 9}}$
+        \item $n(x) = \sqrt{\dfrac{x-1}{x+2}}$
+    \end{enumerate}
+
+    \item Dadas as funções $f(x) = 2x - 3$ e $g(x) = x^2 + 4$, determine as expressões para as funções compostas abaixo e simplifique o resultado:
+    \begin{enumerate}[label=\alph*)]
+        \item $(f \circ g)(x)$
+        \item $(g \circ f)(x)$
+        \item $(f \circ f)(x)$
+        \item Calcule o valor numérico de $(f \circ g)(2)$.
+    \end{enumerate}
+
+    \item Analise as funções abaixo e classifique-as em Injetora, Sobrejetora ou Bijetora. Justifique sua resposta analisando o domínio ($D$) e o contradomínio ($CD$).
+    \begin{enumerate}[label=\alph*)]
+        \item $f: \mathbb{R} \to \mathbb{R}, \quad f(x) = 3x + 5$
+        \item $g: \mathbb{R} \to \mathbb{R}, \quad g(x) = x^2$
+        \item $h: \mathbb{R} \to [0, \infty), \quad h(x) = x^2$
+        \item $i: [0, \infty) \to [0, \infty), \quad i(x) = x^2$
+        \item $j: \mathbb{R} \to \mathbb{R}, \quad j(x) = x^3$
+        \item $k: \mathbb{R} \to \mathbb{R}, \quad k(x) = |x|$
+        \item $l: \mathbb{R} \to (0, \infty), \quad l(x) = e^x$
+        \item $m: (0, \infty) \to \mathbb{R}, \quad m(x) = \ln(x)$
+        \item $n: \mathbb{R} \setminus \{0\} \to \mathbb{R} \setminus \{0\}, \quad n(x) = \frac{1}{x}$
+        \item $p: \mathbb{R} \to \mathbb{R}, \quad p(x) = \sin(x)$
+    \end{enumerate}
+
+
+    \item Utilize o Teste da Reta Vertical e o Teste da Reta Horizontal para classificar as curvas representadas nos gráficos abaixo como: (I) Função ou não-função; (II) Injetora ou não-injetora.
+
+    \begin{center}
+    \begin{tikzpicture}[scale=0.6]
+        % Linha 1
+        % Gráfico A: Parábola (Função, Não Injetora)
+        \begin{scope}[xshift=0cm, yshift=0cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[domain=-1.5:1.5, smooth, blue, thick] plot ({\x}, {\x*\x});
+            \node at (0,-1.5) {Gráfico A};
+        \end{scope}
+
+        % Gráfico B: Parábola Lateral (Não Função)
+        \begin{scope}[xshift=6cm, yshift=0cm]
+            \draw[->] (-1,0) -- (3,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[domain=-1.5:1.5, smooth, blue, thick] plot ({\x*\x}, {\x});
+            \node at (1,-2.5) {Gráfico B};
+        \end{scope}
+
+        % Gráfico C: Reta Inclinada (Função, Injetora)
+        \begin{scope}[xshift=12cm, yshift=0cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[domain=-1.5:1.5, smooth, blue, thick] plot ({\x}, {\x + 1});
+            \node at (0,-1.5) {Gráfico C};
+        \end{scope}
+
+        % Linha 2
+        % Gráfico D: Cúbica (Função, Injetora)
+        \begin{scope}[xshift=0cm, yshift=-6cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[domain=-1.2:1.2, smooth, blue, thick] plot ({\x}, {\x*\x*\x});
+            \node at (0,-2.5) {Gráfico D};
+        \end{scope}
+
+        % Gráfico E: Círculo (Não Função)
+        \begin{scope}[xshift=6cm, yshift=-6cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[blue, thick] (0,0) circle (1.2);
+            \node at (0,-2.5) {Gráfico E};
+        \end{scope}
+
+        % Gráfico F: Reta Horizontal (Função, Não Injetora)
+        \begin{scope}[xshift=12cm, yshift=-6cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[blue, thick] (-1.8, 1.5) -- (1.8, 1.5);
+            \node at (0,-1.5) {Gráfico F};
+        \end{scope}
+
+        % Linha 3
+        % Gráfico G: Senoide (Função, Não Injetora)
+        \begin{scope}[xshift=0cm, yshift=-12cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[domain=-1.8:1.8, smooth, blue, thick] plot ({\x}, {sin(\x*180)});
+            \node at (0,-2.5) {Gráfico G};
+        \end{scope}
+
+        % Gráfico H: V (Valor Absoluto) (Função, Não Injetora)
+        \begin{scope}[xshift=6cm, yshift=-12cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[blue, thick] (-1.5, 1.5) -- (0,0) -- (1.5, 1.5);
+            \node at (0,-1.5) {Gráfico H};
+        \end{scope}
+
+        % Gráfico I: Semicírculo Superior (Função, Não Injetora)
+        \begin{scope}[xshift=12cm, yshift=-12cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[domain=0:180, smooth, blue, thick] plot ({1.5*cos(\x)}, {1.5*sin(\x)});
+            \node at (0,-1.5) {Gráfico I};
+        \end{scope}
+
+        % Linha 4
+        % Gráfico J: Exponencial (Função, Injetora)
+        \begin{scope}[xshift=3cm, yshift=-18cm]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+            \draw[domain=-1.8:1.1, smooth, blue, thick] plot ({\x}, {exp(\x)});
+            \node at (0,-1.5) {Gráfico J};
+        \end{scope}
+
+        % Gráfico K: Logaritmo (Função, Injetora)
+        \begin{scope}[xshift=9cm, yshift=-18cm]
+            \draw[->] (-1,0) -- (3,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[domain=0.15:2.5, smooth, blue, thick] plot ({\x}, {ln(\x)});
+            \node at (1,-2.5) {Gráfico K};
+        \end{scope}
+    \end{tikzpicture}
+    \end{center}
+
+    \item Considere a função $f: A \to B$ representada pelo diagrama de Venn abaixo, onde $A = \{1, 2, 3\}$ e $B = \{a, b, c, d\}$.
+    \begin{center}
+    \begin{tikzpicture}[scale=1]
+        \node (1) at (0,1) {1};
+        \node (2) at (0,0) {2};
+        \node (3) at (0,-1) {3};
+        \draw (0,0) ellipse (0.8 and 1.8);
+        \node at (0,2) {$A$};
+
+        \node (a) at (3,1.5) {a};
+        \node (b) at (3,0.5) {b};
+        \node (c) at (3,-0.5) {c};
+        \node (d) at (3,-1.5) {d};
+        \draw (3,0) ellipse (0.8 and 2);
+        \node at (3,2.3) {$B$};
+
+        \draw[->, >=stealth] (1) -- (a);
+        \draw[->, >=stealth] (2) -- (c);
+        \draw[->, >=stealth] (3) -- (c);
+    \end{tikzpicture}
+    \end{center}
+
+    Determine:
+    \begin{enumerate}[label=\alph*)]
+        \item O conjunto Domínio ($D$).
+        \item O conjunto Contradomínio ($CD$).
+        \item O conjunto Imagem ($Im$).
+        \item Esta função é sobrejetora? Justifique.
+        \item Esta função é injetora? Justifique.
+    \end{enumerate}
+
+\end{enumerate}
+
+\end{document}

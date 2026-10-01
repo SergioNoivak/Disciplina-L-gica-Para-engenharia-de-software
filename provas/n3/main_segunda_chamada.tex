@@ -1,0 +1,681 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% Pacotes
+% ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}\usepackage{amsfonts}
+\usepackage{amsmath} % Recomendado para o comando \text{}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\definecolor{maincolor}{RGB}{0,100,50} 
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multicol}
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=white, colframe=black, height=#1, boxrule=0.5pt, arc=0pt] \textit{Resposta:} \end{tcolorbox}}
+
+\newtcolorbox{codeblock}{%
+  colback=black!2,
+  colframe=gray!30,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  fontupper=\small
+}
+
+\lstset{
+    language=Java,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    frame=none,
+    numbers=none,
+    tabsize=2,
+    commentstyle=\itshape\color{gray},
+    morekeywords={this}
+}
+
+% TikZ Styles for ER Diagrams
+\tikzset{
+    block/.style={rectangle, draw, thick, minimum width=2cm, minimum height=1cm, fill=white},
+    diamond_node/.style={diamond, draw, thick, minimum width=2cm, minimum height=1cm, fill=white, aspect=2},
+    attribute/.style={ellipse, draw, thin, minimum width=1.5cm, minimum height=0.6cm, fill=white, font=\scriptsize},
+    line/.style={draw, thick}, 
+}
+% ------------------------------------------------ 
+% Configuração de página
+% ------------------------------------------------
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt % Adicione isso
+}% Caixa para resposta discursiva
+\newcommand{\resposta}[1]{
+\noindent
+\framebox[\textwidth]{
+\begin{minipage}{0.98\textwidth}
+\vspace{#1}
+\end{minipage}
+}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Comandos auxiliares
+% ------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ------------------------------------------------
+% Documento
+% ------------------------------------------------
+\begin{document}
+
+% ------------------------------------------------
+% Cabeçalho
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{@{} L{4cm} X @{}}
+    \raisebox{-0.5cm}{\includegraphics[width=4cm]{Universidade_de_Rio_Verde.jpg}} &
+    \hfill
+    \begin{tabular}{|>{\centering\arraybackslash}m{10cm}|>{\raggedright\arraybackslash}p{1.8cm}|}
+        \hline
+        \cellcolor{black}\color{white}\rule{0pt}{1.2cm}\textbf{AVALIAÇÃO 3 - 2ª CHAMADA} 
+        & 
+        \small Nota \tabularnewline
+        \hline
+    \end{tabular} 
+\end{tabularx}
+
+% ------------------------------------------------  
+% Tabela principal
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{|X|L{2cm}|}
+\hline
+\textbf{Curso} & \textbf{Campus} \\
+\textit{Engenharia de Software} & \textit{Rio Verde} \\
+\hline
+\multicolumn{2}{|l|}{ \textit{Lógica para Engenharia de Software}} \\
+\hline
+\textbf{Nome do(a) acadêmico(a)} EDUARDO VAZ MOREIRA BORGES &  \textbf{Valor} \\
+& 7,0 \\
+\hline
+\textbf{Professor} & \textbf{Turma} \\
+\textit{ Sergio Souza Novak} & \textit{A} \\
+\hline
+\textbf{Data da Avaliação} & \textbf{Código} \\
+ & \textit{ESW418} \\
+\hline
+\end{tabularx}
+ 
+% ------------------------------------------------
+% Barra de Atenção
+% ------------------------------------------------
+\vspace{0.2cm}
+
+\begin{tabularx}{\textwidth}{|X|}
+\hline
+\cellcolor{black}\color{white}
+\centering \textbf{ATENÇÃO:} Somente serão passíveis de \textbf{REVISÃO} avaliações resolvidas à \textbf{TINTA}. \tabularnewline
+\hline
+\end{tabularx}
+
+
+\textbf{ORIENTAÇÕES PARA A RESOLUÇÃO}  
+
+\begin{itemize}
+    \item A avaliação é individual, com consulta apenas ao material escrito a mão (à caneta);
+    \item A interpretação de texto faz parte da avaliação;
+\end{itemize}
+
+
+\begin{center}
+    \rule{\textwidth}{0.4pt}
+    \textbf{QUESTÕES}
+\end{center}
+
+\vspace{0.5cm} 
+\begin{enumerate}
+    \item \textbf{(ENADE) - Adaptada} No processo de pesquisa binária em um vetor ordenado, os números máximos de comparações necessárias para se determinar se um elemento faz parte de vetores com tamanhos 50, 220 e 300 são, respectivamente, iguais a
+
+\begin{enumerate}[label=(\Alph*)]
+    \item 5, 100 e 30.
+    \item 6, 8 e 9.
+    \item 8, 31 e 18.
+    \item 10, 100 e 30.
+    \item 25, 500 e 150.
+\end{enumerate}
+     
+    
+    \item Converta o grafo bipartido abaixo para o formato de Matriz de Adjacência, nos moldes do livro Cormen.
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={thick}
+    ]
+        % Partição 1
+        \node[vertex] (1) at (0,4) {1};
+        \node[vertex] (2) at (0,2) {2};
+        \node[vertex] (3) at (0,0) {3};
+        
+        % Partição 2
+        \node[vertex] (4) at (4,4.5) {4};
+        \node[vertex] (5) at (4,2.5) {5};
+        \node[vertex] (6) at (4,0.5) {6};
+        \node[vertex] (7) at (4,-1.5) {7};
+
+        \draw[edge] (1) -- (4);
+        \draw[edge] (1) -- (5);
+        \draw[edge] (1) -- (6);
+        \draw[edge] (1) -- (7);
+        \draw[edge] (2) -- (4);
+        \draw[edge] (2) -- (5);
+        \draw[edge] (2) -- (6);
+        \draw[edge] (2) -- (7);
+        \draw[edge] (3) -- (4);
+        \draw[edge] (3) -- (5);
+        \draw[edge] (3) -- (6);
+        \draw[edge] (3) -- (7);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Preencha a matriz de adjacência abaixo.
+    \item Explique, em suas palavras, porque um grafo bipartido é um tipo especial de grafo.
+    \item Qual é a vantagem da matriz de adjacência em relação à lista para este grafo?
+\end{enumerate}
+
+\begin{center}
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.6\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.5}
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{Vértices} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} \\ \hline
+        \textbf{1} & & & & & & & \\ \hline
+        \textbf{2} & & & & & & & \\ \hline
+        \textbf{3} & & & & & & & \\ \hline
+        \textbf{4} & & & & & & & \\ \hline
+        \textbf{5} & & & & & & & \\ \hline
+        \textbf{6} & & & & & & & \\ \hline
+        \textbf{7} & & & & & & & \\ \hline
+    \end{tabular}
+    \end{center}
+    \end{tcolorbox}
+\end{center}
+\quadro{10cm}
+
+
+    \item Com base no comportamento das curvas no gráfico abaixo, assinale a alternativa que associa corretamente a cor/formato do ponto à sua respectiva complexidade:
+    \begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=11cm, height=7cm,
+            axis lines = left,
+            xlabel = {$n$ (Entrada)},
+            ylabel = {$T(n)$ (Custo)},
+            ymin=0, ymax=1000, xmin=0, xmax=35,
+            grid=both,
+            grid style={line width=.1pt, draw=black!10},
+            legend pos=outer north east,
+            legend style={font=\small},
+        ]
+            % O(n^2) - Azul (Círculo)
+            \addplot[blue, only marks, mark=*, mark size=3pt] coordinates {
+                (1,1) (5,25) (10,100) (15,225) (20,400) (25,625) (30,900)
+            };
+            \addlegendentry{Pontos Azuis ($\bullet$)}
+            
+            % O(n log n) - Vermelho (Quadrado)
+            \addplot[red, only marks, mark=square*, mark size=3pt] coordinates {
+                (1,0) (2,2) (4,8) (8,24) (16,64) (24,110) (32,160)
+            };
+            \addlegendentry{Pontos Vermelhos ($\blacksquare$)}
+            
+            % O(2^n) - Verde (Triângulo)
+            \addplot[green!60!black, only marks, mark=triangle*, mark size=3.5pt] coordinates {
+                (1,2) (2,4) (4,16) (6,64) (8,256) (9,512) (10,1024)
+            };
+            \addlegendentry{Pontos Verdes ($\blacktriangle$)}
+        \end{axis}
+    \end{tikzpicture}
+    \end{center}
+    
+    \begin{enumerate}[label=\alph*)]
+        \item Azul: $O(n^2)$; Vermelho: $O(n \log n)$; Verde: $O(2^n)$.
+        \item Azul: $O(n^2)$; Vermelho: $O(2^n)$; Verde: $O(n \log n)$.
+        \item Azul: $O(2^n)$; Vermelho: $O(n \log n)$; Verde: $O(n^2)$.
+        \item Azul: $O(n \log n)$; Vermelho: $O(n^2)$; Verde: $O(2^n)$.
+    \end{enumerate}
+
+    \item O algoritmo abaixo (Floyd-Warshall) calcula as distâncias mínimas entre todos os pares de vértices em um grafo (representado por uma matriz de adjacência $W$ de pesos).
+
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, thick, minimum size=0.8cm},
+        ]
+            \node[vertex] (1) at (90:2.2)  {$S_1$};
+            \node[vertex] (2) at (18:2.2)  {$S_2$};
+            \node[vertex] (3) at (306:2.2) {$S_3$};
+            \node[vertex] (4) at (234:2.2) {$S_4$};
+            \node[vertex] (5) at (162:2.2) {$S_5$};
+
+            \draw[thick] (1) -- node[above right] {\small 5} (2);
+            \draw[thick] (2) -- node[right]       {\small 18} (3);
+            \draw[thick] (3) -- node[below]       {\small 12} (4);
+            \draw[thick] (4) -- node[left]        {\small 7}  (5);
+            \draw[thick] (5) -- node[above left]  {\small 25} (1);
+            \draw[thick] (1) -- node[pos=0.3, right] {\small 8} (3);
+            \draw[thick] (1) -- node[pos=0.3, left]  {\small 19} (4);
+            \draw[thick] (2) -- node[pos=0.7, left]  {\small 3}  (4);
+            \draw[thick] (2) -- node[pos=0.3, left]  {\small 14} (5);
+            \draw[thick] (3) -- node[pos=0.3, right] {\small 21} (5);
+        \end{tikzpicture}
+    \end{center}
+
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{FLOYD-WARSHALL($W, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & $D \leftarrow W$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            2 & \textbf{para} $k = 1$ \textbf{até} $n$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            3 & \quad \textbf{para} $i = 1$ \textbf{até} $n$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            4 & \quad \quad \textbf{para} $j = 1$ \textbf{até} $n$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            5 & \quad \quad \quad \textbf{se} $D[i,j] > D[i,k] + D[k,j]$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            6 & \quad \quad \quad \quad $D[i,j] \leftarrow D[i,k] + D[k,j]$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            7 & \textbf{retornar} $D$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+
+    \begin{enumerate}[label=\alph*)]
+        \item Preencha as colunas \textbf{custo} e \textbf{vezes} para cada linha do algoritmo. (Considere o pior caso para a linha 6)
+        \item Determine a complexidade assintótica $T(n)$ do algoritmo no pior caso, expressando-a em notação Big-O.
+    \end{enumerate}
+    \quadro{6cm}
+
+\item Um novo condomínio industrial deseja conectar seus 6 galpões principais (identificados pelos números de $1$ a $6$) a uma central unificada de energia elétrica. O projeto exige que todos os galpões fiquem interligados (seja de forma direta ou indireta) na mesma rede, mas a construtora precisa realizar a obra com o menor orçamento possível. Os custos orçados (em milhares de reais) para o cabeamento subterrâneo entre cada par de galpões viável estão representados no projeto topológico abaixo.
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={thick}
+    ]
+        \node[vertex] (1) at (0,2) {1};
+        \node[vertex] (2) at (3,3) {2};
+        \node[vertex] (3) at (6,2) {3};
+        \node[vertex] (4) at (6,0) {4};
+        \node[vertex] (5) at (3,-1) {5};
+        \node[vertex] (6) at (0,0) {6};
+
+        \draw[edge] (1) -- node[above left] {12} (2);
+        \draw[edge] (1) -- node[left] {4} (6);
+        \draw[edge] (2) -- node[left, pos=0.3] {15} (6);
+        \draw[edge] (3) -- node[right] {14} (4);
+        \draw[edge] (3) -- node[above right] {3} (2);
+        \draw[edge] (5) -- node[below left] {6} (6);
+        \draw[edge] (1) -- node[right, pos=0.2] {18} (5);
+        \draw[edge] (2) -- node[left, pos=0.8] {20} (4);
+        \draw[edge] (4) -- node[below right] {9} (5);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Aplique o algoritmo de Kruskal para encontrar a Árvore Geradora Mínima (MST). Liste as arestas em ordem crescente de peso.
+    \item Para cada aresta analisada, indique se ela foi \textbf{adicionada} à MST ou \textbf{rejeitada} (por formar ciclo). Mostre a evolução dos conjuntos de vértices (simulando a estrutura Union-Find).
+    \item Desenhe a Árvore Geradora Mínima resultante.
+    \item Qual é o custo total mínimo para interligar os 6 galpões?
+\end{enumerate}
+\quadro{12cm} 
+
+\item \textbf{Texto de Apoio:}
+\vspace{0.3cm}
+
+    PEDROSO, Alexandre da Silva; CINTRA, Fausto Gonçalves. \textbf{Estudo analítico do desempenho de algoritmos de ordenação}. Revista EduFatec: educação, tecnologia e gestão, Franca, v. 2, n. 5, p. 73--88, ago./dez. 2022. Disponível em: Revista EduFatec -- artigo em PDF. Acesso em: 25 jun. 2026.
+\vspace{0.3cm}
+
+O que é ordenar dados? Por que é tão importante ordenar dados em computação? Tome-se o caso de alguém que precise localizar o número de celular de um amigo na lista de contatos do seu celular, mas esses contatos não estão organizados sob nenhuma ordem. Caso a quantidade de contatos na lista seja elevada, essa busca pode se tornar uma atividade muito laboriosa e por vezes até mesmo infrutífera. Não por acaso, a lista de contatos dos celulares costuma estar organizada em ordem alfabética. Pode-se citar também a busca de informações sobre um cliente no banco de dados de uma empresa que possui milhares de cadastros. Se os dados se encontram ordenados, a busca pela informação se torna menos complexa. Por esses e outros motivos os algoritmos de ordenação se tornam um importante recurso utilizado por cientistas da computação. 
+
+Neste estudo, conforme antes anunciado, serão discutidas as características e a eficiência temporal dos algoritmos de ordenação \textit{bubble sort}, \textit{selection sort} e \textit{quick sort}, tendo sido recolhidos dados a esse respeito por meio de pesquisa bibliográfica. 
+
+O algoritmo \textit{bubble sort} (ordenação por flutuação) compara cada dois valores adjacentes, realizando a permuta entre eles se o primeiro valor for maior do que o segundo. O melhor caso ocorre quando o vetor a ser ordenado já está na ordem correta. Nesse caso, nenhuma troca será realizada e a estrutura de repetição será executada uma única vez, tendo sido realizadas $n - 1$ comparações. Com isso diz-se que, no melhor caso, esse algoritmo possui complexidade $\Omega(n)$, utilizando a notação Ômega ($\Omega$) para representar o tempo mínimo de execução.
+O pior caso ocorre quando o vetor a ser ordenado está na ordem inversa à desejada. Logo, o número de comparações realizadas será $n(n - 1) = n^2 - n$. Isso leva a concluir que, no pior caso, o tempo de execução do algoritmo é $O(n^2)$. O caso médio para esse algoritmo será $\frac{(n^2 - n) + (n - 1)}{2} = \frac{1}{2}(n^2 - 1)$ e, portanto, a complexidade do caso médio para o algoritmo será $O(n^2)$.
+
+O algoritmo \textit{quick sort}, primeiramente seleciona um valor do vetor, o qual é designado como pivô. Na primeira passada, divide o vetor em um subvetor à esquerda contendo apenas valores menores que o pivô, e outro subvetor à direita, que contém apenas valores maiores que o pivô. Em seguida, recursivamente, repete o processo em cada um dos subvetores até que todo o vetor esteja ordenado. 
+Uma característica peculiar do \textit{quick sort} é sua ineficiência para vetores já ordenados quando a escolha do pivô é inadequada. Nessa situação, as partições serão extremamente desiguais. Essa situação é desastrosa, pois o número de comparações passa a cerca de $\frac{n^2}{2}$, e o tamanho da pilha necessária para as chamadas recursivas é cerca de $n$. 
+A melhor situação possível ocorre quando cada partição divide o vetor em duas partes iguais. Logo, $T(n) = 2T(\frac{n}{2}) + n - 1$. A solução para esta recorrência é: $T(n) = n \log n - n + 1$, o que define uma complexidade de melhor caso de $\Omega(n \log n)$.
+No caso médio, o número de comparações realizadas é $T(n) \approx 1,386 n \log n - 0,846 n$, o que significa que em média o tempo de execução do \textit{quick sort} é $O(n \log n)$.
+
+O algoritmo \textit{selection sort} (ordenação por seleção) encontra primeiro o valor mínimo entre os dados de entrada, coloca esse valor na primeira posição, depois encontra o segundo valor mínimo colocando-o na segunda posição, e faz isso sucessivamente até que o vetor esteja ordenado. Para esse algoritmo, ao utilizarmos um vetor com $n$ posições, o tempo de execução pode ser encontrado pela soma $T(n) = 1 + 2 + 3 + \dots + (n - 1)$, que é uma progressão aritmética cuja soma resulta em $T(n) = \frac{1}{2}(n^2 - n)$. Sendo assim, como ele sempre executa esse mesmo número de comparações independente da entrada, é possível concluir que a complexidade temporal do algoritmo \textit{selection sort} é delimitada inferiormente por $\Omega(n^2)$.
+
+\vspace{0.3cm}
+Com base no texto de apoio, os três algoritmos de ordenação apresentam diferentes níveis de eficiência temporal dependendo da disposição inicial dos dados. 
+
+Assinale a alternativa que apresenta o algoritmo que tem o \textbf{melhor caso} mais eficiente:
+\begin{enumerate}[label=\alph*)]
+    \item Bubble sort
+    \item Quick sort
+    \item Selection sort
+    \item A eficiência dos três algoritmos no melhor caso é a mesma.
+\end{enumerate}
+\item Tanto o algoritmo de Prim quanto o algoritmo de Kruskal são amplamente utilizados para encontrar a Árvore Geradora Mínima (MST) de um grafo não-direcionado e ponderado. Explique, de forma discursiva, qual é a principal diferença na estratégia de construção da MST entre os dois algoritmos e em quais cenários (relacionados à densidade do grafo) é mais vantajoso utilizar o Prim e em quais é mais recomendado o uso do Kruskal.
+
+\quadro{10cm}
+
+\item Analise os quatro grafos a seguir (I, II, III e IV):
+
+\begin{center}
+\begin{tabular}{cc}
+% Grafo I
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.6cm, inner sep=1pt},
+    edge/.style={thick}
+]
+    \node at (0.5, 2) {\textbf{I)}};
+    \node[vertex] (A) at (1,1) {A};
+    \node[vertex] (B) at (3,1) {B};
+    \node[vertex] (C) at (3,-1) {C};
+    \node[vertex] (D) at (1,-1) {D};
+    
+    \draw[edge] (A) -- (B);
+    \draw[edge] (B) -- (C);
+    \draw[edge] (C) -- (D);
+    \draw[edge] (D) -- (A);
+    \draw[edge] (A) -- (C);
+    \draw[edge] (B) -- (D);
+\end{tikzpicture}
+&
+% Grafo II
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.6cm, inner sep=1pt},
+    edge/.style={thick}
+]
+    \node at (0.5, 2) {\textbf{II)}};
+    \node[vertex] (1) at (1,1) {1};
+    \node[vertex] (2) at (2,0) {2};
+    \node[vertex] (3) at (1,-1) {3};
+    \node[vertex] (4) at (3,1) {4};
+    \node[vertex] (5) at (3,-1) {5};
+    
+    \draw[edge] (1) -- (2);
+    \draw[edge] (2) -- (3);
+    \draw[edge] (4) -- (5);
+\end{tikzpicture}
+\\
+% Grafo III
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.6cm, inner sep=1pt},
+    edge/.style={thick}
+]
+    \node at (0.5, 2) {\textbf{III)}};
+    \node[vertex] (U) at (2,1.5) {U};
+    \node[vertex] (V) at (1,0) {V};
+    \node[vertex] (W) at (3,0) {W};
+    \node[vertex] (X) at (0,-1.5) {X};
+    \node[vertex] (Y) at (2,-1.5) {Y};
+    
+    \draw[edge] (U) -- (V);
+    \draw[edge] (U) -- (W);
+    \draw[edge] (V) -- (X);
+    \draw[edge] (V) -- (Y);
+\end{tikzpicture}
+&
+% Grafo IV
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.6cm, inner sep=1pt},
+    edge/.style={thick}
+]
+    \node at (0.5, 2) {\textbf{IV)}};
+    \node[vertex] (K) at (2,1) {K};
+    \node[vertex] (L) at (3.5,0) {L};
+    \node[vertex] (M) at (2.5,-1.5) {M};
+    \node[vertex] (N) at (0.5,-1.5) {N};
+    \node[vertex] (O) at (0.5,0) {O};
+    
+    \draw[edge] (K) -- (L);
+    \draw[edge] (L) -- (M);
+    \draw[edge] (M) -- (N);
+    \draw[edge] (N) -- (O);
+    \draw[edge] (O) -- (K);
+\end{tikzpicture}
+\end{tabular}
+\end{center}
+
+Sobre os grafos desenhados acima, assinale a alternativa \textbf{CORRETA}:
+
+\begin{enumerate}[label=\alph*)]
+    \item O Grafo I é uma árvore, pois não possui ciclos.
+    \item O Grafo III é classificado como completo, pois não possui ciclos.
+    \item O Grafo II é uma árvore, portanto não poderia possuir duas componentes conexas.
+    \item O Grafo IV possui árvore geradora.
+    \item O Grafo I possui quatro componentes conexas e é um grafo completo.
+\end{enumerate}
+\end{enumerate}
+
+% ============================================================
+% FORMULÁRIO DE APOIO
+% ============================================================
+\newpage
+\begin{center}
+    {\Large \textbf{FORMULÁRIO DE APOIO}}\\[0.3cm]
+    {\small Consulta permitida durante a prova. Não destacar.}
+\end{center}
+\vspace{0.5cm}
+
+\hrule
+\vspace{0.4cm}
+
+% --- 1. Teorema do Aperto de Mãos ---
+\noindent\textbf{1. Teorema do Aperto de Mãos (\textit{Handshaking Lemma})}
+
+Em qualquer grafo $G = (V, E)$, a soma dos graus de todos os vértices é igual ao dobro do número de arestas:
+$$\sum_{v \in V} \text{grau}(v) = 2 \cdot |E|$$
+
+\textbf{Consequência:} Se todos os $n$ vértices possuem o mesmo grau $d$ (grafo regular), então:
+$$|E| = \frac{n \cdot d}{2}$$
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.4cm}
+
+% --- 2. Algoritmo de Kruskal ---
+\noindent\textbf{2. Algoritmo de Kruskal (Árvore Geradora Mínima — MST)}
+
+\begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+\textbf{KRUSKAL($G, n$)}\\
+1. Ordenar todas as arestas de $G$ em ordem crescente de peso.\\
+2. Inicializar cada vértice como um conjunto independente (Union-Find).\\
+3. \textbf{Para} cada aresta $(u, v)$ em ordem crescente de peso:\\
+\quad 3.1. \textbf{Se} $u$ e $v$ pertencem a conjuntos \textbf{diferentes}:\\
+\quad\quad Adicionar $(u, v)$ à MST e unir os conjuntos de $u$ e $v$.\\
+\quad 3.2. \textbf{Senão}: Rejeitar $(u, v)$ (formaria ciclo).\\
+4. Parar quando a MST tiver $n - 1$ arestas.
+\end{tcolorbox}
+
+\textbf{Resultado:} A MST sempre terá exatamente $n - 1$ arestas para $n$ vértices.
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.4cm}
+
+% --- 3. Representações de Grafos ---
+\noindent\textbf{3. Representações de Grafos — Exemplo com o grafo:}
+
+\begin{center}
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, thick, minimum size=0.7cm},
+    edge/.style={thick}
+]
+    \node[vertex] (1) at (0,0) {1};
+    \node[vertex] (2) at (2,1) {2};
+    \node[vertex] (3) at (2,-1) {3};
+    \node[vertex] (4) at (4,0) {4};
+
+    \draw[edge] (1) -- (2);
+    \draw[edge] (1) -- (3);
+    \draw[edge] (2) -- (3);
+    \draw[edge] (2) -- (4);
+    \draw[edge] (3) -- (4);
+\end{tikzpicture}
+\end{center}
+
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{3a. Matriz de Adjacência}
+
+$$M = \begin{pmatrix}
+ 0 & 1 & 1 & 0 \\
+ 1 & 0 & 1 & 1 \\
+ 1 & 1 & 0 & 1 \\
+ 0 & 1 & 1 & 0
+\end{pmatrix}$$
+
+$M[i][j] = 1$ se existe aresta entre $i$ e $j$.\\
+Propriedade: a matriz é \textbf{simétrica} em grafos não direcionados.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{3b. Lista de Adjacência}
+
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c|l}
+    \textbf{Vértice} & \textbf{Vizinhos} \\ \hline
+    1 & $\to$ 2 $\to$ 3 \\
+    2 & $\to$ 1 $\to$ 3 $\to$ 4 \\
+    3 & $\to$ 1 $\to$ 2 $\to$ 4 \\
+    4 & $\to$ 2 $\to$ 3 \\
+\end{tabular}
+
+\vspace{0.2cm}
+Cada vértice armazena a lista dos seus vizinhos diretos.
+\end{minipage}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.4cm}
+
+
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.4cm}
+
+\noindent\textbf{4. Comparativo Visual das Complexidades}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=14cm, height=9cm,
+        axis lines = left,
+        xlabel = {$n$ (Tamanho da Entrada)},
+        ylabel = {$T(n)$ (Operações)},
+        ymin=0, ymax=260, xmin=0, xmax=18,
+        grid=both,
+        grid style={line width=.1pt, draw=black!10},
+        legend pos=outer north east,
+        legend style={font=\small},
+        every axis plot/.append style={thick},
+    ]
+        % O(1)
+        \addplot[black, dashed, mark=-, mark size=3pt, domain=1:17, samples=10] {10};
+        \addlegendentry{Constante}
+
+        % O(log n)
+        \addplot[blue, mark=*, mark size=2pt, domain=1:17, samples=10] {10*(ln(x)/ln(2))};
+        \addlegendentry{Logarítmica}
+
+        % O(sqrt n)
+        \addplot[cyan, mark=diamond*, mark size=2.5pt, domain=1:17, samples=10] {10*sqrt(x)};
+        \addlegendentry{Raiz Quadrada}
+
+        % O(n)
+        \addplot[green!60!black, mark=square*, mark size=2pt, domain=1:17, samples=10] {10*x};
+        \addlegendentry{Linear}
+
+        % O(n log n)
+        \addplot[orange, mark=triangle*, mark size=2.5pt, domain=1:17, samples=10] {10*x*(ln(x)/ln(2))};
+        \addlegendentry{Linearítmica}
+
+        % O(n^2)
+        \addplot[red, mark=pentagon*, mark size=2.5pt, domain=1:17, samples=10] {x^2};
+        \addlegendentry{Quadrática}
+
+        % O(2^n)
+        \addplot[purple, mark=star, mark size=3pt, domain=1:8, samples=8] {2^x};
+        \addlegendentry{Exponencial}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.4cm}
+
+\noindent\textbf{5. Tábua de Logaritmos (\textit{Base 10 e Base 2})}
+
+\begin{center}
+\scriptsize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{N} & \textbf{$\log_{10}$} & \textbf{$\log_2$} & \textbf{N} & \textbf{$\log_{10}$} & \textbf{$\log_2$} & \textbf{N} & \textbf{$\log_{10}$} & \textbf{$\log_2$} & \textbf{N} & \textbf{$\log_{10}$} & \textbf{$\log_2$} & \textbf{N} & \textbf{$\log_{10}$} & \textbf{$\log_2$} \\ \hline
+10 & 1.00 & 3.32 & 310 & 2.49 & 8.28 & 610 & 2.79 & 9.25 & 910 & 2.96 & 9.83 & 1210 & 3.08 & 10.24 \\ \hline
+20 & 1.30 & 4.32 & 320 & 2.51 & 8.32 & 620 & 2.79 & 9.28 & 920 & 2.96 & 9.85 & 1220 & 3.09 & 10.25 \\ \hline
+30 & 1.48 & 4.91 & 330 & 2.52 & 8.37 & 630 & 2.80 & 9.30 & 930 & 2.97 & 9.86 & 1230 & 3.09 & 10.26 \\ \hline
+40 & 1.60 & 5.32 & 340 & 2.53 & 8.41 & 640 & 2.81 & 9.32 & 940 & 2.97 & 9.88 & 1240 & 3.09 & 10.28 \\ \hline
+50 & 1.70 & 5.64 & 350 & 2.54 & 8.45 & 650 & 2.81 & 9.34 & 950 & 2.98 & 9.89 & 1250 & 3.10 & 10.29 \\ \hline
+60 & 1.78 & 5.91 & 360 & 2.56 & 8.49 & 660 & 2.82 & 9.37 & 960 & 2.98 & 9.91 & 1260 & 3.10 & 10.30 \\ \hline
+70 & 1.85 & 6.13 & 370 & 2.57 & 8.53 & 670 & 2.83 & 9.39 & 970 & 2.99 & 9.92 & 1270 & 3.10 & 10.31 \\ \hline
+80 & 1.90 & 6.32 & 380 & 2.58 & 8.57 & 680 & 2.83 & 9.41 & 980 & 2.99 & 9.94 & 1280 & 3.11 & 10.32 \\ \hline
+90 & 1.95 & 6.49 & 390 & 2.59 & 8.61 & 690 & 2.84 & 9.43 & 990 & 3.00 & 9.95 & 1290 & 3.11 & 10.33 \\ \hline
+100 & 2.00 & 6.64 & 400 & 2.60 & 8.64 & 700 & 2.85 & 9.45 & 1000 & 3.00 & 9.97 & 1300 & 3.11 & 10.34 \\ \hline
+110 & 2.04 & 6.78 & 410 & 2.61 & 8.68 & 710 & 2.85 & 9.47 & 1010 & 3.00 & 9.98 & 1310 & 3.12 & 10.36 \\ \hline
+120 & 2.08 & 6.91 & 420 & 2.62 & 8.71 & 720 & 2.86 & 9.49 & 1020 & 3.01 & 9.99 & 1320 & 3.12 & 10.37 \\ \hline
+130 & 2.11 & 7.02 & 430 & 2.63 & 8.75 & 730 & 2.86 & 9.51 & 1030 & 3.01 & 10.01 & 1330 & 3.12 & 10.38 \\ \hline
+140 & 2.15 & 7.13 & 440 & 2.64 & 8.78 & 740 & 2.87 & 9.53 & 1040 & 3.02 & 10.02 & 1340 & 3.13 & 10.39 \\ \hline
+150 & 2.18 & 7.23 & 450 & 2.65 & 8.81 & 750 & 2.88 & 9.55 & 1050 & 3.02 & 10.04 & 1350 & 3.13 & 10.40 \\ \hline
+160 & 2.20 & 7.32 & 460 & 2.66 & 8.85 & 760 & 2.88 & 9.57 & 1060 & 3.03 & 10.05 & 1360 & 3.13 & 10.41 \\ \hline
+170 & 2.23 & 7.41 & 470 & 2.67 & 8.88 & 770 & 2.89 & 9.59 & 1070 & 3.03 & 10.06 & 1370 & 3.14 & 10.42 \\ \hline
+180 & 2.26 & 7.49 & 480 & 2.68 & 8.91 & 780 & 2.89 & 9.61 & 1080 & 3.03 & 10.08 & 1380 & 3.14 & 10.43 \\ \hline
+190 & 2.28 & 7.57 & 490 & 2.69 & 8.94 & 790 & 2.90 & 9.63 & 1090 & 3.04 & 10.09 & 1390 & 3.14 & 10.44 \\ \hline
+200 & 2.30 & 7.64 & 500 & 2.70 & 8.97 & 800 & 2.90 & 9.64 & 1100 & 3.04 & 10.10 & 1400 & 3.15 & 10.45 \\ \hline
+210 & 2.32 & 7.71 & 510 & 2.71 & 8.99 & 810 & 2.91 & 9.66 & 1110 & 3.05 & 10.12 & 1410 & 3.15 & 10.46 \\ \hline
+220 & 2.34 & 7.78 & 520 & 2.72 & 9.02 & 820 & 2.91 & 9.68 & 1120 & 3.05 & 10.13 & 1420 & 3.15 & 10.47 \\ \hline
+230 & 2.36 & 7.85 & 530 & 2.72 & 9.05 & 830 & 2.92 & 9.70 & 1130 & 3.05 & 10.14 & 1430 & 3.16 & 10.48 \\ \hline
+240 & 2.38 & 7.91 & 540 & 2.73 & 9.08 & 840 & 2.92 & 9.71 & 1140 & 3.06 & 10.15 & 1440 & 3.16 & 10.49 \\ \hline
+250 & 2.40 & 7.97 & 550 & 2.74 & 9.10 & 850 & 2.93 & 9.73 & 1150 & 3.06 & 10.17 & 1450 & 3.16 & 10.50 \\ \hline
+260 & 2.41 & 8.02 & 560 & 2.75 & 9.13 & 860 & 2.93 & 9.75 & 1160 & 3.06 & 10.18 & 1460 & 3.16 & 10.51 \\ \hline
+270 & 2.43 & 8.08 & 570 & 2.76 & 9.15 & 870 & 2.94 & 9.76 & 1170 & 3.07 & 10.19 & 1470 & 3.17 & 10.52 \\ \hline
+280 & 2.45 & 8.13 & 580 & 2.76 & 9.18 & 880 & 2.94 & 9.78 & 1180 & 3.07 & 10.20 & 1480 & 3.17 & 10.53 \\ \hline
+290 & 2.46 & 8.18 & 590 & 2.77 & 9.20 & 890 & 2.95 & 9.80 & 1190 & 3.08 & 10.22 & 1490 & 3.17 & 10.54 \\ \hline
+300 & 2.48 & 8.23 & 600 & 2.78 & 9.23 & 900 & 2.95 & 9.81 & 1200 & 3.08 & 10.23 & 1500 & 3.18 & 10.55 \\ \hline
+\end{tabular}
+\end{center}
+
+\end{document}

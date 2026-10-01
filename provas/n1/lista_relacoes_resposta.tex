@@ -1,0 +1,277 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Gabarito — Lista de Relações}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+\vspace*{0.2cm}
+
+\section*{Gabarito — Exercícios Discursivos}
+
+\begin{enumerate}
+
+% ============================================================
+% RESPOSTA 1
+% ============================================================
+\item \textbf{Enunciado:} Seja $A = \{1, 2, 3\}$ e $R = \{(1,1), (2,2), (3,3), (1,2), (2,1)\}$.
+
+\begin{block}{Resposta}
+\textbf{Reflexiva:} Sim. Os pares $(1,1)$, $(2,2)$ e $(3,3)$ pertencem a $R$, logo $(a,a) \in R$ para todo $a \in A$.
+
+\textbf{Simétrica:} Sim. Para cada $(a,b) \in R$ com $a \neq b$, temos:
+$(1,2) \in R$ e $(2,1) \in R$. Todos os pares simétricos estão presentes.
+
+\textbf{Transitiva:} Sim. Os únicos pares com $a \neq b$ são $(1,2)$ e $(2,1)$.
+\begin{itemize}
+    \item $(1,2) \in R$ e $(2,1) \in R \Rightarrow (1,1) \in R$ \checkmark
+    \item $(2,1) \in R$ e $(1,2) \in R \Rightarrow (2,2) \in R$ \checkmark
+\end{itemize}
+Não há cadeia que gere um par ausente em $R$.
+
+\textbf{Conclusão:} $R$ é uma relação de equivalência.
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 2
+% ============================================================
+\item \textbf{Enunciado:} $aRb \Leftrightarrow a - b$ é múltiplo de 4 em $\mathbb{Z}$.
+
+\begin{block}{Resposta}
+\textbf{Reflexiva:} Para todo $a \in \mathbb{Z}$, $a - a = 0 = 4 \cdot 0$, que é múltiplo de 4. Logo, $aRa$.
+
+\textbf{Simétrica:} Suponha $aRb$, ou seja, $a - b = 4k$ para algum $k \in \mathbb{Z}$. Então $b - a = -(a-b) = -4k = 4(-k)$, que é múltiplo de 4. Logo, $bRa$.
+
+\textbf{Transitiva:} Suponha $aRb$ e $bRc$. Então $a - b = 4k$ e $b - c = 4m$ para $k, m \in \mathbb{Z}$. Somando:
+\[
+a - c = (a - b) + (b - c) = 4k + 4m = 4(k + m),
+\]
+que é múltiplo de 4. Logo, $aRc$.
+
+\textbf{Conclusão:} $R$ é uma relação de equivalência.
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 3
+% ============================================================
+\item \textbf{Enunciado:} $A = \{1,2,3,4\}$ e $R = \{(a,b) \in A \times A : a \leq b\}$.
+
+\begin{block}{Resposta}
+\textbf{Reflexiva:} Sim. Para todo $a \in A$, $a \leq a$, logo $(a,a) \in R$.
+
+\textbf{Simétrica:} Não. Contraexemplo: $(1,2) \in R$ pois $1 \leq 2$, mas $(2,1) \notin R$ pois $2 \not\leq 1$.
+
+\textbf{Transitiva:} Sim. Se $a \leq b$ e $b \leq c$, então $a \leq c$.
+
+\textbf{Conclusão:} $R$ é reflexiva e transitiva, mas \textbf{não} é simétrica. Portanto, $R$ \textbf{não} é uma relação de equivalência. (É uma relação de ordem parcial.)
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 4
+% ============================================================
+\item \textbf{Enunciado:} $R$ em $\mathbb{Z}$: $aRb \Leftrightarrow |a| = |b|$.
+
+\begin{block}{Resposta}
+\textbf{Reflexiva:} Para todo $a \in \mathbb{Z}$, $|a| = |a|$. Logo, $aRa$.
+
+\textbf{Simétrica:} Suponha $aRb$, ou seja, $|a| = |b|$. Então $|b| = |a|$, logo $bRa$.
+
+\textbf{Transitiva:} Suponha $aRb$ e $bRc$, ou seja, $|a| = |b|$ e $|b| = |c|$. Então $|a| = |c|$, logo $aRc$.
+
+\textbf{Conclusão:} $R$ é reflexiva, simétrica e transitiva. Portanto, $R$ é uma relação de equivalência.
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 5
+% ============================================================
+\item \textbf{Enunciado:} $A = \{1,2,3,4,5\}$ e $R = \{(1,1),(2,2),(3,3),(4,4),(5,5),(1,3),(3,1),(2,4),(4,2)\}$.
+
+\begin{block}{Resposta}
+\textbf{Reflexiva:} Sim. $(1,1), (2,2), (3,3), (4,4), (5,5) \in R$.
+
+\textbf{Simétrica:} Sim.
+\begin{itemize}
+    \item $(1,3) \in R$ e $(3,1) \in R$ \checkmark
+    \item $(2,4) \in R$ e $(4,2) \in R$ \checkmark
+\end{itemize}
+
+\textbf{Transitiva:} Verificamos todas as cadeias:
+\begin{itemize}
+    \item $(1,3) \in R$ e $(3,1) \in R \Rightarrow (1,1) \in R$ \checkmark
+    \item $(3,1) \in R$ e $(1,3) \in R \Rightarrow (3,3) \in R$ \checkmark
+    \item $(2,4) \in R$ e $(4,2) \in R \Rightarrow (2,2) \in R$ \checkmark
+    \item $(4,2) \in R$ e $(2,4) \in R \Rightarrow (4,4) \in R$ \checkmark
+\end{itemize}
+Não há cadeia que gere um par fora de $R$.
+
+\textbf{Conclusão:} $R$ é uma relação de equivalência.
+\end{block}
+
+\newpage
+
+\section*{Gabarito — Exercícios de Múltipla Escolha}
+
+% ============================================================
+% RESPOSTA 6
+% ============================================================
+\item \textbf{Gabarito: B) $R_1$ e $R_4$.}
+
+\begin{block}{Justificativa}
+\textbf{$R_1$: $a + b$ é par.}
+\begin{itemize}
+    \item Reflexiva: $a + a = 2a$, par. \checkmark
+    \item Simétrica: se $a+b$ é par, $b+a$ é par. \checkmark
+    \item Transitiva: se $a+b$ é par e $b+c$ é par, então $a$ e $b$ têm mesma paridade, e $b$ e $c$ têm mesma paridade, logo $a$ e $c$ têm mesma paridade, ou seja, $a+c$ é par. \checkmark
+\end{itemize}
+$R_1$ é relação de equivalência.
+
+\textbf{$R_2$: $a < b$.} Não é reflexiva ($a \not< a$). Não é relação de equivalência.
+
+\textbf{$R_3$: $a \cdot b \geq 0$.} Não é transitiva: $(-2) \cdot 0 = 0 \geq 0$ e $0 \cdot 3 = 0 \geq 0$, mas $(-2) \cdot 3 = -6 < 0$. Não é relação de equivalência.
+
+\textbf{$R_4$: $a - b$ múltiplo de 3.} Reflexiva ($a-a=0$), simétrica ($b-a = -(a-b)$), transitiva ($(a-b)+(b-c) = a-c$). \checkmark
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 7
+% ============================================================
+\item \textbf{Gabarito: A) $R$ é reflexiva e simétrica, mas não é transitiva.}
+
+\begin{block}{Justificativa}
+Reflexiva: $(1,1),(2,2),(3,3),(4,4) \in R$. \checkmark
+
+Simétrica: $(1,2)$ e $(2,1)$; $(3,4)$ e $(4,3)$; $(1,3)$ e $(3,1)$ estão em $R$. \checkmark
+
+Transitiva: $(1,2) \in R$ e $(2,1) \in R$ e $(1,3) \in R$, o que exigiria $(2,3) \in R$. Porém $(2,3) \notin R$. Contraexemplo: $(2,1) \in R$ e $(1,3) \in R$, mas $(2,3) \notin R$. $\times$
+
+Logo, $R$ não é transitiva e, portanto, não é relação de equivalência.
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 8
+% ============================================================
+\item \textbf{Gabarito: A) $R_1$ é reflexiva e transitiva, mas não simétrica.}
+
+\begin{block}{Justificativa}
+\textbf{$R_1$: $a \mid b$.}
+\begin{itemize}
+    \item Reflexiva: $a \mid a$ para todo $a \in \mathbb{Z}$. \checkmark
+    \item Simétrica: $2 \mid 4$, mas $4 \nmid 2$. Não é simétrica.
+    \item Transitiva: se $a \mid b$ e $b \mid c$, então $a \mid c$. \checkmark
+\end{itemize}
+
+\textbf{$R_2$: $a - b$ múltiplo de 2.} É relação de equivalência (mesma paridade). Mas a alternativa A já é a correta.
+
+\textbf{$R_3$: $a \neq b$.} Não é reflexiva ($a \neq a$ é falso). Não é transitiva: $1 \neq 2$ e $2 \neq 1$, mas $1 = 1$ (falha).
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 9
+% ============================================================
+\item \textbf{Gabarito: B) $R$ é reflexiva e simétrica, mas não é transitiva.}
+
+\begin{block}{Justificativa}
+$R = \{(a,a),(b,b),(c,c),(a,b),(b,a),(b,c),(c,b)\}$.
+
+Reflexiva: $(a,a), (b,b), (c,c) \in R$. \checkmark
+
+Simétrica: $(a,b)$ e $(b,a)$; $(b,c)$ e $(c,b)$ estão em $R$. \checkmark
+
+Transitiva: $(a,b) \in R$ e $(b,c) \in R$, logo deveria ter $(a,c) \in R$. Porém $(a,c) \notin R$. A transitividade falha.
+
+Portanto, $R$ não é relação de equivalência.
+\end{block}
+
+\vspace{0.8cm}
+
+% ============================================================
+% RESPOSTA 10
+% ============================================================
+\item \textbf{Gabarito: B) II e III.}
+
+\begin{block}{Justificativa}
+\textbf{I. Toda relação reflexiva e simétrica é necessariamente transitiva.}\\
+Falso. Contraexemplo: $A=\{1,2,3\}$, $R=\{(1,1),(2,2),(3,3),(1,2),(2,1),(2,3),(3,2)\}$. É reflexiva e simétrica, mas $(1,2)\in R$ e $(2,3)\in R$ e $(1,3)\notin R$. Não é transitiva.
+
+\textbf{II. Se $R$ é simétrica e transitiva, e para todo $a \in A$ existe $b$ tal que $aRb$, então $R$ é reflexiva.}\\
+Verdadeiro. Seja $a \in A$. Existe $b$ tal que $aRb$. Por simetria, $bRa$. Por transitividade, $aRb$ e $bRa$ implica $aRa$.
+
+\textbf{III. A relação vazia em um conjunto não vazio é simétrica e transitiva, mas não reflexiva.}\\
+Verdadeiro. Simétrica e transitiva valem vacuamente (não há pares que violem). Mas se $a \in A$, $(a,a) \notin \varnothing$, logo não é reflexiva.
+
+\textbf{IV. Se $R$ é transitiva e $aRb$, então $aRa$.}\\
+Falso. Saber apenas que $aRb$ e que $R$ é transitiva não garante $aRa$. Precisaríamos de $bRa$ também (simetria) para concluir $aRa$.
+\end{block}
+
+\end{enumerate}
+
+\end{document}

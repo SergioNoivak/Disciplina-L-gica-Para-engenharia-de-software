@@ -1,0 +1,1765 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova} 
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox} 
+\usepackage{lmodern}
+\usepackage[normalem]{ulem}  % para \sout (strikethrough), normalem preserva \emph
+
+% TikZ e CircuiTikZ
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{circuitikz}
+\usetikzlibrary{arrows.meta, positioning, circuits.logic.US, calc}
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Subgrafos, Caminhos, Ciclos, Árvore Geradora Mínima com Prim e Kruskal, Isomorfismo de Grafos e problema do Caixeiro Viajante
+}}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Sumário}
+    \tableofcontents[hideallsubsections]
+\end{frame}
+ 
+\section{Subgrafos}
+\subsection{Conceitos Iniciais}
+
+\begin{frame}{Subgrafos: Definição Formal}
+    \begin{block}{Definição}
+        Seja $G = (V, E)$ um grafo. Um grafo $H = (V_H, E_H)$ é dito um \textbf{subgrafo} de $G$, denotado por $H \subseteq G$, se e somente se:
+        \begin{itemize}
+            \item $V_H \subseteq V$
+            \item $E_H \subseteq E$
+            \item $\forall e \in E_H$, se $e = \{u, v\}$, então $\{u, v\} \subseteq V_H$
+        \end{itemize}
+    \end{block}
+    \vspace{0.3cm}
+    A terceira condição (fecho das arestas) garante matematicamente que toda aresta em $H$ incide exclusivamente sobre vértices que também estão presentes em $H$, mantendo a estrutura de grafo bem definida.
+\end{frame}
+
+\begin{frame}{Exemplo Prático: Grafo Original $G$}
+    Considere o seguinte grafo $G = (V, E)$:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (0,0) {C};
+        \node (D) at (2,0) {D};
+        
+        \path[thick] 
+        (A) edge (B)
+        (A) edge (C)
+        (B) edge (C)
+        (B) edge (D)
+        (C) edge (D);
+    \end{tikzpicture}
+    \end{center}
+    $V = \{A, B, C, D\}$ \\
+    $E = \{\{A,B\}, \{A,C\}, \{B,C\}, \{B,D\}, \{C,D\}\}$
+\end{frame}
+
+\begin{frame}{Exemplo Prático: Subgrafo $H$}
+    A partir de $G$, podemos formar o subgrafo $H = (V_H, E_H)$:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (0,0) {C};
+        
+        \path[thick] 
+        (A) edge (B)
+        (A) edge (C);
+    \end{tikzpicture}
+    \end{center}
+    $V_H = \{A, B, C\} \subseteq \{A, B, C, D\}$ \\
+    $E_H = \{\{A,B\}, \{A,C\}\} \subseteq E$
+\end{frame}
+
+\begin{frame}{Comparação: Grafo $G$ e Subgrafo $H$}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Grafo $G$} \\
+            \vspace{0.5cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (A) at (0,2) {A};
+                \node (B) at (2,2) {B};
+                \node (C) at (0,0) {C};
+                \node (D) at (2,0) {D};
+                
+                \path[thick] 
+                (A) edge (B)
+                (A) edge (C)
+                (B) edge (C)
+                (B) edge (D)
+                (C) edge (D);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Subgrafo $H$} \\
+            \vspace{0.5cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (A) at (0,2) {A};
+                \node (B) at (2,2) {B};
+                \node (C) at (0,0) {C};
+                
+                \path[thick] 
+                (A) edge (B)
+                (A) edge (C);
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    \vspace{0.5cm}
+    \begin{center}
+        Note que removemos o vértice \textbf{D} e as arestas $\{B,C\}$, $\{B,D\}$ e $\{C,D\}$.
+    \end{center}
+\end{frame}
+
+\begin{frame}{Tipos Especiais de Subgrafos}
+    \begin{block}{Subgrafo Próprio}
+        Um subgrafo $H$ de $G$ é chamado de \textbf{subgrafo próprio} se $H \neq G$. Ou seja, $H$ tem menos vértices ou menos arestas que $G$.
+    \end{block}
+    
+    \begin{block}{Subgrafo Gerador (Spanning Subgraph)}
+        Um subgrafo $H$ é um \textbf{subgrafo gerador} de $G$ se ele contém \textbf{todos os vértices} de $G$ ($V_H = V$), mas pode ter menos arestas ($E_H \subseteq E$).
+    \end{block}
+\end{frame}
+
+\begin{frame}{Exemplo: Subgrafo Gerador}
+    Subgrafo $H'$ onde $V_{H'} = \{A, B, C, D\}$ e $E_{H'} = \{\{A,B\}, \{A,C\}, \{B,D\}, \{C,D\}\}$.
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (0,0) {C};
+        \node (D) at (2,0) {D};
+        
+        \path[thick] 
+        (A) edge (B)
+        (A) edge (C)
+        (B) edge (D)
+        (C) edge (D);
+    \end{tikzpicture}
+    \end{center}
+    Aqui, removemos apenas a aresta $\{B,C\}$. Como todos os vértices originais estão presentes, este é um \textbf{subgrafo gerador}.
+\end{frame}
+
+\begin{frame}{Subgrafo Induzido}
+    \begin{block}{Definição}
+        Um subgrafo $H$ de $G$ é dito \textbf{induzido} por um conjunto de vértices $V_H \subseteq V$ se $H$ contém \textbf{todas} as arestas de $G$ que ligam vértices de $V_H$.
+    \end{block}
+    \vspace{0.5cm}
+    \textbf{Exemplo}: Subgrafo induzido pelo conjunto $V_H = \{A, B, C\}$. \\
+    Em $G$, as arestas entre $\{A, B, C\}$ são $\{A,B\}, \{A,C\}$ e $\{B,C\}$.
+    \begin{center}
+    \begin{tikzpicture}[scale=1, every node/.style={circle, draw, minimum size=6mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (0,0) {C};
+        
+        \path[thick] 
+        (A) edge (B)
+        (A) edge (C)
+        (B) edge (C);
+    \end{tikzpicture}
+    \end{center}
+    (O subgrafo $H$ dos primeiros slides \textbf{não} era induzido, pois faltava a aresta $\{B,C\}$).
+\end{frame}
+
+\begin{frame}{Resumo e Aplicações}
+    \begin{itemize}
+        \item \textbf{Subgrafo}: Qualquer subconjunto válido de vértices e arestas.
+        \item \textbf{Subgrafo Gerador}: Mantém todos os vértices, podendo omitir arestas (muito usado em árvores geradoras, roteamento).
+        \item \textbf{Subgrafo Induzido}: Escolhe-se os vértices e obrigatoriamente mantém-se todas as arestas originais entre eles (útil para encontrar cliques, comunidades em redes).
+    \end{itemize}
+    \vspace{0.5cm}
+    Compreender subgrafos é o primeiro passo para analisar estruturas menores dentro de grandes redes complexas.
+\end{frame}
+
+\section{Componentes Conexas}
+\subsection{Definição e Identificação}
+\begin{frame}{Componentes Conexas: Definição}
+    \begin{block}{Definição}
+        Uma \textbf{componente conexa} de um grafo é um conjunto \textbf{maximal} de vértices que estão conectados por caminhos.
+    \end{block}
+    \vspace{0.5cm}
+    \textbf{O que significa "maximal"?} \\
+    Significa que não é possível adicionar mais nenhum outro vértice do grafo a esse conjunto sem perder a propriedade de que todos estão conectados entre si por algum caminho.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Se o grafo todo é conexo, ele possui apenas \textbf{1} componente conexa.
+        \item Se o grafo é desconexo, ele possui \textbf{2 ou mais} componentes conexas.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplo Visual: Grafo Desconexo}
+    Considere o seguinte grafo $G$:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.2, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        % Componente 1
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (4,2) {C};
+        
+        \path[thick] 
+        (A) edge (B)
+        (B) edge (C);
+        
+        % Componente 2
+        \node (D) at (0,0) {D};
+        \node (E) at (2,0) {E};
+        
+        \path[thick]
+        (D) edge (E);
+        
+        % Componente 3
+        \node (F) at (4,0) {F};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.5cm}
+    Embora pareçam três figuras separadas, matematicamente isso compõe \textbf{um único grafo} $G$.
+\end{frame}
+
+\begin{frame}{Identificando as Componentes Conexas}
+    Neste grafo, podemos identificar claramente três grupos maximais isolados:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.2, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        % Fundo Componente 1
+        \draw[fill=blue!10, draw=blue, dashed, rounded corners] (-0.6, 1.4) rectangle (4.6, 2.6);
+        % Componente 1
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (4,2) {C};
+        \path[thick] (A) edge (B) (B) edge (C);
+        
+        % Fundo Componente 2
+        \draw[fill=red!10, draw=red, dashed, rounded corners] (-0.6, -0.6) rectangle (2.6, 0.6);
+        % Componente 2
+        \node (D) at (0,0) {D};
+        \node (E) at (2,0) {E};
+        \path[thick] (D) edge (E);
+        
+        % Fundo Componente 3
+        \draw[fill=green!10, draw=green, dashed, rounded corners] (3.4, -0.6) rectangle (4.6, 0.6);
+        % Componente 3
+        \node (F) at (4,0) {F};
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    \textbf{Componentes:} $C_1 = \{A, B, C\}$, \quad $C_2 = \{D, E\}$, \quad $C_3 = \{F\}$.
+\end{frame}
+
+\begin{frame}{Aplicações Práticas}
+    O estudo de componentes conexas é fundamental na Engenharia de Software e em outras áreas para entender o isolamento e a comunicação em sistemas:
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item \textbf{Redes Sociais}: Identificar bolhas ou comunidades isoladas (grupos de pessoas onde ninguém conhece ninguém fora do grupo).
+        \vspace{0.3cm}
+        \item \textbf{Redes Elétricas}: Detectar partes da malha elétrica que ficaram sem energia ou isoladas após a falha de uma conexão principal.
+        \vspace{0.3cm}
+        \item \textbf{Sistemas de Transporte}: Verificar se todas as cidades de uma malha viária ou aeroportuária são acessíveis a partir de qualquer outra.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exercício 1: Componentes Conexas}
+    \textbf{Dado o grafo $G$ abaixo:}
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1, node distance=1.5cm, every node/.style={circle, draw, minimum size=6mm, thick}]
+        \node (1) at (0,2) {1};
+        \node (2) at (2,2) {2};
+        \node (3) at (2,0) {3};
+        \node (4) at (0,0) {4};
+        \node (5) at (-2,0) {5};
+        
+        \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (4) edge (5);
+        
+        \node (6) at (5,2) {6};
+        \node (7) at (6,0) {7};
+        \node (8) at (4,0) {8};
+        
+        \path[thick] (6) edge (7) (7) edge (8) (8) edge (6);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.5cm}
+    \textbf{Pergunta:} Identifique as componentes conexas deste grafo. Escreva o conjunto de vértices pertencente a cada componente.
+\end{frame}
+
+\begin{frame}{Resolução 1: Componentes Conexas}
+    O grafo possui \textbf{duas} componentes conexas distintas:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1, node distance=1.5cm, every node/.style={circle, draw, minimum size=6mm, thick}]
+        % Fundo Componente 1
+        \draw[fill=blue!10, draw=blue, dashed, rounded corners] (-2.6, -0.6) rectangle (2.6, 2.6);
+        \node (1) at (0,2) {1};
+        \node (2) at (2,2) {2};
+        \node (3) at (2,0) {3};
+        \node (4) at (0,0) {4};
+        \node (5) at (-2,0) {5};
+        \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (4) edge (5);
+        
+        % Fundo Componente 2
+        \draw[fill=red!10, draw=red, dashed, rounded corners] (3.4, -0.6) rectangle (6.6, 2.6);
+        \node (6) at (5,2) {6};
+        \node (7) at (6,0) {7};
+        \node (8) at (4,0) {8};
+        \path[thick] (6) edge (7) (7) edge (8) (8) edge (6);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    \textbf{Resposta:} $C_1 = \{1, 2, 3, 4, 5\}$ \quad e \quad $C_2 = \{6, 7, 8\}$.
+\end{frame}
+
+\begin{frame}{Exercício 2: Construção de Subgrafos}
+    Utilizando o \textbf{mesmo grafo $G$} da questão anterior:
+    \vspace{0.3cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=0.8, node distance=1.5cm, every node/.style={circle, draw, minimum size=6mm, thick}]
+        \node (1) at (0,2) {1};
+        \node (2) at (2,2) {2};
+        \node (3) at (2,0) {3};
+        \node (4) at (0,0) {4};
+        \node (5) at (-2,0) {5};
+        \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (4) edge (5);
+        
+        \node (6) at (5,2) {6};
+        \node (7) at (6,0) {7};
+        \node (8) at (4,0) {8};
+        \path[thick] (6) edge (7) (7) edge (8) (8) edge (6);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    \textbf{Construa três subgrafos diferentes com as seguintes regras:}
+    \begin{enumerate}
+        \item \textbf{$H_1$:} Um subgrafo qualquer contendo apenas 3 vértices.
+        \item \textbf{$H_2$:} Um subgrafo gerador do grafo $G$.
+        \item \textbf{$H_3$:} O subgrafo induzido pelo conjunto de vértices $V_{H_3} = \{1, 4, 5\}$.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Resolução 2: Construção de Subgrafos}
+    \begin{columns}
+        \begin{column}{0.33\textwidth}
+            \centering
+            \textbf{1) $H_1$ (3 vértices)} \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=0.8, every node/.style={circle, draw, minimum size=5mm, thick}]
+                \node (6) at (1,2) {6};
+                \node (7) at (2,0) {7};
+                \node (8) at (0,0) {8};
+                \path[thick] (6) edge (7) (7) edge (8);
+            \end{tikzpicture}
+        \end{column}
+        
+        \begin{column}{0.33\textwidth}
+            \centering
+            \textbf{2) $H_2$ (Gerador)} \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=0.45, every node/.style={circle, draw, minimum size=5mm, thick}]
+                \node (1) at (0,2) {1}; \node (2) at (2,2) {2}; \node (3) at (2,0) {3}; \node (4) at (0,0) {4}; \node (5) at (-2,0) {5};
+                \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1);
+                \node (6) at (4,2) {6}; \node (7) at (5,0) {7}; \node (8) at (3,0) {8};
+                \path[thick] (6) edge (8);
+            \end{tikzpicture}
+        \end{column}
+        
+        \begin{column}{0.33\textwidth}
+            \centering
+            \textbf{3) $H_3$ (Induzido)} \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=0.8, every node/.style={circle, draw, minimum size=5mm, thick}]
+                \node (1) at (0,2) {1}; 
+                \node (4) at (0,0) {4}; 
+                \node (5) at (-1.5,0) {5};
+                \path[thick] (1) edge (4) (4) edge (5);
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    \vspace{0.5cm}
+    \begin{center}
+        \footnotesize \textit{Nota: As respostas para $H_1$ e $H_2$ são apenas exemplos, pois existem várias possibilidades corretas. $H_3$ possui uma única resposta.}
+    \end{center}
+\end{frame}
+
+\section{Grafos Isomorfos}
+\subsection{A Intuição do Isomorfismo}
+\begin{frame}{Grafos Isomorfos}
+    \begin{block}{Objetivos}
+        \begin{itemize}
+            \item Compreender o conceito de \textbf{isomorfismo} em teoria dos grafos.
+            \item Aplicar técnicas e estratégias de verificação para determinar se dois grafos são isomorfos.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{A Intuição do Isomorfismo}
+    \begin{itemize}
+        \item Muitas vezes, dois grafos desenhados de maneiras completamente diferentes na verdade representam a \textbf{mesma estrutura}.
+        \item Se pudermos "mover" os vértices de um grafo (esticando ou dobrando as arestas, mas sem cortá-las) de modo que ele fique exatamente igual ao outro, os dois grafos são \textbf{isomorfos}.
+        \item Isomorfismo vem do grego: \textit{isos} (igual) e \textit{morphos} (forma).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Definição}
+    \begin{block}{Definição Formal}
+        Dois grafos $G$ e $H$ são \textbf{isomorfos} quando possuem exatamente a \textbf{mesma estrutura} topológica, mesmo que seus vértices tenham nomes diferentes ou sejam desenhados de formas diferentes.
+    \end{block}
+    \vspace{0.5cm}
+    Em outras palavras, se os grafos forem "despidos" dos rótulos de seus vértices, não haverá como distinguir um do outro.
+\end{frame}
+
+\begin{frame}{A Função Bijetora}
+    Matematicamente, $G$ e $H$ são isomorfos se existir uma \textbf{função bijetora}:
+    \vspace{0.3cm}
+    \begin{center}
+        \Large $f: V(G) \rightarrow V(H)$
+    \end{center}
+    \vspace{0.3cm}
+    Que \textbf{preserva as adjacências}. Isso significa que:
+    \begin{itemize}
+        \item Dois vértices $u, v$ são vizinhos em $G$ \textbf{se, e somente se}, $f(u)$ e $f(v)$ são vizinhos em $H$.
+        \item A função pareia cada vértice de $G$ com exatamente um vértice de $H$ e vice-versa.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplo: Grafo $G$}
+    Considere o grafo $G$:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (2,0) {C};
+        \node (D) at (0,0) {D};
+        
+        \path[thick] 
+        (A) edge (B)
+        (B) edge (C)
+        (C) edge (D)
+        (D) edge (A);
+    \end{tikzpicture}
+    \end{center}
+    Este é um ciclo com 4 vértices (um quadrado).
+\end{frame}
+
+\begin{frame}{Exemplo: Grafo $H$}
+    Agora considere o grafo $H$:
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (1) at (0,2) {1};
+        \node (2) at (2,2) {2};
+        \node (3) at (2,0) {3};
+        \node (4) at (0,0) {4};
+        
+        \path[thick] 
+        (1) edge (2)
+        (2) edge (3)
+        (3) edge (4)
+        (4) edge (1);
+    \end{tikzpicture}
+    \end{center}
+    À primeira vista, os rótulos são diferentes, mas a estrutura de conexões é idêntica ao grafo $G$.
+\end{frame}
+
+\begin{frame}{Mapeamento de Adjacências ($G \rightarrow H$)}
+    Para provar o isomorfismo, aplicamos o seguinte mapeamento (a função bijetora $f$):
+    \vspace{0.5cm}
+    \begin{center}
+        \begin{tabular}{c c c}
+            \textbf{Grafo $G$} & $\rightarrow$ & \textbf{Grafo $H$} \\
+            A & $\rightarrow$ & 1 \\
+            B & $\rightarrow$ & 2 \\
+            C & $\rightarrow$ & 3 \\
+            D & $\rightarrow$ & 4 \\
+        \end{tabular}
+    \end{center}
+    \vspace{0.5cm}
+    Verifique as adjacências: A e B estão conectados, assim como 1 e 2 estão. C e D estão conectados, assim como 3 e 4 estão. Todas as conexões são perfeitamente preservadas.
+\end{frame}
+
+\begin{frame}{Estratégia de Verificação}
+    Antes de tentar encontrar o mapeamento, podemos verificar rapidamente algumas \textbf{condições necessárias}.
+    
+    Dois grafos \textbf{só podem} ser isomorfos se tiverem:
+    \begin{itemize}
+        \item O mesmo \textbf{número de vértices} ($|V(G)| = |V(H)|$).
+        \item O mesmo \textbf{número de arestas} ($|E(G)| = |E(H)|$).
+        \item A mesma \textbf{sequência de graus} (os graus dos vértices ordenados devem ser idênticos).
+        \item A mesma \textbf{estrutura de ciclos} (ex: mesmo número de triângulos, quadrados).
+    \end{itemize}
+    \vspace{0.3cm}
+    \textit{Nota: Se alguma condição falhar, os grafos \textbf{não} são isomorfos.}
+\end{frame}
+
+\begin{frame}{Algoritmo Combinatorial Simples}
+    Caso as condições iniciais sejam atendidas, o algoritmo básico (força bruta) para provar o isomorfismo é:
+    \vspace{0.3cm}
+    \begin{enumerate}
+        \item Compare a quantidade de vértices.
+        \item Compare a quantidade de arestas.
+        \item Compare a sequência de graus.
+        \item \textbf{Teste permutações:} Gere todas as formas possíveis de parear os vértices de $G$ com os vértices de $H$.
+        \item \textbf{Verifique adjacências:} Para cada permutação, teste se as adjacências são preservadas. O primeiro mapeamento que funcionar confirma o isomorfismo.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Complexidade do Algoritmo Combinatorial}
+    O passo de testar permutações é o grande gargalo da verificação de isomorfismo em computação:
+    \vspace{0.5cm}
+    \begin{block}{Complexidade}
+        A complexidade deste algoritmo força bruta é \textbf{$\mathcal{O}(n!)$} (onde $n$ é o número de vértices).
+    \end{block}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item Para um grafo com 10 vértices: $10! = 3.628.800$ permutações.
+        \item Para um grafo com 20 vértices: $\approx 2.4 \times 10^{18}$ permutações (impraticável!).
+    \end{itemize}
+    \vspace{0.3cm}
+    É por isso que o \textit{Problema do Isomorfismo de Grafos} é famoso na Ciência da Computação.
+\end{frame}
+
+\section{Caminhos}
+\subsection{O Conceito de Caminho}
+\begin{frame}{Caminhos, Ciclos e Ciclos Hamiltonianos}
+    \begin{block}{Objetivos da Aula}
+        \begin{itemize}
+            \item Diferenciar os conceitos de \textbf{caminhos} e \textbf{ciclos} em grafos.
+            \item Identificar e compreender o que torna um ciclo \textbf{Hamiltoniano}.
+            \item Compreender como esses conceitos são aplicados para resolver problemas clássicos da Computação.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{O que é um Caminho?}
+    \begin{block}{Definição de Caminho}
+        Um \textbf{caminho} em um grafo é uma sequência de vértices adjacentes conectados por arestas, onde nos movemos de um vértice para outro seguindo a estrutura do grafo.
+    \end{block}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item É literalmente a "rota" que pode ser percorrida partindo de um nó origem até um nó destino.
+        \item Formalmente, é uma sequência $v_1, v_2, ..., v_k$ onde cada par adjacente $(v_i, v_{i+1})$ é uma aresta do grafo.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplo Visual: Caminho}
+    \textbf{Exemplo:} O caminho $A \rightarrow B \rightarrow C \rightarrow D$
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,0) {A};
+        \node (B) at (2,0) {B};
+        \node (C) at (4,0) {C};
+        \node (D) at (6,0) {D};
+        \node (E) at (3,1) {E};
+        
+        \path[thick] 
+        (A) edge[->, line width=1.5pt, red] (B)
+        (B) edge[->, line width=1.5pt, red] (C)
+        (C) edge[->, line width=1.5pt, red] (D)
+        (B) edge (E)
+        (C) edge (E);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    As setas em \textbf{vermelho} destacam a sequência de vértices visitados.
+\end{frame}
+
+\begin{frame}{Comprimento de um Caminho}
+    \begin{block}{Como medimos um caminho?}
+        O \textbf{comprimento} de um caminho é determinado pelo \textbf{número de arestas} que o compõem, e não pelo número de vértices.
+    \end{block}
+    \vspace{0.5cm}
+    Voltando ao exemplo $A \rightarrow B \rightarrow C \rightarrow D$:
+    \begin{itemize}
+        \item Vértices visitados: 4 ($A, B, C, D$).
+        \item Arestas percorridas: 3 ($(A,B), (B,C), (C,D)$).
+        \item \textbf{Comprimento = 3}.
+    \end{itemize}
+\end{frame}
+
+% =====================================================================
+% SEÇÃO: ÁRVORE GERADORA MÍNIMA
+% =====================================================================
+
+\section{Árvores Geradoras Mínimas (AGM)}
+\subsection{Conceitos Fundamentais}
+\begin{frame}{Árvore Geradora Mínima}
+    \begin{block}{Objetivos}
+        \begin{itemize}
+            \item Compreender o conceito de \textbf{árvore geradora} e \textbf{árvore geradora mínima} (AGM).
+            \item Entender intuitivamente os algoritmos de \textbf{Kruskal} e \textbf{Prim}.
+            \item Reconhecer as aplicações práticas da AGM em problemas de engenharia.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{O que é uma Árvore? (Revisão)}
+    \begin{block}{Definição de Árvore}
+        Uma \textbf{árvore} é um grafo \textbf{conexo} e \textbf{acíclico}. Ou seja, é um grafo que:
+        \begin{itemize}
+            \item Possui \textbf{exatamente} um caminho entre cada par de vértices.
+            \item \textbf{Não} contém ciclos.
+            \item Se possui $n$ vértices, possui exatamente $n - 1$ arestas.
+        \end{itemize}
+    \end{block}
+    \vspace{0.4cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.1, every node/.style={circle, draw, minimum size=7mm, thick}]
+        \node (A) at (2,2)  {A};
+        \node (B) at (0,1)  {B};
+        \node (C) at (4,1)  {C};
+        \node (D) at (0,0)  {D};
+        \node (E) at (1.5,0){E};
+        \path[thick] (A) edge (B) (A) edge (C) (B) edge (D) (B) edge (E);
+    \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Árvore Geradora (Spanning Tree)}
+    \begin{block}{Definição}
+        Dado um grafo conexo $G = (V, E)$, uma \textbf{árvore geradora} $T$ de $G$ é um \textbf{subgrafo gerador} de $G$ que é ao mesmo tempo uma \textbf{árvore}. Ou seja:
+        \begin{itemize}
+            \item $T$ contém \textbf{todos os vértices} de $G$ ($V_T = V$).
+            \item $T$ é conexo e \textbf{não possui ciclos}.
+            \item $T$ possui exatamente $|V| - 1$ arestas.
+        \end{itemize}
+    \end{block}
+    \vspace{0.3cm}
+    Um grafo pode ter \textbf{múltiplas} árvores geradoras diferentes.
+\end{frame}
+
+\begin{frame}{Exemplo: Grafo com Pesos}
+    Considere o grafo $G$ abaixo com pesos nas arestas:
+    \vspace{0.3cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.4, every node/.style={circle, draw, minimum size=7mm, thick}]
+        \node (A) at (0,2)  {A};
+        \node (B) at (2,2)  {B};
+        \node (C) at (4,2)  {C};
+        \node (D) at (1,0)  {D};
+        \node (E) at (3,0)  {E};
+
+        \path[thick]
+        (A) edge node[above, draw=none, font=\small]{4} (B)
+        (B) edge node[above, draw=none, font=\small]{3} (C)
+        (A) edge node[left,  draw=none, font=\small]{2} (D)
+        (B) edge node[left,  draw=none, font=\small]{5} (D)
+        (B) edge node[right, draw=none, font=\small]{1} (E)
+        (C) edge node[right, draw=none, font=\small]{6} (E)
+        (D) edge node[below, draw=none, font=\small]{7} (E);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.2cm}
+    O peso de uma aresta representa um custo (distância, latência, etc.).
+\end{frame}
+
+\begin{frame}{Árvore Geradora Mínima (AGM)}
+    \begin{block}{Definição Formal}
+        Dado um grafo conexo e ponderado $G = (V, E, w)$, onde $w: E \to \mathbb{R}$ atribui pesos às arestas, a \textbf{Árvore Geradora Mínima} (AGM) é uma árvore geradora $T^*$ cujo \textbf{peso total} é mínimo:
+        \[
+            T^* = \arg\min_{T \subseteq G,\ T \text{ é A.G.}} \sum_{e \in T} w(e)
+        \]
+    \end{block}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item A AGM \textbf{conecta todos os vértices} com o menor custo total possível.
+        \item Em inglês: \textit{Minimum Spanning Tree} (MST).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{AGM do Exemplo Anterior}
+    A AGM do grafo anterior utiliza as arestas de \textbf{menor custo} que ainda conectam todos os vértices:
+    \vspace{0.2cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.4, every node/.style={circle, draw, minimum size=7mm, thick}]
+        \node (A) at (0,2)  {A};
+        \node (B) at (2,2)  {B};
+        \node (C) at (4,2)  {C};
+        \node (D) at (1,0)  {D};
+        \node (E) at (3,0)  {E};
+
+        % Arestas NÃO escolhidas (cinza pontilhado)
+        \path[dashed, draw=gray, thin]
+        (A) edge node[above, draw=none, font=\small, text=gray]{4} (B)
+        (B) edge node[left,  draw=none, font=\small, text=gray]{5} (D)
+        (C) edge node[right, draw=none, font=\small, text=gray]{6} (E)
+        (D) edge node[below, draw=none, font=\small, text=gray]{7} (E);
+
+        % Arestas da AGM (verde, texto em preto)
+        \path[line width=2pt, green!60!black]
+        (A) edge node[left,  draw=none, font=\small, text=black]{\textbf{2}} (D)
+        (B) edge node[right, draw=none, font=\small, text=black]{\textbf{1}} (E)
+        (B) edge node[above, draw=none, font=\small, text=black]{\textbf{3}} (C)
+        (B) edge node[left,  draw=none, font=\small, text=black]{\textbf{5}} (D);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.1cm}
+    Arestas selecionadas: $\{A,D\}=2$, $\{B,E\}=1$, $\{B,C\}=3$, $\{B,D\}=5$.
+    \quad \textbf{Custo total = 11}.
+\end{frame}
+
+\subsection{Algoritmo de Kruskal}
+\begin{frame}{Algoritmo de Kruskal}
+    \vspace{-0.1cm}
+    \begin{ttfamily}
+    \textbf{KRUSKAL}($G$, $w$) \\
+    \textbf{1} \hspace{0.4cm} $A \leftarrow \emptyset$ \\
+    \textbf{2} \hspace{0.4cm} \textbf{para cada} vértice $v \in G.V$ \\
+    \textbf{3} \hspace{0.8cm} \textsc{Criar-Conjunto}($v$) \\
+    \textbf{4} \hspace{0.4cm} ordene as arestas de $G.E$ em ordem não decrescente de peso $w$ \\
+    \textbf{5} \hspace{0.4cm} \textbf{para cada} aresta $(u, v) \in G.E$, na ordem não decrescente de $w$ \\
+    \textbf{6} \hspace{0.8cm} \textbf{se} \textsc{Encontrar-Conjunto}($u$) $\neq$ \textsc{Encontrar-Conjunto}($v$) \\
+    \textbf{7} \hspace{1.2cm} $A \leftarrow A \cup \{(u, v)\}$ \hspace{0.3cm} \textit{// não forma ciclo: adiciona} \\
+    \textbf{8} \hspace{1.2cm} \textsc{Unir}($u$, $v$) \hspace{0.3cm} \textit{// une as duas componentes} \\
+    \textbf{9} \hspace{0.4cm} \textbf{retorne} $A$
+    \end{ttfamily}
+    \vspace{0.25cm}
+    \begin{block}{Estruturas auxiliares}
+        \begin{itemize}
+            \item \textsc{Criar-Conjunto}$(v)$: inicializa cada vértice como sua própria componente.
+            \item \textsc{Encontrar-Conjunto}$(u)$: retorna o representante da componente de $u$.
+            \item \textsc{Unir}$(u,v)$: funde as componentes de $u$ e $v$ (\textit{Union-Find}).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% ----- Kruskal passo 1/8 -----
+\begin{frame}{Kruskal: Passo 1/8 — Aresta $\{h,g\}=1$}
+
+{\footnotesize
+$\langle$
+\textcolor{orange}{\textbf{(h,g,1)}},
+\textcolor{gray}{(c,i,2)},
+\textcolor{gray}{(g,f,2)},
+\textcolor{gray}{(a,b,4)},
+\textcolor{gray}{(c,f,4)},
+\textcolor{gray}{(i,g,6)},
+\textcolor{gray}{(c,d,7)},
+\textcolor{gray}{(h,i,7)},
+\textcolor{gray}{(a,h,8)},
+\textcolor{gray}{(b,c,8)},
+\textcolor{gray}{(d,e,9)}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\centering
+\textbf{Grafo}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[dashed,draw=gray]
+(a) edge node[left,draw=none]{4}(b)
+(a) edge node[left,draw=none]{8}(h)
+(b) edge node[left,draw=none]{11}(h)
+(b) edge node[above,draw=none]{8}(c)
+(h) edge node[above,draw=none]{7}(i)
+(i) edge node[above,draw=none]{2}(c)
+(i) edge node[below,draw=none]{6}(g)
+(c) edge node[above,draw=none]{7}(d)
+(c) edge node[right,draw=none]{4}(f)
+(d) edge node[right,draw=none]{14}(f)
+(d) edge node[right,draw=none]{9}(e)
+(f) edge node[right,draw=none]{10}(e)
+(g) edge node[below,draw=none]{2}(f);
+
+\path[orange,line width=2pt]
+(h) edge node[below,draw=none]{\textbf{1}}(g);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\textbf{Conjuntos}
+
+\[
+\{a\}\ \{b\}\ \{c\}\ \{d\}\ \{e\}\ \{f\}\ \{i\}
+\]
+
+\[
+\boxed{\{h,g\}}
+\]
+
+\begin{block}{Decisão}
+$\{h,g\}$ estão em conjuntos distintos.
+
+Adicionar aresta.
+
+Custo = 1
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+% ----- Kruskal passo 2/8 -----
+\begin{frame}{Kruskal: Passo 2/8 — Aresta $\{c,i\}=2$}
+
+{\footnotesize
+$\langle$
+\textcolor{green!60!black}{\checkmark(h,g,1)},
+\textcolor{orange}{\textbf{(c,i,2)}},
+\textcolor{gray}{(g,f,2)},
+\textcolor{gray}{(a,b,4)},
+\textcolor{gray}{(c,f,4)},
+\textcolor{gray}{(i,g,6)},
+\textcolor{gray}{(c,d,7)}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\centering
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+% mesmos nós
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[dashed,draw=gray]
+(a) edge (b)
+(a) edge (h)
+(b) edge (h)
+(b) edge (c)
+(h) edge (i)
+(i) edge node[above,draw=none]{2}(c)
+(i) edge (g)
+(c) edge (d)
+(c) edge (f)
+(d) edge (f)
+(d) edge (e)
+(f) edge (e)
+(g) edge (f);
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g);
+
+\path[orange,line width=2pt]
+(i) edge node[above,draw=none]{\textbf{2}}(c);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{h,g\}}
+\]
+
+\[
+\boxed{\{c,i\}}
+\]
+
+\[
+\{a\}\{b\}\{d\}\{e\}\{f\}
+\]
+
+\begin{block}{Decisão}
+Adicionar $\{c,i\}$.
+
+Custo acumulado = 3
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+% ----- Kruskal passo 3/8 -----
+\begin{frame}{Kruskal: Passo 3/8 — Aresta $\{g,f\}=2$}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\textcolor{orange}{\textbf{(g,f,2)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+% nós
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c);
+
+\path[orange,line width=2pt]
+(g) edge node[below,draw=none]{\textbf{2}}(f);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{h,g,f\}}
+\]
+
+\[
+\boxed{\{c,i\}}
+\]
+
+\[
+\{a\}\{b\}\{d\}\{e\}
+\]
+
+\begin{block}{Decisão}
+Adicionar $\{g,f\}$.
+
+Custo acumulado = 5
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+% ----- Kruskal passo 4/8 -----
+\begin{frame}{Kruskal: Passo 4/8 — Aresta $\{a,b\}=4$}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\checkmark(g,f,2),
+\textcolor{orange}{\textbf{(a,b,4)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c)
+(g) edge node[below,draw=none]{2}(f);
+
+\path[orange,line width=2pt]
+(a) edge node[left,draw=none]{\textbf{4}}(b);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{h,g,f\}}
+\]
+
+\[
+\boxed{\{c,i\}}
+\]
+
+\[
+\boxed{\{a,b\}}
+\]
+
+\[
+\{d\}\{e\}
+\]
+
+\begin{block}{Decisão}
+Adicionar $\{a,b\}$.
+
+Custo acumulado = 9
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+% ----- Kruskal passo 4/8 -----
+\begin{frame}{Kruskal: Passo 4/8 — Aresta $\{a,b\}=4$}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\checkmark(g,f,2),
+\textcolor{orange}{\textbf{(a,b,4)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c)
+(g) edge node[below,draw=none]{2}(f);
+
+\path[orange,line width=2pt]
+(a) edge node[left,draw=none]{\textbf{4}}(b);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{h,g,f\}}
+\]
+
+\[
+\boxed{\{c,i\}}
+\]
+
+\[
+\boxed{\{a,b\}}
+\]
+
+\[
+\{d\}\{e\}
+\]
+
+\begin{block}{Decisão}
+Adicionar $\{a,b\}$.
+
+Custo acumulado = 9
+\end{block}
+
+\end{column}
+\end{columns}
+\end{frame}
+% ----- Kruskal passo 6/8 -----
+\begin{frame}{Kruskal: Passo 6/8 — Aresta $\{c,d\}=7$}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\checkmark(g,f,2),
+\checkmark(a,b,4),
+\checkmark(c,f,4),
+\textcolor{red}{\sout{(i,g,6)}},
+\textcolor{orange}{\textbf{(c,d,7)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c)
+(g) edge node[below,draw=none]{2}(f)
+(a) edge node[left,draw=none]{4}(b)
+(c) edge node[right,draw=none]{4}(f);
+
+\path[red,dashed,line width=2pt]
+(i) edge node[below,draw=none]{6}(g);
+
+\path[orange,line width=2pt]
+(c) edge node[above,draw=none]{\textbf{7}}(d);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{c,d,f,g,h,i\}}
+\]
+
+\[
+\boxed{\{a,b\}}
+\]
+
+\[
+\{e\}
+\]
+
+\begin{block}{Decisão}
+$\{i,g\}$ gera ciclo.
+
+Descartar.
+
+Adicionar $\{c,d\}$.
+
+Custo acumulado = 20
+\end{block}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+% ----- Kruskal passo 7/8 -----
+\begin{frame}{Kruskal: Passo 7/8 — Aresta $\{a,h\}=8$}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\checkmark(g,f,2),
+\checkmark(a,b,4),
+\checkmark(c,f,4),
+\sout{(i,g,6)},
+\checkmark(c,d,7),
+\sout{(h,i,7)},
+\textcolor{orange}{\textbf{(a,h,8)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c)
+(g) edge node[below,draw=none]{2}(f)
+(a) edge node[left,draw=none]{4}(b)
+(c) edge node[right,draw=none]{4}(f)
+(c) edge node[above,draw=none]{7}(d);
+
+\path[orange,line width=2pt]
+(a) edge node[left,draw=none]{\textbf{8}}(h);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{a,b,c,d,f,g,h,i\}}
+\]
+
+\[
+\{e\}
+\]
+
+\begin{block}{Decisão}
+$\{h,i\}$ gera ciclo.
+
+Descartar.
+
+Adicionar $\{a,h\}$.
+
+Custo acumulado = 28
+\end{block}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+% ----- Kruskal passo 8/8 -----
+\begin{frame}{Kruskal: Passo 8/8 — Aresta $\{d,e\}=9$ (AGM Completa)}
+
+{\footnotesize
+$\langle$
+\checkmark(h,g,1),
+\checkmark(c,i,2),
+\checkmark(g,f,2),
+\checkmark(a,b,4),
+\checkmark(c,f,4),
+\sout{(i,g,6)},
+\checkmark(c,d,7),
+\sout{(h,i,7)},
+\checkmark(a,h,8),
+\sout{(b,c,8)},
+\textcolor{orange}{\textbf{(d,e,9)}}
+$\rangle$
+}
+
+\begin{columns}[T]
+
+\begin{column}{0.60\textwidth}
+
+\begin{tikzpicture}[scale=0.55,
+every node/.style={circle,draw,minimum size=7mm,thick}]
+
+\node (a) at (0,2){a};
+\node (b) at (1.5,4){b};
+\node (h) at (1.5,0){h};
+\node (i) at (4,2){i};
+\node (c) at (6,4){c};
+\node (g) at (6,0){g};
+\node (d) at (9,4){d};
+\node (f) at (9,0){f};
+\node (e) at (11,2){e};
+
+\path[green!60!black,line width=2pt]
+(h) edge node[below,draw=none]{1}(g)
+(i) edge node[above,draw=none]{2}(c)
+(g) edge node[below,draw=none]{2}(f)
+(a) edge node[left,draw=none]{4}(b)
+(c) edge node[right,draw=none]{4}(f)
+(c) edge node[above,draw=none]{7}(d)
+(a) edge node[left,draw=none]{8}(h);
+
+\path[orange,line width=2pt]
+(d) edge node[right,draw=none]{\textbf{9}}(e);
+
+\end{tikzpicture}
+
+\end{column}
+
+\begin{column}{0.40\textwidth}
+
+\[
+\boxed{\{a,b,c,d,e,f,g,h,i\}}
+\]
+
+\begin{block}{Resultado}
+Adicionar $\{d,e\}$.
+
+Todos os vértices estão conectados.
+
+\vspace{0.2cm}
+
+Número de arestas:
+
+\[
+|V|-1 = 8
+\]
+
+Custo total:
+
+\[
+1+2+2+4+4+7+8+9
+=
+\mathbf{37}
+\]
+
+\end{block}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+\subsection{Algoritmo de Prim}
+\begin{frame}{Algoritmo de Prim}
+    \begin{block}{Estratégia: Greedy por Vértices}
+        O algoritmo de \textbf{Prim} constrói a AGM expandindo \textbf{um vértice por vez}. A cada passo, escolhe a aresta de menor peso que conecta a árvore atual a um vértice ainda \textbf{não visitado}.
+    \end{block}
+    \vspace{0.3cm} 
+    \textbf{Passos do algoritmo:}
+    \begin{enumerate}
+        \item Escolha qualquer vértice inicial. Marque-o como visitado.
+        \item Considere todas as arestas que partem dos vértices visitados.
+        \item Selecione a aresta de \textbf{menor peso} que chega a um vértice \textbf{não visitado}.
+        \item Marque o novo vértice como visitado e repita até incluir todos.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Comparativo: Kruskal $\times$ Prim}
+    \begin{center}
+    \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Característica} & \textbf{Kruskal} & \textbf{Prim} \\
+        \hline
+        Estratégia & Por arestas & Por vértices \\
+        \hline
+        Estrutura auxiliar & Union-Find & Fila de prioridade \\
+        \hline
+        Complexidade & $\mathcal{O}(E \log E)$ & $\mathcal{O}(E \log V)$ \\
+        \hline
+        Ideal para & Grafos esparsos & Grafos densos \\
+        \hline
+        Resultado & Mesmo (AGM) & Mesmo (AGM) \\
+        \hline
+    \end{tabular}
+    \end{center}
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item Ambos os algoritmos são \textbf{gulosos} (\textit{greedy}) e produzem a mesma AGM.
+        \item A prova de corretude baseia-se na \textbf{Propriedade do Corte} e na \textbf{Propriedade do Ciclo} da teoria dos grafos.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Aplicações da AGM}
+    A Árvore Geradora Mínima aparece em \textbf{problemas reais} de engenharia e computação:
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Redes de telecomunicações}: Conectar $n$ cidades com o menor comprimento total de cabo de fibra óptica.
+        \vspace{0.2cm}
+        \item \textbf{Redes elétricas}: Projeto de redes de distribuição de energia com custo mínimo de instalação.
+        \vspace{0.2cm}
+        \item \textbf{Cluster em Machine Learning}: O algoritmo \textit{single-linkage clustering} utiliza a AGM para agrupar dados similares.
+        \vspace{0.2cm}
+        \item \textbf{Roteamento de redes}: Protocolos como o \textbf{OSPF} usam conceitos de árvore geradora para evitar loops e otimizar o tráfego.
+        \vspace{0.2cm}
+        \item \textbf{Circuitos impressos (PCB)}: Conectar pinos de um circuito com o menor comprimento total de trilhas.
+    \end{itemize}
+\end{frame}
+
+% =====================================================================
+% FIM DA SEÇÃO: ÁRVORE GERADORA MÍNIMA
+% =====================================================================
+
+\section{Ciclos e PCV}
+\subsection{Definição de Ciclos}
+\begin{frame}{O que é um Ciclo?}
+    \begin{block}{Definição de Ciclo}
+        Um \textbf{ciclo} é simplesmente um \textbf{caminho fechado}. Ou seja, é um caminho que começa e termina no mesmo vértice.
+    \end{block}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item O tamanho (comprimento) do ciclo também é contado pelo número de arestas.
+        \item Pelo menos 3 vértices são necessários para formar um ciclo em grafos simples não-direcionados.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplo Visual: Ciclo}
+    \textbf{Exemplo:} O ciclo $A \rightarrow B \rightarrow C \rightarrow A$
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, node distance=2cm, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,0) {A};
+        \node (B) at (2,0) {B};
+        \node (C) at (1,1.5) {C};
+        \node (D) at (3,1) {D};
+        
+        \path[thick] 
+        (A) edge[->, line width=1.5pt, blue, bend right=15] (B)
+        (B) edge[->, line width=1.5pt, blue, bend right=15] (C)
+        (C) edge[->, line width=1.5pt, blue, bend right=15] (A)
+        (B) edge (D)
+        (C) edge (D);
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    As setas em \textbf{azul} mostram o caminho fechado (Comprimento = 3).
+\end{frame}
+
+\begin{frame}{Ciclos Simples}
+    \begin{block}{Definição de Ciclo Simples}
+        Um ciclo é dito \textbf{simples} se ele \textbf{não repete vértices} e não repete arestas ao longo de seu percurso, exceto obviamente pelo vértice de início e fim.
+    \end{block}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item $A \rightarrow B \rightarrow C \rightarrow A$ (Simples).
+        \item $A \rightarrow B \rightarrow C \rightarrow B \rightarrow D \rightarrow A$ (\textbf{Não} é simples, pois o vértice $B$ foi visitado duas vezes).
+    \end{itemize}
+\end{frame}
+
+\subsection{Ciclos Hamiltonianos e PCV}
+\begin{frame}{Ciclo Hamiltoniano}
+    \begin{block}{Definição de Ciclo Hamiltoniano}
+        Um \textbf{ciclo Hamiltoniano} é um ciclo especial e altamente restritivo: ele é um ciclo que passa por \textbf{TODOS} os vértices do grafo \textbf{exatamente uma vez} e retorna ao vértice de origem.
+    \end{block}
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item Leva o nome do matemático Sir William Rowan Hamilton.
+        \item Diferente do \textit{Ciclo Euleriano} (que precisa passar por todas as \textbf{arestas}), o Hamiltoniano foca em visitar todos os \textbf{vértices}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{As Regras do Ciclo Hamiltoniano}
+    Para ser considerado um Ciclo Hamiltoniano, as seguintes regras são absolutas:
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item Tem que ser um ciclo (começa e termina no mesmo lugar).
+        \item Tem que visitar $100\%$ dos vértices disponíveis no grafo.
+        \item \textbf{Nenhum} vértice pode ser visitado mais de uma vez (com exceção da repetição obrigatória do vértice de origem no final).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Exemplo: Grafo para Busca Hamiltoniana}
+    Dado o grafo abaixo, existe um ciclo Hamiltoniano?
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (2,0) {C};
+        \node (D) at (0,0) {D};
+        
+        \path[thick] 
+        (A) edge (B)
+        (B) edge (C)
+        (C) edge (D)
+        (D) edge (A)
+        (A) edge (C); % Aresta diagonal extra
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    Precisamos encontrar uma rota que passe por A, B, C e D apenas uma vez e volte ao início.
+\end{frame}
+
+\begin{frame}{O Ciclo Hamiltoniano Destacado}
+    Sim, existe! A sequência $A \rightarrow B \rightarrow C \rightarrow D \rightarrow A$ forma um ciclo Hamiltoniano.
+    \vspace{0.5cm}
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, every node/.style={circle, draw, minimum size=8mm, thick}]
+        \node (A) at (0,2) {A};
+        \node (B) at (2,2) {B};
+        \node (C) at (2,0) {C};
+        \node (D) at (0,0) {D};
+        
+        \path[thick] 
+        (A) edge[->, line width=1.5pt, green!60!black] (B)
+        (B) edge[->, line width=1.5pt, green!60!black] (C)
+        (C) edge[->, line width=1.5pt, green!60!black] (D)
+        (D) edge[->, line width=1.5pt, green!60!black] (A)
+        (A) edge[dashed, draw=gray] (C); % Aresta não utilizada
+    \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    Note que a aresta $\{A, C\}$ \textbf{não} foi utilizada. Em um ciclo Hamiltoniano, não precisamos percorrer todas as arestas, apenas todos os vértices.
+\end{frame}
+
+\begin{frame}{O Problema do Caixeiro Viajante (PCV)}
+    O conceito de ciclo Hamiltoniano é a base teórica de um dos problemas mais famosos da computação: \textbf{O Problema do Caixeiro Viajante (PCV)}.
+    \vspace{0.5cm}
+    \begin{block}{O Problema}
+        "Dada uma lista de cidades e a distância entre cada par delas, qual é a rota mais curta possível que visita cada cidade \textbf{exatamente uma vez} e retorna à cidade de origem?"
+    \end{block}
+\end{frame}
+
+\begin{frame}{Relacionamento PCV e Ciclo Hamiltoniano}
+    Como esses dois conceitos se ligam?
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item O Caixeiro Viajante está buscando um \textbf{Ciclo Hamiltoniano}.
+        \item No PCV, o grafo possui pesos nas arestas (distâncias, custos, pedágios).
+        \item O objetivo não é encontrar \textit{qualquer} ciclo Hamiltoniano (pois em um grafo completo existem muitos), mas sim encontrar o ciclo Hamiltoniano com a \textbf{menor soma de pesos} (a rota mais barata/curta).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Complexidade Computacional}
+    Por que o PCV e a busca por Ciclos Hamiltonianos são tão estudados?
+    \vspace{0.5cm}
+    \begin{block}{Classe NP-Completo}
+        A determinação da existência de um ciclo Hamiltoniano em um grafo qualquer é um problema \textbf{NP-Completo}.
+    \end{block}
+    \vspace{0.5cm}
+    Isso significa que, assim como o problema do isomorfismo que vimos antes, \textbf{não existe} um algoritmo rápido (em tempo polinomial) conhecido para resolvê-lo garantidamente em grafos grandes.
+\end{frame}
+
+\begin{frame}{Resumo: O Desafio do Tempo de Execução}
+    \begin{itemize}
+        \item À medida que o número de vértices (cidades) cresce, o tempo necessário para testar todas as combinações no PCV explode combinatoriamente (Complexidade fatorial $\mathcal{O}(n!)$ na busca por força bruta).
+        \vspace{0.3cm}
+        \item Para resolver problemas NP-Completos na vida real (como roteamento de caminhões dos Correios, design de microchips ou logística da Uber), usamos \textbf{heurísticas} e \textbf{algoritmos de aproximação} (ex: Algoritmos Genéticos), que encontram rotas "boas o suficiente" em tempo viável, mas não garantem a perfeição matemática.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Algoritmo: Busca de Ciclo Hamiltoniano}
+    Abordagem por \textit{Backtracking} (Tentativa e Erro):\\
+    \vspace{0.2cm}
+    \begin{ttfamily}
+    
+    \textbf{Função} EncontrarCiclo(caminho, vertice\_atual): \\
+    \hspace{0.4cm} \textbf{Se} caminho.tamanho == Total\_de\_Vertices: \\
+    \hspace{0.8cm} \textbf{Se} vertice\_atual tem aresta para caminho[0]: \\
+    \hspace{1.2cm} Adicionar caminho[0] ao caminho \\
+    \hspace{1.2cm} \textbf{Retornar} Verdadeiro \hspace{0.2cm}\textit{// Ciclo encontrado!} \\
+    \hspace{0.8cm} \textbf{Senão}: \\
+    \hspace{1.2cm} \textbf{Retornar} Falso \\
+    \vspace{0.2cm}
+    \hspace{0.4cm} \textbf{Para cada} vizinho de vertice\_atual: \\
+    \hspace{0.8cm} \textbf{Se} vizinho não está no caminho: \\
+    \hspace{1.2cm} Adicionar vizinho ao caminho \\
+    \hspace{1.2cm} \textbf{Se} EncontrarCiclo(caminho, vizinho) == Verdadeiro: \\
+    \hspace{1.6cm} \textbf{Retornar} Verdadeiro \\
+    \hspace{1.2cm} Remover vizinho do caminho \hspace{0.2cm}\textit{// BACKTRACKING} \\
+    \vspace{0.2cm}
+    \hspace{0.4cm} \textbf{Retornar} Falso \hspace{0.2cm}\textit{// Nenhum ciclo encontrado}
+    \end{ttfamily}
+\end{frame}
+
+
+\begin{frame}{Execução do Algoritmo (1/4): Início}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \centering
+            Grafo $G$: \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (1) at (0,2) {1};
+                \node (2) at (2,2) {2};
+                \node (3) at (2,0) {3};
+                \node (4) at (0,0) {4};
+                \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (2) edge (4);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \textbf{Pilha de Chamadas (Call Stack)}
+            \vspace{0.3cm}
+            
+            \begin{tikzpicture}[stack/.style={rectangle, draw, minimum width=3cm, minimum height=0.6cm, font=\small, fill=yellow!10}]
+                \node[stack] (s1_1) at (0, 0) {CH(1) $\rightarrow$ \texttt{[1]}};
+                \draw[thick] (-1.8, -0.4) -- (1.8, -0.4);
+            \end{tikzpicture}
+            \vspace{0.5cm}
+            
+            \footnotesize
+            \textbf{Fluxo:} A execução começa chamando a função para o vértice 1. Ele é adicionado ao caminho e entra no topo da pilha na memória.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Execução do Algoritmo (2/4): Beco Sem Saída}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \centering
+            Grafo $G$: \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (1) at (0,2) {1};
+                \node (2) at (2,2) {2};
+                \node (3) at (2,0) {3};
+                \node (4) at (0,0) {4};
+                \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (2) edge (4);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \textbf{Pilha de Chamadas (Call Stack)}
+            \vspace{0.3cm}
+            
+            \begin{tikzpicture}[stack/.style={rectangle, draw, minimum width=3cm, minimum height=0.6cm, font=\small, fill=yellow!10}]
+                \node[stack, fill=red!15] (s2_4) at (0, 2.1) {CH(3) $\rightarrow$ \texttt{[1,2,4,3]}};
+                \node[stack] (s2_3) at (0, 1.4) {CH(4) $\rightarrow$ \texttt{[1,2,4]}};
+                \node[stack] (s2_2) at (0, 0.7) {CH(2) $\rightarrow$ \texttt{[1,2]}};
+                \node[stack] (s2_1) at (0, 0) {CH(1) $\rightarrow$ \texttt{[1]}};
+                \draw[thick] (-1.8, -0.4) -- (1.8, -0.4);
+            \end{tikzpicture}
+            \vspace{0.5cm}
+            
+            \footnotesize
+            \textbf{Fluxo:} O algoritmo tenta o primeiro caminho disponível ($1 \rightarrow 2 \rightarrow 4 \rightarrow 3$). O limite de 4 vértices é atingido, mas \textbf{não existe} aresta ligando 3 de volta ao 1! A recursão retorna \texttt{FALSO}.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Execução do Algoritmo (3/4): Backtracking}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \centering
+            Grafo $G$: \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (1) at (0,2) {1};
+                \node (2) at (2,2) {2};
+                \node (3) at (2,0) {3};
+                \node (4) at (0,0) {4};
+                \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (2) edge (4);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \textbf{Pilha de Chamadas (Call Stack)}
+            \vspace{0.3cm}
+            
+            \begin{tikzpicture}[stack/.style={rectangle, draw, minimum width=3cm, minimum height=0.6cm, font=\small, fill=yellow!10}]
+                \node[stack, dashed, draw=gray, text=gray] (s3_4) at (0, 2.1) {CH(3) (removido)};
+                \node[stack, dashed, draw=gray, text=gray] (s3_3) at (0, 1.4) {CH(4) (removido)};
+                \node[stack] (s3_2) at (0, 0.7) {CH(2) $\rightarrow$ \texttt{[1,2]}};
+                \node[stack] (s3_1) at (0, 0) {CH(1) $\rightarrow$ \texttt{[1]}};
+                \draw[thick] (-1.8, -0.4) -- (1.8, -0.4);
+                \draw[->, thick, red] (1.6, 1.8) to[bend left] (2.5, 0.5);
+            \end{tikzpicture}
+            \vspace{0.5cm}
+            
+            \footnotesize
+            \textbf{Fluxo:} Como a rota falhou, a função \texttt{removerUltimo()} é ativada. Os nós 3 e 4 saem do caminho e são \textbf{desempilhados}. A execução recua ("backtracks") para o nó 2, pronto para tentar um outro vizinho.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Execução do Algoritmo (4/4): Sucesso}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \centering
+            Grafo $G$: \\
+            \vspace{0.2cm}
+            \begin{tikzpicture}[scale=1.2, every node/.style={circle, draw, minimum size=6mm, thick}]
+                \node (1) at (0,2) {1};
+                \node (2) at (2,2) {2};
+                \node (3) at (2,0) {3};
+                \node (4) at (0,0) {4};
+                \path[thick] (1) edge (2) (2) edge (3) (3) edge (4) (4) edge (1) (2) edge (4);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \centering
+            \textbf{Pilha de Chamadas (Call Stack)}
+            \vspace{0.3cm}
+            
+            \begin{tikzpicture}[stack/.style={rectangle, draw, minimum width=3cm, minimum height=0.6cm, font=\small, fill=yellow!10}]
+                \node[stack, fill=green!15] (s4_4) at (0, 2.1) {CH(4) $\rightarrow$ \texttt{[1,2,3,4]}};
+                \node[stack] (s4_3) at (0, 1.4) {CH(3) $\rightarrow$ \texttt{[1,2,3]}};
+                \node[stack] (s4_2) at (0, 0.7) {CH(2) $\rightarrow$ \texttt{[1,2]}};
+                \node[stack] (s4_1) at (0, 0) {CH(1) $\rightarrow$ \texttt{[1]}};
+                \draw[thick] (-1.8, -0.4) -- (1.8, -0.4);
+            \end{tikzpicture}
+            \vspace{0.5cm}
+            
+            \footnotesize
+            \textbf{Fluxo:} A partir do 2, tenta-se o próximo vizinho: o 3, que tenta o 4. A pilha atinge o limite com a rota $1 \rightarrow 2 \rightarrow 3 \rightarrow 4$. Desta vez, há aresta conectando 4 ao 1! A função retorna \texttt{VERDADEIRO} em cascata e fecha o ciclo.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\end{document}

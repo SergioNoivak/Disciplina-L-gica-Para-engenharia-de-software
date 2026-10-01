@@ -1,0 +1,873 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova}
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox}
+\usepackage{lmodern}
+
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Análise Combinatória: Princípios de Contagem, Permutação,  Combinação e Arranjo.
+}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+} 
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+% Title page frame
+%\begin{frame}
+    %\titlepage 
+%\end{frame}
+\frame[plain]{\titlepage}
+%logo
+\AddToShipoutPictureFG{
+    \put(\LenToUnit{.92\paperwidth},
+    \LenToUnit{.185\paperheight})
+    {\vtop{{\null}
+    \makebox{\includegraphics[width=.8cm,keepaspectratio]{Universidade_de_Rio_Verde.jpg}}}}}
+
+
+\begin{frame}{Sumário}
+  \tableofcontents
+\end{frame}
+
+\section{Introdução}
+\begin{frame}{Introdução}
+Combinatória é o ramo da matemática que trata de contagem.
+Esses problema são importantes quando temos recursos finitos, por exemplo,
+\begin{itemize}
+    \item Quanto espaço de armazenamento um determinado banco de dados usa?
+    \item Quantos usuários uma determinada configuração de computador pode suportar?
+    \item Quantos cálculos são efetuados por um determinado algoritmo?
+    \item Quantas linhas tem uma tabela-verdade com $n$ letras de proposição?
+\end{itemize}
+\end{frame}
+
+\section{Princípio da Multiplicação}
+\begin{frame}{Princípio da Multiplicação}
+\textbf{Exemplo:} uma criança pode escolher uma entre duas balas, uma rosa e outra preta, e um entre três chicletes, um amarelo, outro verde e outro branco. Quantos conjuntos diferentes a criança pode ter?
+
+Para resolver este problema podemos fazer uma árvore de possibilidades de escolha.
+
+\begin{center}
+\begin{tikzpicture}[level distance=2.5cm,
+  level 1/.style={sibling distance=3.5cm},
+  level 2/.style={sibling distance=1cm}]
+  \node {Início}
+    child {node {Bala Rosa}
+      child {node {Amarelo}}
+      child {node {Verde}}
+      child {node {Branco}}
+    }
+    child {node {Bala Preta}
+      child {node {Amarelo}}
+      child {node {Verde}}
+      child {node {Branco}}
+    };
+\end{tikzpicture}
+\end{center}
+
+Sendo assim, a criança tem 6 possibilidades. A criança poderia escolher primeiro o chiclete e depois a bala, e o resultado seria o mesmo.
+\end{frame}
+\begin{frame}{Princípio Fundamental da Contagem (Princípio da Multiplicação)}
+
+Sejam $E_1$ e $E_2$ dois experimentos finitos e não vazios, com conjuntos de resultados associados $A_1$ e $A_2$, tais que:
+\[
+|A_1| = n_1 \quad \text{e} \quad |A_2| = n_2
+\]
+
+\vspace{0.3cm}
+
+Considere o experimento composto definido pelo produto cartesiano:
+\[
+A = A_1 \times A_2 = \{(a_1, a_2) \mid a_1 \in A_1 \land a_2 \in A_2\}
+\]
+
+\vspace{0.4cm}
+\end{frame}
+\begin{frame}{Princípio Fundamental da Contagem (Princípio da Multiplicação)}
+
+\begin{block}{Formulação Lógica}
+\[
+\forall a_1 \in A_1, \; \exists n_2 \text{ possibilidades em } A_2
+\;\;\Rightarrow\;\;
+|A| = |A_1 \times A_2| = n_1 \cdot n_2
+\]
+\end{block}
+
+\vspace{0.4cm}
+
+De forma geral, para uma sequência finita de conjuntos $A_1, A_2, \dots, A_k$, com $|A_i| = n_i$, tem-se:
+\[
+\left| \prod_{i=1}^{k} A_i \right| = \prod_{i=1}^{k} n_i
+\]
+
+\vspace{0.2cm}
+
+onde:
+\[
+\prod_{i=1}^{k} A_i = \{(a_1, \dots, a_k) \mid \forall i \in \{1,\dots,k\}, \; a_i \in A_i\}
+\]
+
+\end{frame}
+\begin{frame}{Princípio Fundamental da Contagem}
+
+\textbf{Exercício 1:} Considere a formação de sequências de 4 dígitos utilizando o conjunto $D = \{0,1,2,3,4,5,6,7,8,9\}$. Admitindo-se a repetição de dígitos, quantas sequências distintas de comprimento 4 podem ser formadas?
+
+\vspace{0.5cm}
+
+\textbf{Exercício 2:} Nas mesmas condições do exercício anterior, determine o número de sequências de 4 dígitos que podem ser formadas sob a restrição de que não haja repetição de dígitos.
+
+\end{frame}
+\begin{frame}{Resolução com Formalismo Matemático}
+
+\textbf{Exercício 1:}
+
+Seja $D = \{0,1,2,3,4,5,6,7,8,9\}$ o conjunto dos dígitos possíveis, com $|D| = 10$.
+
+Definimos o conjunto de todos os números de 4 dígitos (permitindo repetição) como:
+\[
+A = D \times D \times D \times D
+\]
+
+Logo,
+\[
+|A| = |D|^4 = 10^4 = 10000
+\]
+
+\vspace{0.4cm}
+
+\textbf{Exercício 2:}
+
+Agora, consideramos que não há repetição de dígitos. Assim, definimos:
+\[
+A = \{(d_1,d_2,d_3,d_4) \in D^4 \mid \forall i,j \in \{1,2,3,4\},\; i \neq j \Rightarrow d_i \neq d_j\}
+\]
+
+\vspace{0.3cm}
+
+Pelo Princípio da Multiplicação:
+\[
+|A| = 10 \cdot 9 \cdot 8 \cdot 7 = 5040
+\]
+
+
+\end{frame}
+
+\section{Princípio da Adição}
+\begin{frame}{Princípio da Adição}
+\textbf{Exemplo:} suponha que queremos selecionar uma sobremesa entre três tortas e quatro bolos. De quantas maneiras podemos fazer isso?
+\vspace{0.3cm}
+
+Temos dois eventos, um com 3 resultados e outro com 4 resultados. No entanto, nesse caso não podemos multiplicar, pois queremos comer apenas uma sobremesa.
+\vspace{0.1cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, rounded corners, minimum width=3cm, minimum height=1.5cm] (tortas) at (-2,0) {3 Tortas};
+  \node[draw, rounded corners, minimum width=3cm, minimum height=1.5cm] (bolos) at (2,0) {4 Bolos};
+  \node at (0, 0) {\textbf{OU}};
+\end{tikzpicture}
+\end{center}
+
+O número de escolhas possíveis é o número total de escolhas que temos: $3+4=7$.
+\end{frame}
+\begin{frame}{Princípio Fundamental da Contagem (Princípio da Adição)}
+
+Sejam $A$ e $B$ conjuntos finitos que representam espaços de resultados de dois eventos.
+
+\vspace{0.3cm}
+
+\begin{block}{Definição Formal}
+Se $A$ e $B$ são disjuntos, isto é,
+\[
+A \cap B = \emptyset
+\]
+então:
+\[
+|A \cup B| = |A| + |B|
+\]
+\end{block}
+
+
+\begin{block}{Formulação Lógica}
+\[
+\forall x \; (x \in A \Rightarrow x \notin B)
+\;\;\Rightarrow\;\;
+|A \cup B| = |A| + |B|
+\]
+\end{block}
+
+
+De forma geral, para uma família finita de conjuntos disjuntos $\{A_i\}_{i=1}^k$, tal que:
+\[
+\forall i \neq j,\; A_i \cap A_j = \emptyset
+\]
+tem-se:
+\[
+\left| \bigcup_{i=1}^{k} A_i \right| = \sum_{i=1}^{k} |A_i|
+\]
+
+\end{frame}
+
+\begin{frame}{Princípio da Adição}
+\textbf{Exercício 3:} Um consumidor deseja comprar um veículo de uma concessionária. A concessionária tem 23 automóveis e 14 caminhões em estoque. Quantas escolhas possíveis o consumidor tem?
+
+\vspace{0.5cm}
+
+\textbf{Obs:} poderíamos utilizar o princípio da adição se o consumidor quisesse comprar um veículo de uma concessionária com 23 automóveis, 14 caminhões e 17 veículos vermelhos?
+
+\vspace{0.5cm}
+Lembre que: Se $A$ e $B$ são conjuntos finitos disjuntos, então $|A \cup B| = |A| + |B|$.
+\end{frame}
+
+\begin{frame}{Princípio da Adição}
+\textbf{Exercício 4:} Na linguagem de programação BASIC original, um identificador tem que ser uma letra ou uma letra seguida de um único dígito. Quantos identificadores podemos formar?
+\end{frame}
+
+\begin{frame}{Resolução}
+\textbf{Exercício 3:}
+Seja $A$ o conjunto de automóveis e $C$ o conjunto de caminhões.
+Temos $|A| = 23$ e $|C| = 14$. Como não é possível um veículo ser carro e caminhão ao mesmo tempo, $A \cap C = \emptyset$.
+Pelo Princípio da Adição:
+\[ |A \cup C| = |A| + |C| = 23 + 14 = 37 \text{ escolhas possíveis.} \]
+
+\textbf{Obs:} Se houvesse 17 veículos vermelhos (conjunto $V$), não poderíamos simplesmente somar, pois os conjuntos não seriam disjuntos (há carros e caminhões vermelhos). Teríamos que usar o Princípio da Inclusão-Exclusão: $|A \cup C \cup V|$.
+
+\vspace{0.4cm}
+
+\textbf{Exercício 4:}
+Um identificador pode ter dois formatos (disjuntos):
+\begin{itemize}
+    \item \textbf{Formato 1:} Apenas uma letra. Quantidade = 26.
+    \item \textbf{Formato 2:} Uma letra e um dígito. Pelo Princípio da Multiplicação: $26 \cdot 10 = 260$.
+\end{itemize}
+Pelo Princípio da Adição, o total é $26 + 260 = 286$ identificadores.
+\end{frame}
+
+\section{Princípio da Adição e Multiplicação}
+\begin{frame}{Princípio da Adição e Multiplicação}
+Como podemos ver no exercício 4, o princípio da adição é usado junto com o princípio da multiplicação.
+\vspace{0.3cm}
+
+Considerando o exemplo das ``balas e chicletes'', escolher uma bala rosa e depois um chiclete amarelo não é a mesma coisa que escolher um chiclete amarelo e depois uma bala rosa.
+\vspace{0.3cm}
+
+Podemos considerar dois casos disjuntos: cada um desses casos (princípio da multiplicação) tem 6 possibilidades e pelo princípio da adição existem $6+6=12$ maneiras diferentes de escolher os doces.
+\end{frame}
+
+\begin{frame}{Princípio da Adição e Multiplicação}
+\textbf{Exemplo 5:} quantos números de quatro dígitos começam com 4 ou 5?
+
+\vspace{0.4cm}
+
+\textbf{Exemplo 6:} quantos inteiros de três dígitos são pares?
+
+\vspace{0.4cm}
+
+\textbf{Exemplo 7:} suponha que os quatro últimos dígitos de um número de telefone têm que incluir pelo menos um dígito repetido. Quantos desses números existem? (Dica: pensar em conjuntos disjuntos)
+\end{frame}
+
+\begin{frame}{Resolução}
+\textbf{Exemplo 5:}
+Seja $A$ o conjunto dos que começam com 4, e $B$ os que começam com 5. O primeiro dígito é fixo.
+$|A| = 1 \cdot 10 \cdot 10 \cdot 10 = 1000$ e $|B| = 1 \cdot 10 \cdot 10 \cdot 10 = 1000$.
+Como $A \cap B = \emptyset$, o total é $1000 + 1000 = 2000$.
+
+\vspace{0.3cm}
+
+\textbf{Exemplo 6:}
+O primeiro dígito não pode ser 0 (9 opções: 1 a 9). O segundo dígito pode ser qualquer um (10 opções). O último dígito deve ser par, ou seja, $\in \{0,2,4,6,8\}$ (5 opções).
+Total: $9 \cdot 10 \cdot 5 = 450$.
+
+\vspace{0.3cm}
+
+\textbf{Exemplo 7:}
+É mais fácil contar pelo complemento.
+Total de combinações de 4 dígitos: $10^4 = 10000$.
+Total de combinações de 4 dígitos \textbf{sem repetição} (visto antes): $10 \cdot 9 \cdot 8 \cdot 7 = 5040$.
+Pelo princípio da diferença, as combinações que têm \textbf{pelo menos uma} repetição são:
+$10000 - 5040 = 4960$.
+\end{frame}
+
+\section{Permutação}
+\begin{frame}{Permutação}
+Lembre o exercício 2, sobre os quatro últimos dígitos de um número de telefone não repetidos. Perceba que o número 1259 não é igual ao número 2951, já que a ordem dos dígitos é importante.
+\vspace{0.3cm}
+
+Um arranjo ordenado de objetos é chamado de \textbf{permutação}.
+\vspace{0.1cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (a1) at (0,0) {1};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (a2) at (1,0) {2};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (a3) at (2,0) {5};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (a4) at (3,0) {9};
+  \node at (4.5, 0) {$\neq$};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (b1) at (6,0) {2};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (b2) at (7,0) {9};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (b3) at (8,0) {5};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm] (b4) at (9,0) {1};
+\end{tikzpicture}
+\end{center}
+
+O número de permutações de $r$ objetos distintos escolhidos entre $n$ objetos distintos é denotado $P(n,r)$.
+\vspace{0.1cm}
+
+Portanto, a solução do problema dos 4 dígitos sem repetição pode ser expressada por $P(10, 4)$.
+\end{frame}
+
+
+\begin{frame}{Permutações (Formalismo)}
+
+Seja $A$ um conjunto finito tal que $|A| = n$.
+
+\vspace{0.3cm}
+
+\begin{block}{Definição}
+Uma \textbf{permutação} de $A$ é uma bijeção:
+\[
+f: A \rightarrow A
+\]
+ou, equivalentemente, uma sequência ordenada contendo todos os elementos de $A$ sem repetição.
+\end{block}
+
+\vspace{0.4cm}
+
+O número total de permutações de $A$ é dado por:
+\[
+P(n) = n!
+\]
+
+
+\end{frame}
+
+
+\begin{frame}{Permutações (Aplicações)}
+
+\textbf{Exemplo 1:} Seja $A = \{a,b,c\}$. O número de permutações é:
+\[
+P(3) = 3! = 6
+\]
+
+\vspace{0.3cm}
+
+Explicitamente:
+\[
+\{(a,b,c), (a,c,b), (b,a,c), (b,c,a), (c,a,b), (c,b,a)\}
+\]
+
+\vspace{0.5cm}
+
+\textbf{Exemplo 2:} Seja $A = \{\text{c, o, m, p, i, l, a, r}\}$, com $|A| = 8$.
+
+\vspace{0.3cm}
+
+Número de sequências ordenadas de 3 elementos distintos:
+\[
+P(8,3) = 8 \cdot 7 \cdot 6 = 336
+\]
+
+\vspace{0.4cm}
+
+\textbf{Interpretação:}
+\[
+\forall a_1 \in A,\;
+\forall a_2 \in A \setminus \{a_1\},\;
+\forall a_3 \in A \setminus \{a_1,a_2\}
+\]
+
+\vspace{0.2cm}
+
+\textbf{Observação:} A ordem dos elementos é relevante.
+
+\end{frame}
+
+
+\begin{frame}{Permutação}
+\textbf{Exercício 1:} Calcule o valor de $P(n,0)$, $P(n,1)$ e $P(n,n)$.
+
+\vspace{0.2cm}
+
+\textbf{Exercício 2:} dez atletas competem num evento olímpico. São dadas medalhas de ouro, prata e bronze. De quantas maneiras diferentes podem ser dadas as medalhas?
+
+\vspace{0.2cm}
+
+\textbf{Exercício 3:} de quantas maneiras diferentes se pode selecionar um presidente e um vice-presidente de um grupo de 20 pessoas?
+
+\vspace{0.2cm}
+
+\textbf{Exercício 4:} uma biblioteca tem 4 livros sobre sistemas operacionais, 7 sobre programação e 3 sobre estrutura de dados. De quantas maneiras diferentes esses livros podem ser arrumados em uma prateleira, dado que todos os livros sobre o mesmo assunto devem ficar juntos?
+\end{frame}
+
+\begin{frame}{Resolução}
+\textbf{Exercício 1:}
+\begin{itemize}
+    \item $P(n, 0) = \frac{n!}{(n-0)!} = \frac{n!}{n!} = 1$
+    \item $P(n, 1) = \frac{n!}{(n-1)!} = \frac{n \cdot (n-1)!}{(n-1)!} = n$
+    \item $P(n, n) = \frac{n!}{(n-n)!} = \frac{n!}{0!} = \frac{n!}{1} = n!$
+\end{itemize}
+
+\vspace{0.1cm}
+\textbf{Exercício 2:}
+Importa a ordem (ouro $\neq$ prata). $P(10, 3) = 10 \cdot 9 \cdot 8 = 720$ maneiras.
+
+\vspace{0.1cm}
+\textbf{Exercício 3:}
+Novamente a ordem importa (presidente $\neq$ vice). $P(20, 2) = 20 \cdot 19 = 380$ maneiras.
+
+\vspace{0.1cm}
+\textbf{Exercício 4:}
+Primeiro, permutamos os $3$ assuntos entre si: $P(3,3) = 3! = 6$.
+Dentro de cada assunto, permutamos os livros:
+\begin{itemize}
+    \item Sistemas Operacionais: $4! = 24$
+    \item Programação: $7! = 5040$
+    \item Estrutura de Dados: $3! = 6$
+\end{itemize}
+Total = $3! \cdot 4! \cdot 7! \cdot 3! = 6 \cdot 24 \cdot 5040 \cdot 6 = 4.354.560$ maneiras.
+\end{frame}
+
+\section{Arranjo}
+\begin{frame}{Arranjo Simples}
+
+\begin{block}{Definição}
+Um \textbf{arranjo simples} de $n$ elementos tomados $p$ a $p$ (com $p \leq n$) é qualquer sequência ordenada de $p$ elementos distintos escolhidos de um conjunto de $n$ elementos.
+\end{block}
+
+\vspace{0.3cm}
+O número total de arranjos é denotado por $A(n,p)$ ou $A_{n,p}$, e é calculado por:
+\[
+A(n, p) = \frac{n!}{(n-p)!}
+\]
+
+\vspace{0.2cm}
+\textbf{Observação:} Diferente da combinação, no arranjo a \textbf{ordem importa}. Diferente da permutação simples vista na seção anterior ($P(n)=n!$), o arranjo em geral escolhe um subconjunto $p \leq n$.
+\end{frame}
+
+\begin{frame}{Arranjo (Diagrama)}
+Exemplo para $n=4$ (conjunto $\{1,2,3,4\}$) e agrupamentos de $p=2$:
+\vspace{0.2cm}
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.9,
+    every node/.style={circle, draw, minimum size=0.8cm, inner sep=1pt}
+]
+
+% Conjunto n=4
+\node (x1) at (0,0.5) {1};
+\node (x2) at (1,0.5) {2};
+\node (x3) at (0,-0.5) {3};
+\node (x4) at (1,-0.5) {4};
+\node[draw=none, rectangle] at (0.5,-1.3) {$n=4$ elementos};
+
+\draw[->, thick] (2,0) -- (3.5,0) node[midway, above] {$p=2$};
+
+% Arranjos
+\node[rectangle, draw=none] (a1) at (5, 1.5) {$(1, 2) \neq (2, 1)$};
+\node[rectangle, draw=none] (a2) at (5, 0.5) {$(1, 3) \neq (3, 1)$};
+\node[rectangle, draw=none] (a3) at (5, -0.5) {$(1, 4) \neq (4, 1)$};
+\node[rectangle, draw=none] (a4) at (8, 1.5) {$(2, 3) \neq (3, 2)$};
+\node[rectangle, draw=none] (a5) at (8, 0.5) {$(2, 4) \neq (4, 2)$};
+\node[rectangle, draw=none] (a6) at (8, -0.5) {$(3, 4) \neq (4, 3)$};
+
+\node[draw=none, rectangle] at (6.5,-1.5) {$A(4,2) = 12$ sequências ordenadas};
+
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Exercícios - Arranjo}
+\textbf{Exercício 1:} Quantos números de 3 algarismos distintos podemos formar com os algarismos $\{1, 2, 3, 4, 5\}$?
+
+\vspace{0.4cm}
+
+\textbf{Exercício 2:} Em uma corrida com 10 carros, de quantas maneiras pode ser formado o pódio (1º, 2º e 3º lugares)?
+
+\vspace{0.4cm}
+
+\textbf{Exercício 3:} Uma senha de banco é formada por 4 caracteres distintos escolhidos entre as 26 letras do alfabeto. Quantas senhas possíveis existem?
+\end{frame}
+
+\begin{frame}{Resolução - Arranjo}
+\textbf{Exercício 1:}
+Temos $n = 5$ algarismos e queremos formar números com $p = 3$ algarismos distintos. A ordem importa ($123 \neq 321$).
+\[
+A(5,3) = \frac{5!}{(5-3)!} = \frac{5!}{2!} = \frac{5 \cdot 4 \cdot 3 \cdot 2!}{2!} = 60
+\]
+\vspace{0.2cm}
+
+\textbf{Exercício 2:}
+Temos $n = 10$ carros e queremos escolher $p = 3$ para o pódio. A ordem importa (1º $\neq$ 2º $\neq$ 3º).
+\[
+A(10,3) = \frac{10!}{(10-3)!} = \frac{10!}{7!} = 10 \cdot 9 \cdot 8 = 720
+\]
+\vspace{0.2cm}
+
+\textbf{Exercício 3:}
+Temos $n = 26$ letras e queremos uma senha de $p = 4$ caracteres distintos. A ordem importa.
+\[
+A(26,4) = \frac{26!}{(26-4)!} = \frac{26!}{22!} = 26 \cdot 25 \cdot 24 \cdot 23 = 358.800
+\]
+\end{frame}
+
+\section{Combinação}
+\begin{frame}{Combinação}
+
+Algumas vezes queremos selecionar $r$ objetos de um conjunto de $n$ objetos, sem considerar a ordem. Nesse caso, estamos interessados no número de combinações, denotado por $\binom{n}{r}$.
+
+\vspace{0.3cm}
+
+Para cada subconjunto de $r$ elementos, existem $r!$ formas de ordená-los. Logo:
+\[
+\binom{n}{r} \cdot r! = P(n, r)
+\]
+
+
+
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.9,
+    every node/.style={circle, draw, minimum size=0.8cm}
+]
+
+% Combinação (sem ordem)
+\node (a1) at (0,0) {A};
+\node (a2) at (1.2,0) {B};
+\node (a3) at (2.4,0) {C};
+
+\node[draw=none, rectangle] at (1.2,-1) {Subconjunto $\{A,B,C\}$};
+
+% Permutações (com ordem)
+\node (p1) at (5,0.8) {ABC};
+\node (p2) at (6.5,0.8) {ACB};
+\node (p3) at (5,-0.2) {BAC};
+\node (p4) at (6.5,-0.2) {BCA};
+\node (p5) at (5,-1.2) {CAB};
+\node (p6) at (6.5,-1.2) {CBA};
+
+\node[draw=none, rectangle] at (5.75,-2) {$3! = 6$ ordenações};
+
+\draw[->, thick] (2.8,0) -- (4.2,0) node[midway, above] {$r!$};
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+\begin{frame}{Combinação}
+Ou seja,
+\[
+\binom{n}{r} = \frac{n!}{r!(n - r)!} \quad \text{para } 0 \leq r \leq n
+\]
+
+Outras notações: $C_{n,r}$, $C_n^r$ ou $\binom{n}{r}$.
+
+\vspace{0.5cm}
+
+\textbf{Exemplo:} Dez atletas competem em um evento olímpico; três deles serão declarados vencedores. De quantas maneiras podem ser escolhidos os vencedores?
+\end{frame}
+
+\begin{frame}{Combinação}
+\textbf{Exercício 1:} Calcule o valor de $\binom{7}{3}$.
+
+\vspace{0.3cm}
+
+\textbf{Exercício 2:} Calcule o valor de $\binom{n}{0}$, $\binom{n}{1}$ e $\binom{n}{n}$.
+
+\vspace{0.3cm}
+
+\textbf{Exercício 3:} Uma comissão de 8 alunos deve ser escolhida em um grupo contendo 19 alunos do primeiro ano e 34 do segundo ano.
+\begin{itemize}
+    \item[a)] De quantas maneiras é possível selecionar 3 alunos do primeiro ano e 5 do segundo?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Combinação}
+\textbf{Exercício 3:} Uma comissão de 8 alunos deve ser escolhida em um grupo contendo 19 alunos do primeiro ano e 34 do segundo ano.
+\begin{itemize}
+    \item[b)] De quantas maneiras é possível selecionar uma comissão contendo exatamente 1 aluno do primeiro ano?
+    \item[c)] De quantas maneiras é possível selecionar uma comissão contendo no máximo 1 aluno do primeiro ano?
+    \item[d)] De quantas maneiras é possível selecionar uma comissão contendo pelo menos 1 aluno do primeiro ano?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Resolução}
+\textbf{Exemplo e Exercício 1, 2 e 3:}
+\textbf{Exemplo atletas:} $\binom{10}{3} = \frac{10!}{3!7!} = \frac{10 \cdot 9 \cdot 8}{3 \cdot 2 \cdot 1} = 120$.
+
+\vspace{0.2cm}
+\textbf{Ex1:} $\binom{7}{3} = \frac{7!}{3!4!} = \frac{7 \cdot 6 \cdot 5}{3 \cdot 2 \cdot 1} = 35$.
+
+\vspace{0.2cm}
+\textbf{Ex2:}
+\begin{itemize}
+    \item $\binom{n}{0} = \frac{n!}{0!(n-0)!} = \frac{n!}{1 \cdot n!} = 1$
+    \item $\binom{n}{1} = \frac{n!}{1!(n-1)!} = \frac{n \cdot (n-1)!}{(n-1)!} = n$
+    \item $\binom{n}{n} = \frac{n!}{n!(n-n)!} = \frac{n!}{n!0!} = 1$
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{Ex3:} $\binom{52}{5} = \frac{52!}{5!47!} = \frac{52 \cdot 51 \cdot 50 \cdot 49 \cdot 48}{120} = 2.598.960$.
+\end{frame}
+
+\begin{frame}{Resolução - Exercício 4}
+Temos 19 alunos do 1º ano e 34 do 2º ano. Comissão de 8.
+
+\vspace{0.2cm}
+
+\textbf{a) 3 do 1º ano e 5 do 2º:}
+Escolhemos 3 dos 19: $\binom{19}{3} = 969$.
+Escolhemos 5 dos 34: $\binom{34}{5} = 278.256$.
+Total = $\binom{19}{3} \cdot \binom{34}{5} = 969 \cdot 278.256 = 269.629.584$.
+
+\vspace{0.2cm}
+
+\textbf{b) Exatamente 1 do 1º ano:}
+Escolhemos 1 dos 19: $\binom{19}{1} = 19$.
+Escolhemos 7 dos 34: $\binom{34}{7} = 5.379.616$.
+Total = $19 \cdot 5.379.616 = 102.212.704$.
+\end{frame}
+
+\begin{frame}{Resolução - Exercício 4 (Cont.)}
+\textbf{c) No máximo 1 aluno do 1º ano:}
+Isso significa "0 alunos do 1º ano" OU "1 aluno do 1º ano".
+- Nenhum do 1º ano (todos do 2º): $\binom{19}{0} \cdot \binom{34}{8} = 1 \cdot 18.156.204 = 18.156.204$.
+- 1 aluno do 1º ano (calculado na letra b): $102.212.704$.
+Total = $18.156.204 + 102.212.704 = 120.368.908$.
+
+\vspace{0.2cm}
+
+\textbf{d) Pelo menos 1 aluno do 1º ano:}
+Pelo complementar, é igual ao total de comissões menos as comissões onde \textbf{nenhum} aluno é do 1º ano.
+Total de comissões possíveis (de 53 alunos, escolhemos 8):
+$\binom{53}{8}$
+Comissões com nenhum aluno do 1º ano (visto na letra c):
+$\binom{34}{8}$
+Total = $\binom{53}{8} - \binom{34}{8}$.
+\end{frame}
+
+\section{Eliminação de Duplicatas}
+\begin{frame}{Eliminação de Duplicatas}
+Em geral, suponha que temos $n$ objetos dos quais um conjunto de $n_1$ são indistinguíveis (idênticos) entre si, um outro conjunto de $n_2$ são indistinguíveis entre si, e assim por diante, até um conjunto de $n_k$ objetos indistinguíveis entre si. O número de permutações distintas desses $n$ objetos é:
+\[
+\frac{n!}{n_1! n_2! \dots n_k!}
+\]
+\vspace{0.3cm}
+
+Pense na permutação da palavra \textbf{ARARA}.
+
+\vspace{0.3cm}
+
+\textbf{Exemplo:} Quantas permutações distintas podem ser feitas com os caracteres que formam a palavra \textbf{MISSISSIPPI}?
+\end{frame}
+
+\begin{frame}{Resolução}
+\textbf{Palavra ARARA:}
+Temos $n = 5$ letras no total.
+Letra A repete $3$ vezes ($n_1 = 3$).
+Letra R repete $2$ vezes ($n_2 = 2$).
+Formas distintas: $\frac{5!}{3!2!} = \frac{120}{6 \cdot 2} = 10$.
+
+\vspace{0.4cm}
+
+\textbf{Palavra MISSISSIPPI:}
+Temos $n = 11$ letras no total.
+Frequências:
+\begin{itemize}
+    \item M: 1 vez
+    \item I: 4 vezes
+    \item S: 4 vezes
+    \item P: 2 vezes
+\end{itemize}
+Formas distintas: $\frac{11!}{1! 4! 4! 2!} = \frac{39.916.800}{1 \cdot 24 \cdot 24 \cdot 2} = 34.650$.
+\end{frame}
+\section{Classificação dos Problemas}
+\begin{frame}{Classificação dos Problemas de Contagem}
+Ao resolver problemas de contagem, devemos responder duas perguntas:
+
+\begin{itemize}
+    \item A ordem importa?
+    \item É permitido repetir elementos?
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+    level distance=1.5cm,
+    level 1/.style={sibling distance=5.5cm},
+    level 2/.style={sibling distance=2.5cm},
+    every node/.style={rectangle, rounded corners, draw, align=center, fill=blue!10, font=\footnotesize},
+    edge from parent/.style={draw, -latex}
+]
+
+\node[fill=blue!30, font=\bfseries] {A ordem importa?}
+    child {node {Sim}
+        child {node {Sem Repetição\\ \textbf{Arranjo}}}
+        child {node {Com Repetição\\ \textbf{Arranjo com Repet.}}}
+    }
+    child {node {Não}
+        child {node {Sem Repetição\\ \textbf{Combinação}}}
+        child {node {Com Repetição\\ \textbf{Combinação com Repet.}}}
+    };
+\end{tikzpicture}
+\end{center}
+\end{frame}
+\section{Arranjo com Repetição}
+\begin{frame}{Arranjo com Repetição}
+
+\begin{block}{Definição}
+Um arranjo com repetição de $n$ elementos tomados $p$ a $p$ permite que um mesmo elemento seja escolhido mais de uma vez.
+\end{block}
+
+\vspace{0.3cm}
+
+O número de arranjos é dado por:
+\[
+A'(n,p) = n^p
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exemplo:} Senhas de 4 dígitos (0–9).
+\vspace{0.2cm}
+
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!20] (d1) at (0,0) {0-9};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!20] (d2) at (1.5,0) {0-9};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!20] (d3) at (3,0) {0-9};
+  \node[draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!20] (d4) at (4.5,0) {0-9};
+  
+  \node[draw=none, rectangle] at (0,-0.8) {10};
+  \node[draw=none, rectangle] at (0.75,-0.8) {$\times$};
+  \node[draw=none, rectangle] at (1.5,-0.8) {10};
+  \node[draw=none, rectangle] at (2.25,-0.8) {$\times$};
+  \node[draw=none, rectangle] at (3,-0.8) {10};
+  \node[draw=none, rectangle] at (3.75,-0.8) {$\times$};
+  \node[draw=none, rectangle] at (4.5,-0.8) {10};
+  
+  \node[draw=none, rectangle] at (2.25,-1.5) {$10^4 = 10000$ senhas};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+\section{Combinação com Repetição}
+\begin{frame}{Combinação com Repetição}
+
+\begin{block}{Definição}
+Na combinação com repetição, podemos escolher elementos repetidos, e a ordem não importa.
+\end{block}
+
+\vspace{0.3cm}
+
+O número de combinações é dado por:
+\[
+C'(n,p) = \binom{n + p - 1}{p}
+\]
+
+\vspace{0.1cm}
+
+\textbf{Exemplo:} Escolher 3 sorvetes entre 5 sabores (podendo repetir):
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  % Exemplo
+  \node[circle, fill=blue!50, inner sep=2.5pt] at (0,0) {};
+  \node[draw=none] at (0.5,0) {\Large $|$};
+  \node[draw=none] at (1,0) {\Large $|$};
+  \node[circle, fill=blue!50, inner sep=2.5pt] at (1.5,0) {};
+  \node[circle, fill=blue!50, inner sep=2.5pt] at (2,0) {};
+  \node[draw=none] at (2.5,0) {\Large $|$};
+  \node[draw=none] at (3,0) {\Large $|$};
+  
+  \node[draw=none, font=\footnotesize] at (0,-0.6) {S1};
+  \node[draw=none, font=\footnotesize] at (0.75,-0.6) {S2};
+  \node[draw=none, font=\footnotesize] at (1.75,-0.6) {S3};
+  \node[draw=none, font=\footnotesize] at (2.75,-0.6) {S4};
+  \node[draw=none, font=\footnotesize] at (3.5,-0.6) {S5};
+  
+  \node[draw=none, text width=5cm, align=center, font=\footnotesize] at (1.5, -1.5) {3 Escolhas ($\bullet$) + 4 Separadores ($|$)\\ = 7 posições em fila};
+  
+  \node[draw=none, font=\small] at (6, -0.6) {$C'(5,3) = \binom{3+5-1}{3} = \binom{7}{3} = 35$};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+\begin{frame}{Intuição: Com ou Sem Repetição}
+
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, rectangle, rounded corners, fill=red!10, text width=4.5cm, align=center, minimum height=2.5cm] (sem) at (0,0) {
+    \textbf{Sem Repetição} \\ \vspace{0.2cm}
+    Um elemento escolhido \textbf{não volta} para o conjunto. \\ \vspace{0.2cm}
+    \textit{Ex: Equipes, Pódios, Senhas c/ letras distintas}
+  };
+  
+  \node[draw, rectangle, rounded corners, fill=green!10, text width=4.5cm, align=center, minimum height=2.5cm] (com) at (6,0) {
+    \textbf{Com Repetição} \\ \vspace{0.2cm}
+    Um elemento escolhido \textbf{continua disponível}. \\ \vspace{0.2cm}
+    \textit{Ex: Senhas numéricas comuns, Sabores de sorvete}
+  };
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\textbf{Dica prática:}
+Se o problema não proíbe repetição, geralmente ela é permitida.
+\end{frame}
+\end{document}
+

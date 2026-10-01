@@ -1,0 +1,173 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{} % limpa cabeçalho e rodapé
+
+% Linha do cabeçalho e rodapé
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+% Ajuste de altura do cabeçalho
+\setlength{\headheight}{32pt}
+
+% Cabeçalho com imagem 
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Provas Matemáticas}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+% Rodapé
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+% \maketitle
+\vspace*{0.2cm}
+ 
+\section*{Instruções}
+\begin{block}{Utilize as definições formais de números pares e ímpares}
+Um inteiro é par se pode ser escrito na forma \( n = 2k \), com \( k \in \mathbb{Z} \).
+
+
+\[
+    n \in \mathbb{Z} \text{ é par} \iff \exists k \in \mathbb{Z} \text{ tal que } n = 2k,
+    \]
+    \[
+        n \in \mathbb{Z} \text{ é ímpar} \iff \exists k \in \mathbb{Z} \text{ tal que } n = 2k + 1.
+        \]
+    \end{block}
+Justifique rigorosamente todas as afirmações.
+
+\section*{Exercícios}
+
+\begin{enumerate}
+
+\item Demonstre que a soma de dois números pares é sempre um número par.
+\begin{block}{Resposta}
+Sejam $a$ e $b$ dois números inteiros pares. Pela definição de número par, existem
+$k,m \in \mathbb{Z}$ tais que $a = 2k$ e $b = 2m$. Assim, $ a+b = 2k + 2m = 2(k+m)$
+onde $k+m \in \mathbb{Z}$. Logo, $a+b$ é par.
+\end{block}
+
+
+\item Demonstre que a soma de dois números ímpares é sempre um número par.
+\begin{block}{Resposta}
+Sejam $a$ e $b$ dois números inteiros ímpares. Existem $k,m \in \mathbb{Z}$ tais que
+$a = 2k+1$ e $b = 2m+1$. Portanto,
+$a+b = 2k+1 + 2m+1 = 2(k+m+1)$,
+com $k+m+1 \in \mathbb{Z}$. Assim, a soma é par.
+\end{block}
+\item Demonstre que a soma de um número par com um número ímpar é sempre um número ímpar.
+
+\item Prove que o produto de dois números inteiros ímpares é sempre ímpar.
+
+\item Demonstre que o quadrado de qualquer número inteiro ímpar é ímpar.
+
+\item Demonstre que, para qualquer inteiro \( n \), exatamente um dos números \( n \) ou \( n+1 \) é par.
+
+\item Prove que, para todo inteiro \( n \), o número
+\[
+3n + 1
+\]
+possui paridade oposta à de \( n \).
+
+\item Demonstre que a soma de três números inteiros consecutivos é sempre ímpar.
+\newpage
+\end{enumerate}
+
+
+\begin{block}{3. Soma de um inteiro par com um inteiro ímpar}
+Seja $a$ um inteiro par e $b$ um inteiro ímpar. Existem $k,m \in \mathbb{Z}$ tais que
+$a = 2k$ e $b = 2m+1$. Logo,
+\[
+a+b = 2k + 2m + 1 = 2(k+m)+1,
+\]
+onde $k+m \in \mathbb{Z}$. Portanto, a soma é ímpar.
+\end{block}
+
+\begin{block}{4. Produto de dois inteiros ímpares}
+Sejam $a$ e $b$ dois inteiros ímpares. Existem $k,m \in \mathbb{Z}$ tais que
+$a = 2k+1$ e $b = 2m+1$. O produto é
+\[
+ab = (2k+1)(2m+1) = 2(2km+k+m)+1,
+\]
+com $2km+k+m \in \mathbb{Z}$. Logo, $ab$ é ímpar.
+\end{block}
+
+\begin{block}{5. Quadrado de um inteiro ímpar}
+Seja $n$ um inteiro ímpar. Existe $k \in \mathbb{Z}$ tal que $n = 2k+1$. Assim,
+\[
+n^2 = (2k+1)^2 = 2(2k^2+2k)+1,
+\]
+onde $2k^2+2k \in \mathbb{Z}$. Portanto, o quadrado de um inteiro ímpar é ímpar.
+\end{block}
+
+\begin{block}{6. Paridade de $n$ e $n+1$}
+Seja $n \in \mathbb{Z}$. Se $n$ é par, então $n=2k$ e $n+1=2k+1$, que é ímpar.
+Se $n$ é ímpar, então $n=2k+1$ e $n+1=2(k+1)$, que é par.
+Assim, exatamente um dos números $n$ ou $n+1$ é par.
+\end{block}
+
+\begin{block}{7. Paridade de $3n+1$}
+Seja $n \in \mathbb{Z}$. Se $n=2k$, então
+\[
+3n+1 = 6k+1 = 2(3k)+1,
+\]
+que é ímpar. Se $n=2k+1$, então
+\[
+3n+1 = 6k+4 = 2(3k+2),
+\]
+que é par. Logo, $3n+1$ tem paridade oposta à de $n$.
+\end{block}
+
+\begin{block}{8. Soma de três inteiros consecutivos}
+Sejam três inteiros consecutivos $n-1$, $n$ e $n+1$. A soma é
+\[
+(n-1)+n+(n+1)=3n.
+\]
+Se $n$ é par, então $3n$ é par; se $n$ é ímpar, então $3n$ é ímpar.
+Em ambos os casos, a soma dos três inteiros consecutivos é ímpar.
+\end{block}
+
+\end{document}

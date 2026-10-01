@@ -1,0 +1,116 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  % Certifique-se de que o arquivo de imagem esteja na mesma pasta
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios 2.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Exercícios — Teoria dos Conjuntos}
+
+
+
+\begin{enumerate}
+
+\item Considere um conjunto arbitrário \(A\). Prove formalmente as seguintes afirmações envolvendo o conjunto vazio, utilizando as definições de inclusão, união e interseção:
+
+\begin{enumerate}[label=\alph*)]
+    \item \(\varnothing \subseteq A\).
+    \item \(A \cap \varnothing = \varnothing\).
+    \item \(A \cup \varnothing = A\).
+    \item Se \(A \subseteq \varnothing\), então \(A = \varnothing\).
+    \item \(\varnothing \cap \varnothing = \varnothing\).
+    \item \(\varnothing \cup \varnothing = \varnothing\).
+\end{enumerate}
+
+\item Prove a propriedade reflexiva da inclusão:
+\[
+A \subseteq A.
+\]
+
+\item Mostre que a inclusão é antissimétrica. Ou seja, se:
+\[
+A \subseteq B \quad \text{e} \quad B \subseteq A,
+\]
+então \(A = B\).
+
+\item Prove que a interseção é um subconjunto dos conjuntos originais:
+\[
+A \cap B \subseteq A.
+\]
+
+\item Prove que os conjuntos originais são subconjuntos da união:
+\[
+A \subseteq A \cup B.
+\]
+
+\item Utilizando a definição de pertinência, mostre que, se \(x \in A \cap B\), então \(x \in A\) e \(x \in B\).
+
+\item Mostre que, se \(x \in A\), então \(x \in A \cup B\).
+
+\item Prove a propriedade comutativa da interseção:
+\[
+A \cap B = B \cap A.
+\]
+
+\end{enumerate}
+
+\end{document}

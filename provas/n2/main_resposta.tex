@@ -1,0 +1,258 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% Pacotes
+% ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}\usepackage{amsfonts}
+\usepackage{amsmath} % Recomendado para o comando \text{}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\definecolor{maincolor}{RGB}{0,100,50}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multicol}
+
+\newtcolorbox{codeblock}{%
+  colback=black!2,
+  colframe=gray!30,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  fontupper=\small
+}
+
+\newtcolorbox{respostabox}{%
+  colback=green!5!white,
+  colframe=green!50!black,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  title=\textbf{Resolução / Gabarito},
+  fontupper=\small
+}
+
+\lstset{
+    language=Java,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    frame=none,
+    numbers=none,
+    tabsize=2,
+    commentstyle=\itshape\color{gray},
+    morekeywords={this}
+}
+
+% TikZ Styles for ER Diagrams
+\tikzset{
+    block/.style={rectangle, draw, thick, minimum width=2cm, minimum height=1cm, fill=white},
+    diamond_node/.style={diamond, draw, thick, minimum width=2cm, minimum height=1cm, fill=white, aspect=2},
+    attribute/.style={ellipse, draw, thin, minimum width=1.5cm, minimum height=0.6cm, fill=white, font=\scriptsize},
+    line/.style={draw, thick}, 
+}
+% ------------------------------------------------ 
+% Configuração de página
+% ------------------------------------------------
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Comandos auxiliares
+% ------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ------------------------------------------------
+% Documento
+% ------------------------------------------------
+\begin{document}
+
+% ------------------------------------------------
+% Cabeçalho
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{@{} L{4cm} X @{}}
+    \raisebox{-0.5cm}{\includegraphics[width=4cm]{Universidade_de_Rio_Verde.jpg}} &
+    \hfill
+    \begin{tabular}{|>{\centering\arraybackslash}m{10cm}|>{\raggedright\arraybackslash}p{1.8cm}|}
+        \hline
+        \cellcolor{black}\color{white}\rule{0pt}{1.2cm}\textbf{GABARITO — AVALIAÇÃO 2} 
+        & 
+        \small Nota \tabularnewline
+        \hline
+    \end{tabular} 
+\end{tabularx}
+
+\begin{tabularx}{\textwidth}{|X|L{2cm}|}
+\hline
+\textbf{Curso} & \textbf{Campus} \\
+\textit{Engenharia de Software} & \textit{Rio Verde} \\
+\hline
+\multicolumn{2}{|l|}{ \textit{Lógica para Engenharia de Software}} \\
+\hline
+\textbf{Nome do(a) acadêmico(a)} & \textbf{Valor} \\
+& 7,0 \\
+\hline
+\textbf{Professor} & \textbf{Turma} \\
+\textit{ Sergio Souza Novak} & \textit{A} \\
+\hline
+\textbf{Data da Avaliação} & \textbf{Código} \\
+\textit{ 11/05/2026} & \textit{ESW418} \\
+\hline
+\end{tabularx}
+ 
+\vspace{0.5cm}
+
+\begin{center}
+    \rule{\textwidth}{0.4pt}
+    \textbf{QUESTÕES RESOLVIDAS}
+\end{center}
+
+\vspace{0.5cm} 
+
+\begin{enumerate}
+     \item Em uma aplicação \textbf{Qt (C++)}, um botão executa uma ação ao ser clicado com base nas seguintes condições:
+As condições consideradas são: \texttt{isValid}, \texttt{isCached}, \texttt{hasNetwork} e \texttt{isAuthorized}.
+    
+    O código do slot é:
+    
+    \begin{codeblock}
+    \begin{verbatim}
+    if ( ((isValid && hasNetwork) || isCached) &&
+         ((!isValid || isCached) && (isAuthorized || isCached)) ) {
+        exibirResultado();
+    }
+    \end{verbatim}
+    \end{codeblock}
+
+    \textbf{Simplifique a lógica condicional acima e apresente a expressão mínima resultante.}
+    
+    \begin{respostabox}
+    Sejam as variáveis: $A = \text{isValid}$, $B = \text{hasNetwork}$, $C = \text{isCached}$, $D = \text{isAuthorized}$.
+    
+    A expressão é: $Y = ((A \cdot B) + C) \cdot ((\overline{A} + C) \cdot (D + C))$
+    
+    1. Aplicando a distributividade na segunda parte: $(\overline{A} + C) \cdot (D + C) = (\overline{A} \cdot D) + C$
+    
+    2. A expressão torna-se: $Y = (AB + C) \cdot (\overline{A}D + C)$
+    
+    3. Aplicando distributividade novamente (OR $C$): $Y = (AB \cdot \overline{A}D) + C$
+    
+    4. Simplificando o termo AND: $A \cdot \overline{A} \cdot B \cdot D = 0 \cdot BD = 0$
+    
+    5. Resultado: $Y = 0 + C = C \implies \mathbf{isCached}$
+    \end{respostabox}
+
+    \item (IBFC - 2017) Analise as afirmações sobre funções matemáticas:
+    \begin{enumerate}[label=\Roman*.]
+        \item Uma função é injetora se cada elemento do domínio possui uma imagem diferente. (Correto)
+        \item Uma função é sobrejetora se a Imagem é igual ao Contradomínio. (Correto)
+        \item Uma função não pode ser injetora e sobrejetora simultaneamente. (Falso - Bijetora)
+        \item O contradomínio sempre será um conjunto numérico maior que o domínio. (Falso)
+    \end{enumerate}
+
+    \begin{respostabox}
+    \textbf{Resposta correta: B)} Apenas as afirmações I e II estão corretas.
+    \end{respostabox}
+
+    \item Sistema de ordenha IoT - Sensores A, B, C, D. Saída Y.
+    
+    \begin{respostabox}
+    \textbf{a) SOP Canônica (Mintermos Y=1):}
+    $Y = \overline{A}\overline{B}\overline{C}D + \overline{A}B\overline{C}\overline{D} + A\overline{B}C\overline{D} + ABCD$ (Mintermos $m_1, m_4, m_{10}, m_{15}$)
+    
+    \textbf{b) Simplificação Algébrica:}
+    $Y = \overline{A}\overline{C}(\overline{B}D + B\overline{D}) + AC(\overline{B}\overline{D} + BD)$
+    $Y = \overline{A}\overline{C}(B \oplus D) + AC(B \odot D)$
+    
+    \textbf{c) Descrição do Circuito:}
+    \begin{itemize}
+        \item Uma porta XOR para $B$ e $D$.
+        \item Uma porta XNOR para $B$ e $D$.
+        \item Uma porta AND de 3 entradas para $(\text{NOT } A, \text{NOT } C, \text{XOR})$.
+        \item Uma porta AND de 3 entradas para $(A, C, \text{XNOR})$.
+        \item Uma porta OR final para unir os dois resultados.
+    \end{itemize}
+    \end{respostabox}
+
+    \item (FUNDATEC - 2019) Domínio, Imagem e Codomínio.
+    \begin{respostabox}
+    O conjunto A é o domínio $\{1, 2, 3, 4\}$. O conjunto B é o contradomínio. Os elementos de B que recebem setas formam a Imagem $\{5, 6, 7, 8\}$.
+    
+    \textbf{Resposta correta: C)} Imagem é o conjunto formado por $\{5, 6, 7, 8\}$.
+    \end{respostabox}
+
+    \item Classificação de Gráficos (V/F):
+    \begin{respostabox}
+    \begin{itemize}
+        \item \textbf{I ($y=x^2$):} (F) Não é função; (F) Injetora; (F) Sobrejetora. (É função, mas não injetora/sobrejetora em $\mathbb{R}$)
+        \item \textbf{II ($y=x$):} (F) Não é função; (V) Injetora; (V) Sobrejetora.
+        \item \textbf{III (Parábola lateral):} (V) Não é função; (F) Injetora; (F) Sobrejetora.
+        \item \textbf{IV ($y=x^3-x$):} (F) Não é função; (F) Injetora; (V) Sobrejetora.
+        \item \textbf{V ($y=e^x$):} (F) Não é função; (V) Injetora; (F) Sobrejetora.
+        \item \textbf{VI (Círculo):} (V) Não é função; (F) Injetora; (F) Sobrejetora.
+    \end{itemize}
+    \end{respostabox}
+
+    \item Binômio de Newton e Trigometria:
+    \begin{respostabox}
+    \textbf{a) Expandindo $(1 - x/2)^6$:}
+    $1^6 - 6(1^5)(x/2) + 15(1^4)(x/2)^2 - 20(1^3)(x/2)^3 + 15(1^2)(x/2)^4 - 6(1^1)(x/2)^5 + 1(x/2)^6$
+    $= 1 - 3x + \frac{15}{4}x^2 - \frac{5}{2}x^3 + \frac{15}{16}x^4 - \frac{3}{16}x^5 + \frac{1}{64}x^6$
+    
+    \textbf{b) Expandindo $(\text{sen}(x) + \cos(x))^2$:}
+    $\text{sen}^2(x) + 2\text{sen}(x)\cos(x) + \cos^2(x)$
+    Como $\text{sen}^2(x) + \cos^2(x) = 1$:
+    $= 1 + 2\text{sen}(x)\cos(x) = \mathbf{1 + \text{sen}(2x)}$
+    \end{respostabox}
+
+    \item (Itame - 2024) Soma dos coeficientes de $(x+y)^7$.
+    \begin{respostabox}
+    Para encontrar a soma dos coeficientes, basta fazer $x=1$ e $y=1$:
+    $(1 + 1)^7 = 2^7 = 128$.
+    
+    \textbf{Resposta correta: C) 128.}
+    \end{respostabox}
+
+    \item Servidor PHP - 5 requisições sequenciais.
+    \begin{respostabox}
+    Trata-se de uma permutação simples de 5 elementos ($P_5$):
+    $5! = 5 \times 4 \times 3 \times 2 \times 1 = 120$.
+    
+    \textbf{Resposta correta: C) 120.}
+    \end{respostabox}
+\end{enumerate}
+
+\end{document}

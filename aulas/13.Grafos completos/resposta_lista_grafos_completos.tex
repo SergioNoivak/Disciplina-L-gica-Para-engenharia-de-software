@@ -1,0 +1,238 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,arrows.meta,decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{52.2pt} 
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Gabarito --- Grafos e Árvores}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=green!5, colframe=forestgreen, boxrule=0.5pt, arc=0pt] \textbf{Resposta:} #1 \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+% -------------------------------------------------------
+% Questão 1
+% -------------------------------------------------------
+\item \textbf{Grafos Completos ($K_n$): Definição e Propriedades}
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o grafo $K_7$ no espaço abaixo.
+    \item Qual é o grau de cada vértice em um $K_7$?
+    \item Calcule o número total de arestas de um grafo completo $K_{10}$. Mostre a fórmula utilizada.
+\end{enumerate}
+
+\quadro{
+\textbf{a) Desenho do $K_7$:} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.6cm}]
+    \foreach \i in {1,...,7} {
+        \node[node] (\i) at ({360/7 * (\i - 1) + 90}:2cm) {\i};
+    }
+    \foreach \i in {1,...,7} {
+        \foreach \j in {\i,...,7} {
+            \ifnum\i<\j
+                \draw[gray, thin] (\i) -- (\j);
+            \fi
+        }
+    }
+\end{tikzpicture}
+\end{center}
+\textbf{b)} Em um grafo completo $K_n$, todos os vértices se conectam a todos os outros. Logo, o grau de cada vértice é $n-1$. Em um $K_7$, o grau é \textbf{6}. \\
+\textbf{c)} A fórmula de arestas em um grafo completo é $E = \frac{n(n-1)}{2}$. Para $n=10$: $E = \frac{10 \times 9}{2} = \frac{90}{2} =$ \textbf{45 arestas}.
+}
+
+% -------------------------------------------------------
+% Questão 2
+% -------------------------------------------------------
+\item \textbf{Ciclos Hamiltonianos em Grafos Completos}
+Utilizando a fórmula correta, calcule quantos ciclos Hamiltonianos distintos existem em um grafo completo de 6 vértices ($K_6$). Apresente a fórmula e o cálculo.
+
+\quadro{
+A fórmula para determinar o número de ciclos Hamiltonianos \textbf{distintos} (desconsiderando o sentido do percurso e o vértice inicial) em um grafo completo $K_n$ não direcionado é $\frac{(n-1)!}{2}$. \\
+Para $n=6$: 
+$$ \frac{(6-1)!}{2} = \frac{5!}{2} = \frac{120}{2} = \mathbf{60 \text{ ciclos Hamiltonianos distintos.}} $$
+}
+
+% -------------------------------------------------------
+% Questão 5
+% -------------------------------------------------------
+\item \textbf{Grafos Bipartidos Completos ($K_{m,n}$)}
+Desenhe o grafo bipartido completo $K_{3,2}$, separando os conjuntos em esquerda e direita.
+
+\quadro{
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (U1) at (0,3) {$U_1$};
+    \node[node] (U2) at (0,1.5) {$U_2$};
+    \node[node] (U3) at (0,0) {$U_3$};
+    
+    \node[node] (V1) at (4,2.25) {$V_1$};
+    \node[node] (V2) at (4,0.75) {$V_2$};
+    
+    \draw[thick] (U1) -- (V1); \draw[thick] (U1) -- (V2);
+    \draw[thick] (U2) -- (V1); \draw[thick] (U2) -- (V2);
+    \draw[thick] (U3) -- (V1); \draw[thick] (U3) -- (V2);
+\end{tikzpicture}
+\end{center}
+}
+
+% -------------------------------------------------------
+% Questão 6
+% -------------------------------------------------------
+\item \textbf{Aplicações: O Problema da Atribuição}
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um grafo bipartido, desenhando os nós e as arestas.
+    \item Mostre, destacando no grafo ou listando os pares, se existe um \textbf{Casamento Perfeito}...
+\end{enumerate}
+
+\quadro{
+\textbf{a) Grafo Bipartido:}
+\begin{center}
+\begin{tikzpicture}[node/.style={rectangle, draw=black, fill=gray!20, thick, minimum width=2cm, minimum height=0.8cm, align=center}]
+    % Programadores
+    \node[node] (Ana) at (0,4.5) {Ana};
+    \node[node] (Bob) at (0,3) {Bob};
+    \node[node] (Car) at (0,1.5) {Carlos};
+    \node[node] (Dan) at (0,0) {Dani};
+    
+    % Tarefas
+    \node[node] (Fro) at (6,4.5) {Frontend};
+    \node[node] (Bac) at (6,3) {Backend};
+    \node[node] (IA) at (6,1.5) {IA};
+    \node[node] (Dev) at (6,0) {DevOps};
+    
+    % Arestas originais (finas/cinza)
+    \draw[gray, thick] (Ana) -- (Fro); \draw[gray, thick] (Ana) -- (IA);
+    \draw[gray, thick] (Bob) -- (Bac);
+    \draw[gray, thick] (Car) -- (Dev); \draw[gray, thick] (Car) -- (IA);
+    \draw[gray, thick] (Dan) -- (Fro); \draw[gray, thick] (Dan) -- (Dev);
+    
+    % Casamento Perfeito (verdes/grossas)
+    \draw[forestgreen, line width=2pt] (Bob) -- (Bac);
+    \draw[forestgreen, line width=2pt] (Ana) -- (Fro);
+    \draw[forestgreen, line width=2pt] (Dan) -- (Dev);
+    \draw[forestgreen, line width=2pt] (Car) -- (IA);
+\end{tikzpicture}
+\end{center}
+\textbf{b) Sim, existe um Casamento Perfeito.} \\
+Bob obrigatoriamente fará \textbf{Backend}. \\
+Restando IA e Frontend para Ana, e DevOps e IA para Carlos. Se Ana ficar com \textbf{Frontend}, sobra \textbf{DevOps} para Dani e \textbf{IA} para Carlos. \\
+\textbf{Atribuição:} (Ana $\leftrightarrow$ Frontend), (Bob $\leftrightarrow$ Backend), (Carlos $\leftrightarrow$ IA), (Dani $\leftrightarrow$ DevOps).
+}
+
+% -------------------------------------------------------
+% Questão 7
+% -------------------------------------------------------
+\item \textbf{Árvores Binárias: Classificação}
+\begin{enumerate}[label=\alph*)]
+    \item Qual a diferença fundamental entre uma Árvore Binária \textbf{Estrita} (Full) e uma Árvore Binária \textbf{Perfeita}?
+    \item É possível que uma árvore seja considerada ``Completa'' mas não seja ``Perfeita''? Dê um exemplo...
+\end{enumerate}
+
+\quadro{
+\textbf{a)} Em uma árvore binária \textbf{Estrita} (Full), cada nó interno deve possuir exatamente 0 ou 2 filhos (não há nós com apenas 1 filho). Já uma árvore \textbf{Perfeita} é uma árvore estrita na qual \textbf{todas as folhas estão no mesmo nível} de profundidade (formando um triângulo cheio). \\
+\textbf{b) Sim}. Uma árvore completa exige apenas que todos os níveis estejam preenchidos, exceto possivelmente o último, que deve estar preenchido \textbf{da esquerda para a direita}. Abaixo, uma árvore de 4 nós: ela é completa, pois o nível 2 tem o nó mais à esquerda, mas não é perfeita (as folhas estão em níveis diferentes).
+\begin{center}
+\begin{tikzpicture}[level distance=0.8cm, sibling distance=1.5cm, every node/.style={circle, draw=black, thick, minimum size=0.6cm}]
+    \node (1) {1}
+      child {node (2) {2}
+        child {node (4) {4}}
+        child[missing]
+      }
+      child {node (3) {3}};
+\end{tikzpicture}
+\end{center}
+}
+
+% -------------------------------------------------------
+% Questão 9
+% -------------------------------------------------------
+\item \textbf{Teoremas de Capacidade em Árvores}
+\begin{enumerate}[label=\alph*)]
+    \item Utilizando a fórmula apropriada, quantos nós \textit{no máximo} podem existir no nível $k=66$ (considerando que a raiz ocupa o nível 0)?
+    \item Se uma árvore binária é perfeita e possui altura $h=312$, qual o seu número total de nós? Demonstre o cálculo.
+\end{enumerate}
+
+\quadro{
+\textbf{a)} O número máximo de nós em um nível $k$ de uma árvore binária é dado por $2^k$. Portanto, no nível 66, haverá no máximo $\mathbf{2^{66}}$ nós. \\
+\textbf{b)} O número total de nós em uma árvore binária \textbf{perfeita} de altura $h$ é a soma da progressão geométrica das potências de 2, cuja fórmula direta é $2^{h+1} - 1$. \\
+Para $h = 312$, o número total de nós será $\mathbf{2^{313} - 1}$.
+}
+
+% -------------------------------------------------------
+% Questão 10
+% -------------------------------------------------------
+\item \textbf{Pior Caso (Degeneração) e a Relação das Arestas}
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe uma árvore degenerada com 5 nós. Por que cientistas da computação consideram essa formação um ``pior caso'' para a busca (qual a sua notação Big-O)?
+    \item Baseando-se no Lema do Aperto de Mãos aplicado a árvores (Grafos Acíclicos Conexos), quantas arestas obrigatoriamente existem em uma árvore binária que possui exatos 150 vértices? Justifique matematicamente porque não pode haver uma aresta a mais nem uma a menos.
+\end{enumerate}
+
+\quadro{
+\textbf{a)} Uma árvore degenerada é semelhante a uma lista encadeada simples:
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, thick, minimum size=0.6cm}]
+    \node[node] (1) at (0,0) {1};
+    \node[node] (2) at (1.5,0) {2};
+    \node[node] (3) at (3,0) {3};
+    \node[node] (4) at (4.5,0) {4};
+    \node[node] (5) at (6,0) {5};
+    \draw[->, thick] (1) -- (2); \draw[->, thick] (2) -- (3);
+    \draw[->, thick] (3) -- (4); \draw[->, thick] (4) -- (5);
+\end{tikzpicture}
+\end{center}
+É considerada o pior caso pois a árvore perde seu formato ramificado (que daria complexidade $O(\log n)$) e as buscas passam a percorrer a estrutura linearmente, exigindo \textbf{tempo linear $O(n)$}. \\
+\textbf{b)} Em toda árvore (grafo conexo e sem ciclos), o número de arestas $E$ sempre obedece rigorosamente à relação $E = V - 1$. Portanto, para 150 vértices, há exatamente \textbf{149 arestas}. \\
+\textbf{Justificativa:} Se houver uma aresta a menos (148 arestas), o grafo fatalmente se desconecta e deixa de ser árvore (ficará com componentes separadas). Se houver uma aresta a mais (150 arestas), fatalmente se formará um ciclo, o que também contraria a definição de árvore.
+}
+
+\end{enumerate}
+
+\end{document}

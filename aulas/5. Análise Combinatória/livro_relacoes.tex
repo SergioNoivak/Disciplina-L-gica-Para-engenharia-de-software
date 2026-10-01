@@ -1,0 +1,665 @@
+\documentclass[12pt,a4paper]{book}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes, calc}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage{cancel}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=3cm, right=2.5cm}
+
+% ---- Cores ----
+\definecolor{verdeprin}{RGB}{0,100,50}
+\definecolor{verdelight}{RGB}{220,245,230}
+\definecolor{cinzalight}{RGB}{245,245,245}
+\definecolor{azuldef}{RGB}{0,70,140}
+
+% ---- Caixas tcolorbox ----
+\tcbuselibrary{theorems, skins, breakable}
+
+\tcbset{
+  defstyle/.style={
+    enhanced, breakable,
+    colback=verdelight, colframe=verdeprin,
+    fonttitle=\bfseries, separator sign={\ ---},
+    before upper={\parindent1.5em},
+  },
+  thmstyle/.style={
+    enhanced, breakable,
+    colback=blue!5, colframe=azuldef,
+    fonttitle=\bfseries, separator sign={\ ---},
+    before upper={\parindent1.5em},
+  },
+  exstyle/.style={
+    enhanced, breakable,
+    colback=cinzalight, colframe=gray!60,
+    fonttitle=\bfseries,
+    before upper={\parindent1.5em},
+  },
+  obsstyle/.style={
+    enhanced, breakable,
+    colback=yellow!10, colframe=orange!70,
+    fonttitle=\bfseries,
+    before upper={\parindent1.5em},
+  },
+}
+
+\newtcbtheorem[number within=chapter]{definicao}{Definição}{defstyle}{def}
+\newtcbtheorem[number within=chapter]{teorema}{Teorema}{thmstyle}{thm}
+\newtcbtheorem[number within=chapter]{proposicao}{Proposição}{thmstyle}{prop}
+\newtcbtheorem[number within=chapter]{corolario}{Corolário}{thmstyle}{cor}
+\newtcbtheorem[number within=chapter]{exemplo}{Exemplo}{exstyle}{ex}
+\newtcbtheorem[number within=chapter]{observacao}{Observação}{obsstyle}{obs}
+
+% ---- Exercícios ----
+\newcounter{exercicio}[chapter]
+\newenvironment{exercicio}[1][]{%
+  \refstepcounter{exercicio}%
+  \par\medskip\noindent
+  \textbf{Exercício~\thechapter.\theexercicio%
+  \ifx&#1&\else\ (#1)\fi.}\quad\ignorespaces
+}{%
+  \par\medskip
+}
+
+% ---- Cabeçalho / rodapé ----
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\leftmark}
+\fancyhead[RO]{\small\rightmark}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- Título dos capítulos ----
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{verdeprin}}
+  {\chaptertitlename\ \thechapter}{12pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{30pt}{20pt}
+
+% ---- Metadados ----
+\title{%
+  {\color{verdeprin}\rule{\linewidth}{2pt}}\\[0.4cm]
+  {\Huge\bfseries Lógica para Engenharia de Software}\\[0.3cm]
+  {\large\bfseries Capítulo: Relações}\\[0.2cm]
+  {\color{verdeprin}\rule{\linewidth}{2pt}}
+}
+\author{Prof.\ Me.\ Sergio Souza Novak\\
+  \small Faculdade de Engenharia de Software --- UniRV}
+\date{2026}
+
+% ================================================================
+\begin{document}
+% ================================================================
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ================================================================
+\chapter{Produto Cartesiano e Relações Binárias}
+% ================================================================
+
+\section{Produto Cartesiano}
+
+Antes de definir relações, precisamos revisar o conceito de \textbf{par ordenado} e de \textbf{produto cartesiano}, que são os blocos construtivos de toda a teoria.
+
+Um \emph{par ordenado} $(a, b)$ é uma estrutura em que a ordem importa: $(a, b) \neq (b, a)$ sempre que $a \neq b$. Dois pares ordenados são iguais quando suas primeiras coordenadas são iguais e suas segundas coordenadas são iguais:
+\[
+  (a, b) = (c, d) \;\Longleftrightarrow\; a = c \;\text{ e }\; b = d.
+\]
+
+\begin{definicao}{Produto Cartesiano}{}
+Sejam $A$ e $B$ conjuntos. O \textbf{produto cartesiano} de $A$ e $B$, denotado $A \times B$, é o conjunto de todos os pares ordenados $(a, b)$ com $a \in A$ e $b \in B$:
+\[
+  A \times B = \{\,(a, b) \mid a \in A \text{ e } b \in B\,\}.
+\]
+\end{definicao}
+
+Note que a cardinalidade do produto cartesiano de dois conjuntos finitos é $|A \times B| = |A| \cdot |B|$.
+
+\begin{exemplo}{Produto Cartesiano Finito}{}
+Sejam $A = \{1, 2\}$ e $B = \{a, b, c\}$. Então:
+\[
+  A \times B = \{(1,a),\,(1,b),\,(1,c),\,(2,a),\,(2,b),\,(2,c)\}.
+\]
+Temos $|A \times B| = 2 \times 3 = 6$. Observe que $B \times A \neq A \times B$, pois $(a, 1) \in B \times A$ mas $(a,1) \notin A \times B$.
+\end{exemplo}
+
+\begin{observacao}{Produto Cartesiano Consigo Mesmo}{}
+Quando $A = B$, escrevemos $A \times A = A^2$. Por exemplo, $\mathbb{R}^2 = \mathbb{R} \times \mathbb{R}$ é o plano cartesiano usual da geometria.
+\end{observacao}
+
+\section{Relações Binárias}
+
+Uma \textbf{relação} é uma forma de expressar que dois objetos estão associados de algum modo. Matematicamente, basta especificar \emph{quais} pares estão relacionados, o que nos leva à seguinte definição.
+
+\begin{definicao}{Relação Binária}{}
+Sejam $A$ e $B$ conjuntos. Uma \textbf{relação binária} $R$ de $A$ em $B$ é qualquer subconjunto do produto cartesiano:
+\[
+  R \subseteq A \times B.
+\]
+Quando $(a, b) \in R$, escrevemos $a\,R\,b$ e dizemos que \emph{``$a$ está relacionado com $b$ por $R$''}. Caso contrário, escrevemos $a\,\cancel{R}\,b$.
+\end{definicao}
+
+\begin{definicao}{Relação em $A$}{}
+Quando $B = A$, dizemos que $R \subseteq A \times A$ é uma relação \textbf{em} $A$ (ou \textbf{sobre} $A$, ou \textbf{homogênea} em $A$).
+\end{definicao}
+
+As relações em $A$ são as mais estudadas, pois permitem falar de propriedades como reflexividade, simetria e transitividade.
+
+\begin{exemplo}{Relação de Divisibilidade}{}
+Seja $A = \{1, 2, 3, 4, 6\}$. Defina a relação $R$ em $A$ por:
+\[
+  a\,R\,b \;\stackrel{\text{def}}{\Longleftrightarrow}\; a \mid b.
+\]
+Os pares relacionados são:
+\[
+  R = \{(1,1),(1,2),(1,3),(1,4),(1,6),(2,2),(2,4),(2,6),(3,3),(3,6),(4,4),(6,6)\}.
+\]
+Por exemplo, $2\,R\,6$ porque $2 \mid 6$, mas $4\,\cancel{R}\,6$ porque $4 \nmid 6$.
+\end{exemplo}
+
+\section{Formas de Representar uma Relação}
+
+Existem três formas clássicas de representar uma relação finita:
+
+\subsection{Listagem dos Pares}
+
+A forma mais direta: listar explicitamente todos os pares $(a,b)$ tais que $a\,R\,b$.
+
+\subsection{Diagrama de Setas}
+
+Desenhamos dois conjuntos (oval esquerda para $A$, oval direita para $B$) e uma seta de $a$ para $b$ sempre que $a\,R\,b$.
+
+\begin{exemplo}{Diagrama de Setas}{}
+Sejam $A = \{1,2,3\}$, $B = \{p, q\}$ e $R = \{(1,p),(2,p),(3,q)\}$.
+
+\medskip
+\centering
+\begin{tikzpicture}[node distance=1.4cm,
+  every node/.style={circle, draw, minimum size=0.75cm, font=\small}]
+  \node (1) {1};
+  \node (2) [below=0.6cm of 1] {2};
+  \node (3) [below=0.6cm of 2] {3};
+  \node (p) [right=3.5cm of 1] {$p$};
+  \node (q) [below=0.6cm of p] {$q$};
+  \draw[->, thick, verdeprin] (1) -- (p);
+  \draw[->, thick, verdeprin] (2) -- (p);
+  \draw[->, thick, verdeprin] (3) -- (q);
+\end{tikzpicture}
+\end{exemplo}
+
+\subsection{Matriz de Relação}
+
+Para conjuntos finitos $A = \{a_1,\dots,a_m\}$ e $B = \{b_1,\dots,b_n\}$, a \textbf{matriz de relação} $M_R$ é a matrix $m \times n$ com:
+\[
+  (M_R)_{ij} = \begin{cases} 1 & \text{se } a_i\,R\,b_j,\\ 0 & \text{caso contrário.} \end{cases}
+\]
+
+\begin{exemplo}{Matriz de Relação}{}
+Para $A = B = \{1,2,3\}$ e $R$: ``$a$ divide $b$'':
+\[
+  M_R = \begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}.
+\]
+A linha $i$ corresponde a $a_i$ e a coluna $j$ a $b_j$.
+\end{exemplo}
+
+% ================================================================
+\chapter{Propriedades de Relações}
+% ================================================================
+
+Neste capítulo estudamos as propriedades que uma relação $R \subseteq A \times A$ pode ou não satisfazer. Essas propriedades são essenciais para classificar relações e entender estruturas matemáticas fundamentais.
+
+\section{As Seis Propriedades Principais}
+
+\begin{definicao}{Reflexividade}{}
+Uma relação $R$ em $A$ é \textbf{reflexiva} quando todo elemento de $A$ está relacionado com si mesmo:
+\[
+  \forall a \in A,\; a\,R\,a.
+\]
+\end{definicao}
+
+Intuitivamente, ser reflexivo significa que ``nenhum elemento é excluído de se relacionar consigo''. Na matriz de relação, isso se traduz em todos os elementos da diagonal principal serem iguais a $1$.
+
+\begin{definicao}{Irreflexividade}{}
+$R$ é \textbf{irreflexiva} quando nenhum elemento está relacionado consigo mesmo:
+\[
+  \forall a \in A,\; \neg(a\,R\,a).
+\]
+\end{definicao}
+
+\begin{observacao}{}{}
+Uma relação pode ser nem reflexiva nem irreflexiva. Por exemplo, $R = \{(1,1),(1,2)\}$ em $A = \{1,2\}$ não é reflexiva (pois $(2,2)\notin R$) nem irreflexiva (pois $(1,1)\in R$).
+\end{observacao}
+
+\begin{definicao}{Simetria}{}
+$R$ é \textbf{simétrica} quando a relação é sempre recíproca:
+\[
+  \forall a,b \in A,\; (a\,R\,b \Rightarrow b\,R\,a).
+\]
+\end{definicao}
+
+Na matriz de relação, simetria equivale a $M_R = M_R^T$ (a matriz é igual à sua transposta).
+
+\begin{definicao}{Antissimetria}{}
+$R$ é \textbf{antissimétrica} quando:
+\[
+  \forall a,b \in A,\; (a\,R\,b \;\land\; b\,R\,a \;\Rightarrow\; a = b).
+\]
+\end{definicao}
+
+Antissimetria \emph{não} é o oposto de simetria. Uma relação pode ser ambas (por ex., a igualdade em qualquer conjunto é simétrica \emph{e} antissimétrica).
+
+\begin{definicao}{Assimetria}{}
+$R$ é \textbf{assimétrica} quando:
+\[
+  \forall a,b \in A,\; (a\,R\,b \;\Rightarrow\; \neg(b\,R\,a)).
+\]
+\end{definicao}
+
+Toda relação assimétrica é antissimétrica, mas a recíproca não vale.
+
+\begin{definicao}{Transitividade}{}
+$R$ é \textbf{transitiva} quando:
+\[
+  \forall a,b,c \in A,\; (a\,R\,b \;\land\; b\,R\,c \;\Rightarrow\; a\,R\,c).
+\]
+\end{definicao}
+
+\section{Exemplos e Análise das Propriedades}
+
+\begin{exemplo}{Igualdade}{}
+A relação de igualdade $(=)$ em qualquer conjunto $A$ satisfaz:
+\begin{itemize}
+  \item \textbf{Reflexiva}: $a = a$ para todo $a$. \checkmark
+  \item \textbf{Simétrica}: $a = b \Rightarrow b = a$. \checkmark
+  \item \textbf{Antissimétrica}: $a = b \land b = a \Rightarrow a = b$. \checkmark
+  \item \textbf{Transitiva}: $a=b \land b=c \Rightarrow a=c$. \checkmark
+\end{itemize}
+\end{exemplo}
+
+\begin{exemplo}{Menor Estrito ($<$) em $\mathbb{Z}$}{}
+\begin{itemize}
+  \item \textbf{Irreflexiva}: $\neg(a < a)$. \checkmark
+  \item \textbf{Assimétrica}: $a < b \Rightarrow \neg(b < a)$. \checkmark
+  \item \textbf{Transitiva}: $a < b \land b < c \Rightarrow a < c$. \checkmark
+  \item Não é reflexiva, não é simétrica.
+\end{itemize}
+\end{exemplo}
+
+\begin{exemplo}{Divisibilidade ($\mid$) em $\mathbb{N}^*$}{}
+\begin{itemize}
+  \item \textbf{Reflexiva}: $a \mid a$. \checkmark
+  \item \textbf{Antissimétrica}: $a \mid b \land b \mid a \Rightarrow a = b$. \checkmark
+  \item \textbf{Transitiva}: $a \mid b \land b \mid c \Rightarrow a \mid c$. \checkmark
+  \item Não é simétrica em geral: $2 \mid 4$ mas $4 \nmid 2$.
+\end{itemize}
+\end{exemplo}
+
+\begin{exemplo}{Contra-exemplo — Analisando uma Relação Dada}{}
+Seja $A = \{1,2,3\}$ e $R = \{(1,1),(1,2),(2,3),(1,3)\}$. Analisemos cada propriedade:
+\begin{itemize}
+  \item \textbf{Reflexiva?} \emph{Não.} $(2,2) \notin R$ e $(3,3) \notin R$.
+  \item \textbf{Simétrica?} \emph{Não.} $(1,2) \in R$ mas $(2,1) \notin R$.
+  \item \textbf{Antissimétrica?} \emph{Sim.} Nunca ocorre $a\,R\,b$ e $b\,R\,a$ com $a \neq b$.
+  \item \textbf{Transitiva?} \emph{Sim.} Os únicos casos a verificar: $(1,2),(2,3) \Rightarrow (1,3) \in R$. \checkmark
+\end{itemize}
+\end{exemplo}
+
+\section{Tabela-Resumo das Propriedades}
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Relação} & \textbf{Reflexiva} & \textbf{Simétrica} & \textbf{Transitiva} \\
+\midrule
+Igualdade ($=$)       & \checkmark & \checkmark & \checkmark \\
+Menor ($<$)           & $\times$ & $\times$ & \checkmark \\
+Menor ou igual ($\le$)& \checkmark & $\times$ & \checkmark \\
+Divisibilidade ($\mid$) em $\mathbb{N}^*$ & \checkmark & $\times$ & \checkmark \\
+$\varnothing$ (relação vazia) & $\times$ & \checkmark & \checkmark \\
+$A \times A$ (relação total) & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ================================================================
+\chapter{Relações de Equivalência}
+% ================================================================
+
+\section{Definição e Motivação}
+
+As relações de equivalência são, talvez, as relações mais importantes da matemática. Elas formalizam a noção intuitiva de ``ser do mesmo tipo'' ou ``ser indistinguível sob certo critério''.
+
+\begin{definicao}{Relação de Equivalência}{}
+Uma relação $R$ em $A$ é uma \textbf{relação de equivalência} se é simultaneamente:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Reflexiva}: $\forall a \in A,\; a\,R\,a$;
+  \item \textbf{Simétrica}: $\forall a,b \in A,\; a\,R\,b \Rightarrow b\,R\,a$;
+  \item \textbf{Transitiva}: $\forall a,b,c \in A,\; a\,R\,b \land b\,R\,c \Rightarrow a\,R\,c$.
+\end{enumerate}
+\end{definicao}
+
+Uma relação de equivalência usa-se quando se quer ``identificar'' elementos que partilham de uma mesma propriedade, ignorando diferenças que não são relevantes para o problema em questão.
+
+\section{Classes de Equivalência}
+
+\begin{definicao}{Classe de Equivalência}{}
+Seja $R$ uma relação de equivalência em $A$ e $a \in A$. A \textbf{classe de equivalência} de $a$ é o conjunto:
+\[
+  [a]_R = \{\,x \in A \mid x\,R\,a\,\}.
+\]
+Quando $R$ está claro pelo contexto, escrevemos simplesmente $[a]$.
+\end{definicao}
+
+A classe $[a]$ reúne todos os elementos que são ``equivalentes'' a $a$. O elemento $a$ é chamado de \textbf{representante} da classe, mas qualquer elemento da classe pode servir como representante.
+
+\begin{proposicao}{Propriedade Central das Classes}{}
+Seja $R$ uma relação de equivalência em $A$. Para quaisquer $a, b \in A$:
+\[
+  a\,R\,b \;\Longleftrightarrow\; [a] = [b].
+\]
+\end{proposicao}
+
+\begin{proof}
+($\Rightarrow$) Suponha $a\,R\,b$. Seja $x \in [a]$, i.e., $x\,R\,a$. Pela transitividade, $x\,R\,b$, logo $x \in [b]$. Portanto $[a] \subseteq [b]$. Por simetria de $R$, $b\,R\,a$; argumento análogo dá $[b] \subseteq [a]$.
+
+\smallskip
+($\Leftarrow$) Se $[a] = [b]$, como $a \in [a]$ (reflexividade), temos $a \in [b]$, i.e., $a\,R\,b$.
+\end{proof}
+
+\begin{corolario}{}{}
+Duas classes de equivalência são ou iguais ou disjuntas:
+\[
+  [a] \cap [b] \neq \varnothing \;\Longrightarrow\; [a] = [b].
+\]
+\end{corolario}
+
+\section{Exemplos de Relações de Equivalência}
+
+\begin{exemplo}{Congruência Módulo $n$}{}
+Fixe $n \in \mathbb{N}^*$. Define-se em $\mathbb{Z}$:
+\[
+  a \equiv b \pmod{n} \;\stackrel{\text{def}}{\Longleftrightarrow}\; n \mid (a - b).
+\]
+
+\textbf{Verificação:}
+\begin{itemize}
+  \item \emph{Reflexiva}: $n \mid (a - a) = 0$. \checkmark
+  \item \emph{Simétrica}: Se $n \mid (a-b)$, então $n \mid (-(a-b)) = (b-a)$. \checkmark
+  \item \emph{Transitiva}: Se $n \mid (a-b)$ e $n \mid (b-c)$, então $n \mid (a-b)+(b-c) = (a-c)$. \checkmark
+\end{itemize}
+
+\textbf{Classes para $n=3$:}
+\[
+  [0] = \{\dots,-6,-3,0,3,6,\dots\},\quad [1]=\{\dots,-2,1,4,7,\dots\},\quad [2]=\{\dots,-1,2,5,8,\dots\}.
+\]
+\end{exemplo}
+
+\begin{exemplo}{Mesma Paridade}{}
+Em $\mathbb{Z}$, define-se $a \sim b$ se $a$ e $b$ têm a mesma paridade (ambos pares ou ambos ímpares). É fácil verificar que $\sim$ é relação de equivalência. Há exatamente duas classes:
+\[
+  [\text{par}] = 2\mathbb{Z} = \{\dots,-4,-2,0,2,4,\dots\},\quad [\text{ímpar}] = 2\mathbb{Z}+1.
+\]
+Esta relação coincide com a congruência módulo $2$.
+\end{exemplo}
+
+\begin{exemplo}{Aplicação em Engenharia de Software: Particionamento de Equivalência}{}
+Em \textbf{testes de software}, o \emph{particionamento de equivalência} é uma técnica de projeto de casos de teste que se baseia diretamente na teoria de relações de equivalência.
+
+Seja $f: \mathbb{Z} \to S$ uma função (programa). Define-se:
+\[
+  x \sim y \;\stackrel{\text{def}}{\Longleftrightarrow}\; f \text{ exibe o mesmo comportamento observável para } x \text{ e para } y.
+\]
+Esta relação é de equivalência (reflexividade, simetria e transitividade são imediatas pela definição de ``mesmo comportamento''). As classes de equivalência agrupam entradas com comportamento idêntico; basta testar \textbf{um representante} por classe, reduzindo o espaço de testes de potencialmente infinito a finito.
+
+\medskip
+\textbf{Exemplo concreto:} Para $f$ que verifica se um inteiro está no intervalo $[1, 100]$:
+\begin{itemize}
+  \item Classe 1: $x \le 0$ (entradas inválidas abaixo).
+  \item Classe 2: $1 \le x \le 100$ (entradas válidas).
+  \item Classe 3: $x \ge 101$ (entradas inválidas acima).
+\end{itemize}
+\end{exemplo}
+
+\section{O Conjunto Quociente}
+
+\begin{definicao}{Conjunto Quociente}{}
+Seja $R$ uma relação de equivalência em $A$. O \textbf{conjunto quociente} de $A$ por $R$ é:
+\[
+  A/R = \{\,[a]_R \mid a \in A\,\}.
+\]
+É o conjunto cujos \emph{elementos} são as classes de equivalência de $R$.
+\end{definicao}
+
+O conjunto quociente ``colapsa'' elementos equivalentes em um único objeto. Por exemplo:
+\[
+  \mathbb{Z}/{\equiv_3} = \{[0],[1],[2]\}, \quad |\mathbb{Z}/{\equiv_n}| = n.
+\]
+
+% ================================================================
+\chapter{Partições}
+% ================================================================
+
+\section{Definição Formal}
+
+\begin{definicao}{Partição}{}
+Seja $A$ um conjunto não-vazio. Uma \textbf{partição} de $A$ é uma família de subconjuntos $\mathcal{P} = \{A_i\}_{i \in I}$ satisfazendo:
+\begin{enumerate}[label=(P\arabic*)]
+  \item \textbf{Não-vacuidade}: $\forall i \in I,\; A_i \neq \varnothing$.
+  \item \textbf{Cobertura}: $\displaystyle\bigcup_{i \in I} A_i = A$.
+  \item \textbf{Disjunção dois a dois}: $\forall i,j \in I,\; i \neq j \Rightarrow A_i \cap A_j = \varnothing$.
+\end{enumerate}
+Os subconjuntos $A_i$ são chamados de \textbf{blocos} (ou \textbf{células}) da partição.
+\end{definicao}
+
+Intuitivamente, uma partição recorta $A$ em pedaços disjuntos que juntos reconstituem $A$ inteiro. Todo elemento de $A$ pertence a exatamente um bloco.
+
+\section{Exemplos de Partições}
+
+\begin{exemplo}{Partições de $\{1,2,3,4\}$}{}
+O conjunto $A = \{1,2,3,4\}$ admite várias partições, entre elas:
+\begin{itemize}
+  \item $\mathcal{P}_1 = \{\{1,2\},\{3,4\}\}$ (2 blocos de 2 elementos).
+  \item $\mathcal{P}_2 = \{\{1\},\{2\},\{3\},\{4\}\}$ (4 singletons — partição mais fina).
+  \item $\mathcal{P}_3 = \{\{1,2,3,4\}\}$ (1 bloco — partição mais grossa).
+  \item $\mathcal{P}_4 = \{\{1,3\},\{2\},\{4\}\}$ (3 blocos).
+\end{itemize}
+\end{exemplo}
+
+\begin{exemplo}{Partição de $\mathbb{Z}$ pelos Resíduos Módulo $n$}{}
+Para $n \in \mathbb{N}^*$, os $n$ resíduos possíveis $0, 1, \dots, n-1$ definem a partição:
+\[
+  \mathcal{P} = \{[0],[1],\dots,[n-1]\},
+\]
+onde $[k] = \{x \in \mathbb{Z} \mid x \equiv k \pmod{n}\}$.
+
+Para $n = 4$: $\mathbb{Z}$ é particionado em quatro classes:
+\[
+  [0]=\{\dots,-4,0,4,\dots\},\;[1]=\{\dots,-3,1,5,\dots\},\;[2]=\{\dots,-2,2,6,\dots\},\;[3]=\{\dots,-1,3,7,\dots\}.
+\]
+\end{exemplo}
+
+\begin{exemplo}{Partição por Linguagem de Programação}{}
+Seja $M$ o conjunto de módulos de um grande sistema de software. Define-se a partição de $M$ pela linguagem em que cada módulo foi escrito:
+\[
+  \mathcal{P} = \{M_{\text{Java}},\; M_{\text{Python}},\; M_{\text{C++}},\; M_{\text{Rust}},\;\dots\}.
+\]
+Cada módulo pertence a exatamente uma linguagem (supondo que cada módulo seja escrito em uma única linguagem). Esta partição é útil para organizar pipelines de compilação e ferramental de análise estática.
+\end{exemplo}
+
+% ================================================================
+\chapter{Relação entre Equivalência e Partição}
+% ================================================================
+
+\section{O Teorema Fundamental}
+
+O resultado central desta teoria estabelece que relações de equivalência e partições são, em essência, \emph{dois lados da mesma moeda}.
+
+\begin{teorema}{Correspondência entre Equivalência e Partição}{}
+Seja $A$ um conjunto não-vazio.
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{(Equivalência $\Rightarrow$ Partição)} Se $R$ é uma relação de equivalência em $A$, então $A/R$ é uma partição de $A$.
+  \item \textbf{(Partição $\Rightarrow$ Equivalência)} Se $\mathcal{P}$ é uma partição de $A$, então a relação $R_\mathcal{P}$ definida por
+  \[
+    a\,R_\mathcal{P}\,b \;\stackrel{\text{def}}{\Longleftrightarrow}\; \exists B \in \mathcal{P},\; a \in B \;\land\; b \in B
+  \]
+  é uma relação de equivalência em $A$.
+  \item \textbf{(Inversas)} As construções são mutuamente inversas: $A/(R_\mathcal{P}) = \mathcal{P}$ e $R_{(A/R)} = R$.
+\end{enumerate}
+\end{teorema}
+
+\section{Prova Parte 1: Equivalência $\Rightarrow$ Partição}
+
+\begin{proof}
+Seja $R$ relação de equivalência em $A$ e seja $\mathcal{P} = A/R = \{[a] \mid a \in A\}$.
+
+\textbf{(P1) Não-vacuidade.} Seja $[a] \in \mathcal{P}$. Como $R$ é reflexiva, $a\,R\,a$, logo $a \in [a]$. Portanto $[a] \neq \varnothing$.
+
+\textbf{(P2) Cobertura.} Dado qualquer $a \in A$, temos $a \in [a]$ (pela reflexividade). Logo $A \subseteq \bigcup_{a \in A} [a]$. A inclusão contrária é imediata pois cada $[a] \subseteq A$. Portanto $\bigcup_{a \in A} [a] = A$.
+
+\textbf{(P3) Disjunção.} Tomemos $[a], [b] \in \mathcal{P}$ com $[a] \cap [b] \neq \varnothing$. Há algum $c \in [a] \cap [b]$, ou seja, $c\,R\,a$ e $c\,R\,b$. Pela simetria de $R$, $a\,R\,c$. Pela transitividade, $a\,R\,b$. Pela Proposição do Capítulo 3, $[a] = [b]$.
+
+Portanto $\mathcal{P} = A/R$ é partição de $A$.\qed
+\end{proof}
+
+\section{Prova Parte 2: Partição $\Rightarrow$ Equivalência}
+
+\begin{proof}
+Seja $\mathcal{P}$ uma partição de $A$. Verifiquemos as três propriedades de $R_\mathcal{P}$.
+
+\textbf{Reflexividade.} Dado $a \in A$, pela condição (P2) existe $B \in \mathcal{P}$ com $a \in B$. Portanto $a\,R_\mathcal{P}\,a$.
+
+\textbf{Simetria.} Suponha $a\,R_\mathcal{P}\,b$; existe $B \in \mathcal{P}$ com $a, b \in B$. Os mesmos $a, b$ satisfazem $b, a \in B$, logo $b\,R_\mathcal{P}\,a$.
+
+\textbf{Transitividade.} Suponha $a\,R_\mathcal{P}\,b$ e $b\,R_\mathcal{P}\,c$. Existem $B_1, B_2 \in \mathcal{P}$ com $a,b \in B_1$ e $b,c \in B_2$. Como $b \in B_1 \cap B_2$ e os blocos são disjuntos (P3), concluímos $B_1 = B_2$. Logo $a, c \in B_1$, portanto $a\,R_\mathcal{P}\,c$.
+
+Portanto $R_\mathcal{P}$ é relação de equivalência em $A$.\qed
+\end{proof}
+
+\section{Diagrama da Correspondência}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+  \node[draw, rounded corners=6pt, fill=verdelight, minimum width=4.5cm, minimum height=1.2cm, align=center,
+        font=\small\bfseries] (eq)
+    {Relação de Equivalência\\$R$ em $A$};
+  \node[draw, rounded corners=6pt, fill=blue!10, minimum width=4.5cm, minimum height=1.2cm, align=center,
+        font=\small\bfseries, right=4cm of eq] (pt)
+    {Partição $\mathcal{P}$\\de $A$};
+  \draw[->, very thick, verdeprin, bend left=25]
+    (eq.north east) to node[above, font=\small]{$R \mapsto A/R$} (pt.north west);
+  \draw[->, very thick, blue!60, bend left=25]
+    (pt.south west) to node[below, font=\small]{$\mathcal{P} \mapsto R_\mathcal{P}$} (eq.south east);
+\end{tikzpicture}
+\end{center}
+
+\medskip
+A correspondência é biunívoca e as duas construções são inversas uma da outra.
+
+\section{Exemplo Completo}
+
+\begin{exemplo}{Congruência Módulo 3 em $A = \{1,2,3,4,5,6\}$}{}
+Defina $a \equiv b \pmod{3}$ em $A$. As classes de equivalência são:
+\[
+  [1] = [4] = \{1,4\},\quad [2] = [5] = \{2,5\},\quad [3] = [6] = \{3,6\}.
+\]
+A partição induzida é:
+\[
+  \mathcal{P} = \bigl\{\{1,4\},\{2,5\},\{3,6\}\bigr\}.
+\]
+
+\textbf{Verificação das condições de partição:}
+\begin{itemize}
+  \item (P1) $\{1,4\} \neq \varnothing$, $\{2,5\} \neq \varnothing$, $\{3,6\} \neq \varnothing$. \checkmark
+  \item (P2) $\{1,4\} \cup \{2,5\} \cup \{3,6\} = \{1,2,3,4,5,6\} = A$. \checkmark
+  \item (P3) Todas as interseções dois a dois são vazias. \checkmark
+\end{itemize}
+\end{exemplo}
+
+% ================================================================
+\chapter{Exercícios}
+% ================================================================
+
+\begin{exercicio}[Verificação de Propriedades]
+Seja $A = \{1,2,3,4\}$ e $R = \{(1,1),(2,2),(3,3),(4,4),(1,2),(2,1),(3,4),(4,3)\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Verifique que $R$ é reflexiva.
+  \item Verifique que $R$ é simétrica.
+  \item Verifique que $R$ é transitiva.
+  \item Conclua que $R$ é relação de equivalência.
+  \item Determine as classes de equivalência e a partição $A/R$.
+\end{enumerate}
+\end{exercicio}
+
+\begin{exercicio}[Da Partição à Equivalência]
+Seja $A = \{a,b,c,d,e\}$ e $\mathcal{P} = \{\{a,c,e\},\{b,d\}\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Verifique formalmente que $\mathcal{P}$ é partição de $A$.
+  \item Determine a relação de equivalência $R_\mathcal{P}$ induzida por $\mathcal{P}$.
+  \item Liste todos os pares $(x,y) \in R_\mathcal{P}$.
+\end{enumerate}
+\end{exercicio}
+
+\begin{exercicio}[Congruência Módulo 4]
+Considere $\equiv_4$ em $\mathbb{Z}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove formalmente que $\equiv_4$ é relação de equivalência.
+  \item Determine as quatro classes de equivalência.
+  \item Mostre que essas classes formam uma partição de $\mathbb{Z}$.
+\end{enumerate}
+\end{exercicio}
+
+\begin{exercicio}[Aplicação em ES: Módulos por Linguagem]
+Seja $M$ o conjunto de módulos de um sistema e $L(m)$ a linguagem do módulo $m$. Define-se $m_1 \sim m_2 \Leftrightarrow L(m_1) = L(m_2)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Prove que $\sim$ é relação de equivalência em $M$.
+  \item O que representa a classe $[m]$?
+  \item Como essa estrutura pode ser usada na organização de pipelines de build?
+\end{enumerate}
+\end{exercicio}
+
+\begin{exercicio}[Relação que Não é de Equivalência]
+Seja $R$ a relação em $\mathbb{Z}$ definida por $a\,R\,b \Leftrightarrow a \le b$.
+\begin{enumerate}[label=(\alph*)]
+  \item $R$ é reflexiva? Justifique.
+  \item $R$ é simétrica? Justifique com um contra-exemplo.
+  \item $R$ é transitiva? Justifique.
+  \item $R$ é relação de equivalência? Por quê?
+\end{enumerate}
+\end{exercicio}
+
+\section*{Gabaritos Selecionados}
+
+\textbf{Exercício 5.1}
+
+(a) $(1,1),(2,2),(3,3),(4,4) \in R$: reflexiva. \checkmark
+
+(b) $(1,2),(2,1) \in R$ e $(3,4),(4,3) \in R$: simétrica. \checkmark
+
+(c) Transitiva: os únicos pares não triviais são $(1,2),(2,1) \Rightarrow (1,1) \in R$ e $(3,4),(4,3) \Rightarrow (3,3) \in R$. \checkmark
+
+(d) As três propriedades são satisfeitas: $R$ é relação de equivalência.
+
+(e) $[1] = [2] = \{1,2\}$ e $[3] = [4] = \{3,4\}$; portanto $A/R = \bigl\{\{1,2\},\{3,4\}\bigr\}$.
+
+\medskip
+\textbf{Exercício 5.5}
+
+(a) Sim: $a \le a$. (b) Não: $1 \le 2$ mas $2 \not\le 1$. (c) Sim: $a \le b$ e $b \le c \Rightarrow a \le c$. (d) Não é relação de equivalência pois não é simétrica.
+
+\end{document}

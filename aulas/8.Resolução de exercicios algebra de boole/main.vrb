@@ -1,0 +1,23 @@
+\frametitle{Resposta 8: Resultado Limpo}
+
+\begin{alertblock}{Passo a Passo}
+\begin{enumerate}
+    \item De Morgan: $\overline{(\overline{A} + \overline{B})} \rightarrow A \cdot B$
+    \item Expressão completa: $AB + A\overline{B}$
+    \item Fatoração: $A(B + \overline{B}) = A \cdot 1 = A$
+\end{enumerate}
+\end{alertblock}
+
+\begin{block}{Código Final}
+\begin{verbatim}
+if (isValid) {
+    runProcess();
+}
+\end{verbatim}
+\end{block}
+
+\vspace{0.4cm}
+\begin{block}{Por que simplificar?}
+Melhora a \textbf{legibilidade}, reduz a carga cognitiva do desenvolvedor e o número de testes unitários necessários.
+\end{block}
+

@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  % Certifique-se de que o arquivo de imagem esteja na mesma pasta
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Gabarito da Lista 4.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Gabarito — Provas Matemáticas sobre Relações}
+
+Abaixo as demonstrações formais passo a passo.
+
+\begin{enumerate}
+
+\item \textbf{(Interseção de Relações de Equivalência)}\\
+\textbf{I. Reflexividade:} Seja $a \in A$. Como $R$ e $S$ são reflexivas, temos $a\,R\,a$ e $a\,S\,a$. Portanto, por definição, $a\,(R \cap S)\,a$. A relação é reflexiva.\\
+\textbf{II. Simetria:} Sejam $a,b \in A$ e suponha $a\,(R \cap S)\,b$. Por definição, $a\,R\,b$ e $a\,S\,b$. Como $R$ e $S$ são simétricas, deduzimos que $b\,R\,a$ e $b\,S\,a$. Logo, $b\,(R \cap S)\,a$. A relação é simétrica.\\
+\textbf{III. Transitividade:} Suponha $a\,(R \cap S)\,b$ e $b\,(R \cap S)\,c$. Então: ($a\,R\,b$ e $a\,S\,b$) e ($b\,R\,c$ e $b\,S\,c$). Analisando $R$: como temos $a\,R\,b$ e $b\,R\,c$, pela transitividade natural de $R$, obtemos $a\,R\,c$. Analisando $S$: como temos $a\,S\,b$ e $b\,S\,c$, pela transitividade natural de $S$, obtemos $a\,S\,c$. Como ambos ocorrem, $a\,(R \cap S)\,c$. A relação é transitiva. \\
+Como possui as três propriedades, $R \cap S$ é relação de equivalência. $\blacksquare$
+
+\vspace{0.3cm}
+\item \textbf{(União de Relações de Equivalência)}\\
+\textbf{R:} (b) \textbf{Falso}. A união de relações de equivalência \textbf{não} preserva necessariamente a transitividade. \\
+\textit{Contraexemplo:} Seja $A=\{1,2,3\}$. $R = \{(1,1),(2,2),(3,3),(1,2),(2,1)\}$ e $S = \{(1,1),(2,2),(3,3),(2,3),(3,2)\}$. Ambas $R$ e $S$ são relações de equivalência perfeitas em $A$. 
+Fazendo $R \cup S$, o conjunto conterá todos os elementos anteriores. Note que $(1,2) \in (R \cup S)$ e $(2,3) \in (R \cup S)$, contudo, o par $(1,3) \notin R$ e $(1,3) \notin S$, logo $(1,3) \notin (R \cup S)$, violando a regra de transitividade.$ \blacksquare$
+
+\vspace{0.3cm}
+\item \textbf{(Relação Inversa)}\\
+\begin{enumerate}[label=\alph*)]
+    \item \textit{Reflexividade:} Se $a \in A$, como $R$ é reflexiva, $a\,R\,a$. Invertendo, obtém-se $a\,R^{-1}\,a$. $R^{-1}$ é reflexiva.
+    \item \textit{Simetria:} Suponha $a\,R^{-1}\,b$. Por definição da inversa, $b\,R\,a$. Como $R$ é simétrica, sua inversão de termos pertence de novo a $R$, logo $a\,R\,b$. Então $b\,R^{-1}\,a$. $R^{-1}$ é simétrica.
+    \item \textit{Transitividade:} Suponha $a\,R^{-1}\,b$ e $b\,R^{-1}\,c$. Pela definição, $b\,R\,a$ e $c\,R\,b$. Como $R$ é transitiva, unindo $c\,R\,b$ com $b\,R\,a$, obtemos $c\,R\,a$. Por definição inversa, então, $a\,R^{-1}\,c$. $R^{-1}$ é transitiva.
+    \item Portanto, satisfazendo as três leis matemáticas, a inversa de um R.H. preserva o estado de equivalência.$\blacksquare$
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Composição não-transitiva)}\\
+Tome $A = \{1,2,3,4,5\}$. 
+$R = \{(1,2), (3,4)\}$ e $S = \{(2,3), (4,5)\}$.
+Como em $R$ nenhum elemento se interliga ao outro de forma a ativar uma condicional de transitividade (nenhum "meio" se conecta), $R$ é transitiva por vacuidade. Pelo mesmo motivo $S$ é transitiva por vacuidade.
+A relação composta é $S \circ R$: ligamos $(1,2)$ com $(2,3)$ para obter $(1,3)$. E ligamos $(3,4)$ com $(4,5)$ para obter $(3,5)$. Dessa forma, $S \circ R = \{ (1,3), (3,5) \}$.
+Ocorre que, neste novo conjunto de pares, teríamos os pares $(1,3)$ e $(3,5)$. Se essa relação composição fosse transitiva, nós obrigatoriamente precisaríamos ter $(1,5) \in (S \circ R)$. E isso não se verifica. Logo, a composição falha na transitividade. $\blacksquare$
+
+\vspace{0.3cm}
+\item \textbf{(Igualdade das Classes)}\\
+Seja $R$ relação  Eq.
+($\Rightarrow$) Assuma $a\,R\,b$. Seja um arbitrário $x \in [a]$. Daí $x\,R\,a$. Como temos $x\,R\,a$ e a premissa $a\,R\,b$, a transitividade diz que $x\,R\,b$. Ora, então $x \in [b]$. Isso conclui que $[a] \subseteq [b]$. Agora, como $R$ é simétrica ($a\,R\,b \implies b\,R\,a$), aplicamos o mesmo argumento a favor de $[b]$. Seja $y \in [b]$, logo $y\,R\,b$. Juntamente com $b\,R\,a$, resulta em $y\,R\,a$, assim $y \in [a]$, o que garante $[b] \subseteq [a]$. Os dois subconjuntos se contêm mutuamente, logo são idênticos: $[a]=[b]$.\\
+($\Leftarrow$) Assuma $[a]=[b]$. Pela reflexividade, $a\,R\,a$, de onde provamos que $a \in [a]$. Tendo em vista a igualdade, se $a$ é elemento de um lado, é do outro: $a \in [b]$. E $a \in [b]$ nada mais é que a leitura rigorosa de $a\,R\,b$. Fim da demonstração. $\blacksquare$
+
+\vspace{0.3cm}
+\item \textbf{(Antissimetria e Classes)}\\
+\begin{enumerate}[label=\alph*)]
+    \item Suponha que, para $x,y \in A$, ocorra que $x\,R\,y$. Sendo $R$ simétrica, de imediato ativamos que $y\,R\,x$ também é verdadeiro. Sabendo que o conjunto \textbf{também obedece } ativamente à Antissimetria, a regra dela diz que sempre que as proposições "xRb" E "bRx" coexistirem no sistema, necessariamente $x = y$. Está provado.
+    \item Se a relação for além disso também Reflexiva, trata-se de idêntica a uma relação de \textbf{Igualdade} onde os elementos apontam rigorosamente unicamente para si mesmos. As suas partições induzidas seriam formadas unicamente por blocos "solteiros" (singletons) com um único elemento cada (exemplo: $\{ \{x\}, \{y\}, \{z\} \}$). $\blacksquare$
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Partição induzida de uma Função)}\\
+\begin{enumerate}[label=\alph*)]
+    \item (I) Reflexiva: como $f(x)=f(x)$ para si próprio, se obtém $x\,R_f\,x$. (II) Simétrica: se há a verdade para $f(x)=f(y)$ na matemática, é garantido que $f(y)=f(x)$ também seja verdadeiro, entregando $y\,R_f\,x$. (III) Transição: $f(x)=f(y)$ e $f(y)=f(z)$ deduz-se puramente $f(x)=f(z)$. $x\,R_f\,z$. Provado as 3 propriedades, é de fato.
+    \item Para a função dada, $f(x) = x^2$. Calculando o mapeamento:
+    $f(-2)=4$; $f(2)=4$. Se relacionam.
+    $f(-1)=1$; $f(1)=1$. Se relacionam.
+    $f(0)=0$. Fica isolado.
+    Portanto o Quociente/Partição em $A$ contém os 3 novos blocos: $\mathcal{P} = \{ \{-2, 2\}, \{-1, 1\}, \{ 0 \} \}$. $\blacksquare$
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Provas sobre Partições)}\\
+(P1 - Não vacuidade) Basta colocar $k=0$ na expressão em cada um, de forma que o elemento $0 \in A_0$, o elemento $1 \in A_1$ e o elemento $2 \in A_2$. Como todos abrigam pelo menos um número real constatado, não compõem a vacuidade. Satisfeito.\\
+(P2 - Disjuntos). Um número inteiro não pode, simultaneamente, ao ser dividido por 3, dar resto 0 e 1, nem 1 e 2. Pelas bases da matemática dos inteiros de Euclides (Teorema da Divisão de Euclides), o resto da divisão por um escalar fixado é perfeitamente único para cada dividendo. Assim, não existe intersecção nula $A_x \cap A_y = \varnothing$. Satisfeito.\\
+(P3 - Agregação total). Pelo próprio teorema da Divisão de Euclides $n = 3k + r$, qualquer número matemático passante inteiro $n$ ou deixará resto 0, ou 1, ou 2 (pois $r < \text{Divisor } 3$). Significa que, inevitavelmente, qualquer número $n$ estará encaixado perfeitamente no subconjunto que o defenda, assegurando com excelência que a sua união $A_0 \cup A_1 \cup A_2$ cubra infalivelmente os $\mathbb{Z}$ totais. Satisfeito. $\blacksquare$
+\end{enumerate}
+
+\end{document}

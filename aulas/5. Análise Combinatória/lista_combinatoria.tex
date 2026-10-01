@@ -1,0 +1,241 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  % Certifique-se de que o arquivo de imagem esteja na mesma pasta
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Análise Combinatória}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Exercícios — Análise Combinatória}
+
+\begin{enumerate}
+
+\item \textbf{(Princípio da Adição e Multiplicação)} Na linguagem de programação BASIC original, um identificador tem que ser uma única letra ou uma letra seguida de um único dígito (0 a 9). Sabendo que existem 26 letras no alfabeto, quantos identificadores distintos podemos formar?
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[node distance=3cm, auto, thick]
+  \node[draw, rectangle, rounded corners, fill=blue!10, text width=2.5cm, align=center] (l1) {Letra (A-Z)};
+  \node[right of=l1, node distance=3cm] (ou) {\textbf{OU}};
+  \node[draw, rectangle, rounded corners, fill=blue!10, text width=2.5cm, align=center, right of=ou, node distance=3cm] (l2) {Letra (A-Z)};
+  \node[draw, rectangle, rounded corners, fill=green!10, text width=2.8cm, align=center, right of=l2, node distance=5.5cm] (d1) {Dígito (0-9)};
+  \draw[->] (l2) -- (d1) node[midway, above] {seguida de};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Princípio da Multiplicação e Complemento)} Suponha que os quatro últimos dígitos de um número de telefone precisem incluir \textbf{pelo menos um} dígito repetido. Sabendo que existem 10 dígitos (0 a 9) disponíveis, calcule quantos desses números de 4 dígitos existem. (\textit{Dica: calcule o total de possibilidades e subtraia as possibilidades com algarismos distintos}).
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[node distance=4cm, thick, every node/.style={draw, rectangle, rounded corners, align=center, minimum height=1cm}]
+  \node[fill=blue!10] (tot) {Todos os Nros. \\ ($10 \times 10 \times 10 \times 10$)};
+  \node[fill=red!10, right of=tot, node distance=5cm] (sem) {Sem Repetição \\ ($10 \times 9 \times 8 \times 7$)};
+  \node[fill=green!10, right of=sem, node distance=5.5cm] (com) {$\geq$ 1 Repetido};
+  \draw[->] (tot) -- (sem) node[midway, above, draw=none] {$-$};
+  \draw[->] (sem) -- (com) node[midway, above, draw=none] {$=$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Arranjo Simples)} Uma senha de acesso a um sistema é formada por 4 caracteres distintos, escolhidos entre as 26 letras do alfabeto. Sabendo que a ordem das letras importa para a senha, determine a quantidade total de senhas possíveis. Aponte a fórmula formal ($A(n,p)$) e o resultado numérico.
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[every node/.style={draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!10}]
+  \foreach \x/\opts in {1/26, 2/25, 3/24, 4/23} {
+    \node (c\x) at (\x*1.5,0) {?};
+    \node[draw=none, font=\footnotesize, fill=none] at (\x*1.5,-0.8) {\opts \ opç.};
+  }
+  \node[draw=none, fill=none] at (3.75, 1) {\textbf{Arranjo:} Ordem importa, Sem repetição};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Arranjo/Permutação)} Em uma corrida automobilística com 10 carros, de quantas maneiras diferentes o pódio (1º, 2º e 3º lugares) pode ser formado?
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[every node/.style={draw, rectangle, align=center, fill=yellow!20}]
+  \node[minimum height=2.5cm, text width=2cm] (p1) at (2.5,1.25) {1º Lugar\\ (10 opç.)};
+  \node[minimum height=1.8cm, text width=2cm, fill=gray!20] (p2) at (0,0.9) {2º Lugar\\ (9 opç.)};
+  \node[minimum height=1.2cm, text width=2cm, fill=orange!30] (p3) at (5,0.6) {3º Lugar\\ (8 opç.)};
+  \draw[thick, draw=black] (-1.5, 0) -- (6.5, 0);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Combinação Simples)} Dez atletas competem em um evento olímpico, e três deles serão sorteados para um exame antidoping (a ordem em que são sorteados não importa). De quantas maneiras diferentes podem ser escolhidos esses atletas? Calcule marcando claramente a notação de combinação e o valor.
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+  \foreach \x in {1,2,3,4,5,6,7,8,9,10} {
+    \node[draw, circle, inner sep=1pt, fill=blue!10] (a\x) at (\x*0.8,0) {\scriptsize A\x};
+  }
+  \node[draw, rectangle, rounded corners, fill=green!10, align=center] (grp) at (4.4,-1.5) {Sortear 3 atletas. \\ (Ordem \textbf{NÃO} importa)};
+  \draw[->, densely dotted, thick] (4.4, -0.4) -- (grp);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Combinação com Grupos)} Uma comissão de 8 alunos deve ser escolhida a partir de um grupo que contém 19 alunos do primeiro ano e 34 alunos do segundo ano. Considerando que a ordem dos indivíduos na comissão não importa, responda:
+\begin{enumerate}[label=\alph*)]
+    \item De quantas maneiras é possível selecionar exatamente 3 alunos do primeiro ano e 5 do segundo?
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=2.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+    \item De quantas maneiras é possível selecionar uma comissão contendo exatamente 1 aluno do primeiro ano?
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=2.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+    \item De quantas maneiras é possível formular essa comissão sendo exigido \textbf{pelo menos} 1 aluno do primeiro ano? (\textit{Dica: Método explícito ou complementar})
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, rounded corners, fill=yellow!10, text width=2.5cm, align=center] (g1) at (0,0) {1º Ano\\(19 alunos)};
+  \node[draw, rounded corners, fill=yellow!10, text width=2.5cm, align=center] (g2) at (5,0) {2º Ano\\(34 alunos)};
+  \node[draw, text width=4cm, align=center, fill=green!10] (com) at (2.5,-2) {Comissão de 8 alunos};
+  \draw[->, thick] (g1) -- (com) node[midway, left=4pt, draw=none] {$x$};
+  \draw[->, thick] (g2) -- (com) node[midway, right=4pt, draw=none] {$y$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=2.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+\end{enumerate}
+
+\item \textbf{(Arranjo com Repetição)} O cofre de uma casa possui um teclado numérico (0 a 9) e exige uma senha de 4 dígitos. A repetição de um mesmo dígito na senha é perfeitamente permitida. Quantas senhas diferentes podem ser criadas?
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[every node/.style={draw, minimum width=0.8cm, minimum height=0.8cm, fill=gray!20}]
+  \foreach \x in {1,2,3,4} {
+    \node (c\x) at (\x*1.5,0) {0-9};
+    \node[draw=none, font=\footnotesize, fill=none] at (\x*1.5,-0.8) {10 opç.};
+  }
+  \node[draw=none, fill=none] at (3.75, 1) {\textbf{Arranjo com Repetição} (Ordem importa, pode repetir)};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Combinação com Repetição)} Uma sorveteria oferece 5 sabores de sorvete. De quantas maneiras uma pessoa pode montar uma taça com 3 bolas de sorvete, sendo permitido repetir os sabores livremente? Deixe indicada a fórmula utilizada e calcule seu montante.
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \foreach \x/\label in {0/S1, 1.5/S2, 3/S3, 4.5/S4, 6/S5} {
+    \node[draw, rectangle, minimum width=1.2cm, fill=pink!20] at (\x, 0) {\label};
+  }
+  \node[draw=none] at (0, 0.8) {\Large $\bullet\ \bullet$};
+  \node[draw=none] at (3, 0.8) {\Large $\bullet$};
+  \node[draw=none, font=\small, text width=10cm, align=center] at (3, -1) {3 escolhas ($\bullet$) entre 5 sabores (4 delimitadores $|$)\\ $\rightarrow$ Permutação com repetição de $\bullet \bullet \bullet | | | |$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\item \textbf{(Permutação com Elementos Repetidos)} Calcule de forma exata quantas permutações (anagramas) distintas podem ser formadas rearranjando todos os caracteres que compõem a palavra \textbf{MISSISSIPPI}.
+\vspace{0.3cm}
+\begin{center}
+\begin{tikzpicture}
+  \node[draw, rectangle, fill=red!10, rounded corners] (m) at (0,0) {M: 1};
+  \node[draw, rectangle, fill=green!10, rounded corners] (i) at (1.5,0) {I: 4};
+  \node[draw, rectangle, fill=blue!10, rounded corners] (s) at (3,0) {S: 4};
+  \node[draw, rectangle, fill=orange!10, rounded corners] (p) at (4.5,0) {P: 2};
+  \node[draw=none, font=\footnotesize] at (2.25, -0.8) {$n = 11$ elementos (com repetições)};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2cm}
+\begin{tcolorbox}[colback=white, colframe=maincolor, height=3.5cm, arc=2mm, boxrule=1pt]
+\end{tcolorbox}
+
+
+\end{enumerate}
+
+\end{document}

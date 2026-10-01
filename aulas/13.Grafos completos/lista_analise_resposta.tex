@@ -1,0 +1,157 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix}
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Gabarito — Cálculo de Complexidade}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  } 
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\resposta}[1]{\textcolor{blue}{\textbf{Resposta:} #1}}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=1cm]
+
+    \item \textbf{SOMA-VETOR($A, n$)} \\
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & $soma = 0$ & $c_1$ & 1 \\
+            2 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_2$ & $n+1$ \\
+            3 & \quad $soma = soma + A[i]$ & $c_3$ & $n$ \\
+            4 & \textbf{retornar} $soma$ & $c_4$ & 1 \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \resposta{$T(n) = (c_2+c_3)n + (c_1+c_2+c_4) \implies O(n)$. O tempo cresce linearmente com $n$.}
+
+    \item \textbf{SOMA-MATRIZ($A, B, n$)} \\
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n$: & $c_2$ & $n(n+1)$ \\
+            3 & \quad \quad $C[i,j] = A[i,j] + B[i,j]$ & $c_3$ & $n^2$ \\
+            4 & \textbf{retornar} $C$ & $c_4$ & 1 \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \resposta{O termo dominante é $n^2$, logo $O(n^2)$.}
+
+    \item \textbf{BUSCA-MATRIZ($M, n, alvo$)} \\
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n$: & $c_2$ & $n(n+1)$ \\
+            3 & \quad \quad \textbf{se} $M[i,j] == alvo$: & $c_3$ & $n^2$ \\
+            4 & \quad \quad \quad \textbf{retornar} $(i,j)$ & $c_4$ & 0 ou 1 \\
+            5 & \textbf{retornar} NULO & $c_5$ & 1 \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \resposta{Pior caso: $O(n^2)$.}
+
+    \item \textbf{ALGORITMO-MISTO($A, n$)} \\
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad print($A[i]$) & $c_2$ & $n$ \\
+            3 & \textbf{para} $j = 1$ \textbf{até} $n$: & $c_3$ & $n+1$ \\
+            4 & \quad \textbf{para} $k = 1$ \textbf{até} $n$: & $c_4$ & $n(n+1)$ \\
+            5 & \quad \quad print($A[j] + A[k]$) & $c_5$ & $n^2$ \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \resposta{$T(n) = O(n) + O(n^2) \implies O(n^2)$. O laço quadrático "engole" o custo linear.}
+
+    \item \resposta{Complexidade $O(n^2)$. Descartamos constantes e termos de menor ordem.}
+
+    \item \resposta{Número máximo de comparações: $\log_2 1.000 .000 \approx 20$. Complexidade $O(\log n)$.}
+
+    \item \textbf{ORDENA($A, n$)} \\
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_1$ & $n+1$ \\
+            2 & \quad \textbf{para} $j = 1$ \textbf{até} $n - 1$: & $c_2$ & $n \times n$ \\
+            3 & \quad \quad \textbf{se} $A[j] > A[j+1]$: & $c_3$ & $n(n-1)$ \\
+            4 & \quad \quad \quad Troca($A[j], A[j+1]$) & $c_4$ & $n(n-1)$ \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+    \resposta{Complexidade $O(n^2)$.}
+
+    \item \resposta{Complexidade $O(2^n)$. A cada novo servidor infectado (nível), o número de ataques dobra.}
+
+    \item \resposta{$100n = n^2 \implies n = 100$. Para $n > 100$, o algoritmo linear ($100n$) é mais eficiente.}
+
+    \item \resposta{\textbf{C} (Azul: $O(n \log n)$; Vermelho: $O(n^3)$; Verde: $O(n!)$).}
+
+    \item \resposta{\textbf{Errado}. O algoritmo $O(n)$ é \textbf{mais} eficiente que o $O(n \log n)$. À medida que $n$ cresce, o fator $\log n$ faz com que $n \log n$ cresça mais rápido do que a simples função linear $n$. Portanto, $O(n)$ é o limite inferior nesse caso.}
+
+    \item \resposta{\textbf{D} ($O(\log n)$). O código descreve uma busca binária clássica, onde a cada iteração o espaço de busca é reduzido pela metade, resultando em uma complexidade logarítmica.}
+
+    \item \resposta{\textbf{B} ($O(n^2)$). Embora exista um desvio condicional, na análise assintótica consideramos $n$ tendendo ao infinito. Para $n > 1000$, o algoritmo executa dois laços aninhados ($n \times n$), o que define a complexidade como quadrática.}
+
+\end{enumerate}
+
+\end{document}

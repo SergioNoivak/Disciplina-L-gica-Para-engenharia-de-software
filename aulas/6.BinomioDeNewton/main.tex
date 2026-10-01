@@ -1,0 +1,822 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova} 
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox} 
+\usepackage{lmodern}
+
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Binômio de Newton
+}}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+% Title page frame
+%\begin{frame}
+    %\titlepage 
+%\end{frame}
+\frame[plain]{\titlepage}
+%logo
+\AddToShipoutPictureFG{
+    \put(\LenToUnit{.92\paperwidth},
+    \LenToUnit{.185\paperheight})
+    {\vtop{{\null}
+    \makebox{\includegraphics[width=.8cm,keepaspectratio]{Universidade_de_Rio_Verde.jpg}}}}}
+
+
+\begin{frame}{Sumário}
+  \tableofcontents
+\end{frame}
+
+% ============================================================
+\section{Motivação e Revisão}
+% ============================================================
+
+\begin{frame}{Motivação}
+O \textbf{Binômio de Newton} permite expandir expressões da forma $(a+b)^n$ sem efetuar multiplicações repetidas.
+
+\vspace{0.3cm}
+
+\textbf{Exemplos práticos:}
+\begin{itemize}
+    \item Expansão de polinômios em algoritmos simbólicos.
+    \item Probabilidade: distribuição binomial.
+    \item Análise de complexidade de algoritmos que usam divisão e conquista.
+    \item Computação científica: aproximações polinomiais.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{block}{Objetivo}
+Compreender a estrutura combinatória por trás da expansão de $(a+b)^n$ e aplicar o teorema em problemas de computação e matemática discreta.
+\end{block}
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Revisão: Coeficientes Binomiais}
+
+Recorde que o coeficiente binomial $\binom{n}{k}$ conta o número de subconjuntos de tamanho $k$ extraídos de um conjunto de $n$ elementos:
+\[
+\binom{n}{k} = \frac{n!}{k!\,(n-k)!}, \quad 0 \leq k \leq n.
+\]
+
+\vspace{0.3cm}
+
+\textbf{Propriedades importantes:}
+\begin{itemize}
+    \item $\binom{n}{0} = \binom{n}{n} = 1$
+    \item $\binom{n}{k} = \binom{n}{n-k}$ \quad (simetria)
+    \item $\binom{n}{1} = n$
+    \item $\binom{n}{k} \in \mathbb{Z}^+$ para todo $0 \leq k \leq n$
+\end{itemize}
+
+\vspace{0.3cm}
+
+Essas propriedades serão fundamentais para entender os coeficientes do Binômio de Newton.
+\end{frame}
+
+% ============================================================
+\section{Teorema do Binômio de Newton}
+% ============================================================
+
+\begin{frame}{Teorema do Binômio de Newton}
+
+\begin{block}{Teorema}
+Sejam $a, b$ quaisquer números reais (ou elementos de um anel comutativo) e $n \in \mathbb{N}$. Então:
+\[
+(a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}
+\]
+\end{block}
+
+\vspace{0.4cm}
+
+Expandido explicitamente:
+\[
+(a+b)^n = \binom{n}{0}a^n + \binom{n}{1}a^{n-1}b + \binom{n}{2}a^{n-2}b^2 + \cdots + \binom{n}{n}b^n
+\]
+
+\vspace{0.3cm}
+
+\textbf{Interpretação combinatória:} ao multiplicar $(a+b)$ por si mesmo $n$ vezes, o coeficiente de $a^{n-k}b^k$ é o número de formas de escolher $k$ fatores (dentre $n$) que contribuem com $b$, ou seja, $\binom{n}{k}$.
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Prova Combinatória}
+
+\begin{proof}
+Considere o produto $(a+b)^n = \underbrace{(a+b)(a+b)\cdots(a+b)}_{n \text{ fatores}}$.
+
+\vspace{0.2cm}
+
+Ao distribuir, cada termo resulta de escolher $a$ ou $b$ em cada fator. Um termo $a^{n-k}b^k$ aparece cada vez que escolhemos $b$ em exatamente $k$ dos $n$ fatores.
+
+\vspace{0.2cm}
+
+O número de maneiras de escolher quais $k$ fatores contribuem com $b$ é
+\[
+\binom{n}{k}.
+\]
+
+\vspace{0.1cm}
+
+Somando sobre todos os valores possíveis de $k$ ($0 \leq k \leq n$):
+\[
+(a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^k. \qedhere
+\]
+\end{proof}
+\end{frame}
+
+% ============================================================
+\section{Exemplos e Cálculos}
+% ============================================================
+
+\begin{frame}{Exemplos Diretos}
+
+\textbf{Exemplo 1:} Expanda $(a+b)^2$.
+\[
+(a+b)^2 = \binom{2}{0}a^2 + \binom{2}{1}ab + \binom{2}{2}b^2 = a^2 + 2ab + b^2
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exemplo 2:} Expanda $(a+b)^3$.
+\[
+(a+b)^3 = \binom{3}{0}a^3 + \binom{3}{1}a^2b + \binom{3}{2}ab^2 + \binom{3}{3}b^3
+\]
+\[
+= a^3 + 3a^2b + 3ab^2 + b^3
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exemplo 3:} Expanda $(a+b)^4$.
+\[
+(a+b)^4 = a^4 + 4a^3b + 6a^2b^2 + 4ab^3 + b^4
+\]
+
+\vspace{0.2cm}
+
+Perceba que os coeficientes $1, 4, 6, 4, 1$ correspondem à linha $n=4$ do Triângulo de Pascal.
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Exercícios — Expansão Direta}
+
+\textbf{Exercício 1:} Expanda $(x + 2)^4$.
+
+\vspace{0.4cm}
+
+\textbf{Exercício 2:} Expanda $(2a - b)^3$. \\
+(Dica: escreva como $(2a + (-b))^3$ e aplique o teorema.)
+
+\vspace{0.4cm}
+
+\textbf{Exercício 3:} Expanda $\left(x - \dfrac{1}{x}\right)^4$.
+
+\vspace{0.4cm}
+
+\textbf{Exercício 4:} Qual é o coeficiente de $x^3$ na expansão de $(1 + x)^7$?
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Resolução — Exercícios 1 e 2}
+
+\textbf{Exercício 1:} $(x+2)^4$, com $a=x$, $b=2$, $n=4$.
+\[
+= \binom{4}{0}x^4 + \binom{4}{1}x^3 \cdot 2 + \binom{4}{2}x^2 \cdot 4 + \binom{4}{3}x \cdot 8 + \binom{4}{4}\cdot 16
+\]
+\[
+= x^4 + 8x^3 + 24x^2 + 32x + 16
+\]
+
+\vspace{0.4cm}
+
+\textbf{Exercício 2:} $(2a-b)^3 = (2a+(-b))^3$, com $a \leftarrow 2a$, $b \leftarrow -b$, $n=3$.
+\[
+= \binom{3}{0}(2a)^3 + \binom{3}{1}(2a)^2(-b) + \binom{3}{2}(2a)(-b)^2 + \binom{3}{3}(-b)^3
+\]
+\[
+= 8a^3 - 12a^2b + 6ab^2 - b^3
+\]
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Resolução — Exercícios 3 e 4}
+
+\textbf{Exercício 3:} $\left(x - \dfrac{1}{x}\right)^4$ com $a=x$, $b = -\dfrac{1}{x}$, $n=4$.
+
+O termo geral é:
+\[
+\binom{4}{k} x^{4-k}\left(-\frac{1}{x}\right)^k = \binom{4}{k}(-1)^k x^{4-2k}
+\]
+
+Calculando cada termo:
+\begin{center}
+\begin{tabular}{cccc}
+\hline
+$k$ & $\binom{4}{k}$ & $(-1)^k$ & Termo \\
+\hline
+0 & 1 & $+1$ & $x^4$ \\
+1 & 4 & $-1$ & $-4x^2$ \\
+2 & 6 & $+1$ & $6$ \\
+3 & 4 & $-1$ & $-4x^{-2}$ \\
+4 & 1 & $+1$ & $x^{-4}$ \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+
+\textbf{Exercício 4:} Em $(1+x)^7$, o coeficiente de $x^3$ é $\binom{7}{3} = 35$.
+\end{frame}
+
+% ============================================================
+\section{Triângulo de Pascal}
+% ============================================================
+\begin{frame}{Triângulo de Pascal}
+
+\begin{columns}
+
+% Coluna esquerda: explicação
+\column{0.45\textwidth}
+
+\begin{block}{Definição}
+O \textbf{Triângulo de Pascal} organiza os \alert{coeficientes binomiais} em forma triangular.
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{block}{Regra de Formação}
+Cada número é a soma dos dois acima:
+\begin{center}
+\textcolor{blue}{\Large $\downarrow$}
+\end{center}
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Identidade de Pascal}
+\[
+\binom{n}{k} =
+\binom{n-1}{k-1} +
+\binom{n-1}{k}
+\]
+\end{alertblock}
+
+
+% Coluna direita: triângulo
+\column{0.55\textwidth}
+
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.3}
+
+\begin{tabular}{ccccccccccc}
+      &   &   &   &   & \textbf{1} &   &   &   &   &   \\[2pt]
+      &   &   &   & \textbf{1} &   & \textbf{1} &   &   &   &   \\[2pt]
+      &   &   & \textbf{1} &   & \textbf{\color{blue}2} &   & \textbf{1} &   &   &   \\[2pt]
+      &   & \textbf{1} &   & \textbf{3} &   & \textbf{3} &   & \textbf{1} &   &   \\[2pt]
+      & \textbf{1} &   & \textbf{4} &   & \textbf{\color{red}6} &   & \textbf{4} &   & \textbf{1} &   \\[2pt]
+\textbf{1} &   & \textbf{5} &   & \textbf{10} &   & \textbf{10} &   & \textbf{5} &   & \textbf{1} \\
+\end{tabular}
+
+\vspace{0.4cm}
+
+\textcolor{gray}{\footnotesize Cada valor destacado é soma dos dois acima}
+\end{center}
+
+\end{columns}
+
+\end{frame}
+\begin{frame}{Triângulo de Pascal aplicado ao Binômio}
+
+\begin{columns}
+
+% Coluna esquerda: triângulo
+\column{0.45\textwidth}
+
+\begin{block}{Linha $n = 4$}
+\begin{center}
+\begin{tabular}{ccccccccc}
+ &  &  &  & 1 &  &  &  &  \\
+ &  &  & 1 &  & 1 &  &  &  \\
+ &  & 1 &  & 2 &  & 1 &  &  \\
+ & 1 &  & 3 &  & 3 &  & 1 &  \\
+1 &  & 4 &  & \alert{6} &  & 4 &  & 1 \\
+\end{tabular}
+\end{center}
+\end{block}
+
+\vspace{0.3cm}
+
+\textcolor{gray}{Coeficientes: $1 \;\; 4 \;\; 6 \;\; 4 \;\; 1$}
+
+% Coluna direita: binômio
+\column{0.55\textwidth}
+
+\begin{block}{Expansão do Binômio}
+\[
+(a + b)^4
+\]
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Aplicando os coeficientes}
+\[
+\begin{aligned}
+(a + b)^4 =\;&
+1a^4 \\
+&+\, 4a^3b \\
+&+\, 6a^2b^2 \\
+&+\, 4ab^3 \\
+&+\, 1b^4
+\end{aligned}
+\]
+\end{alertblock}
+
+\vspace{0.3cm}
+
+\begin{block}{Regra}
+\[
+\binom{n}{k} \rightarrow \text{coeficiente do termo}
+\]
+\end{block}
+
+\end{columns}
+
+\end{frame}
+\begin{frame}{Triângulo de Pascal aplicado ao Binômio ($n=5$)}
+
+\begin{columns}
+
+% Coluna esquerda: triângulo
+\column{0.45\textwidth}
+
+\begin{block}{Linha $n = 5$}
+\begin{center}
+\begin{tabular}{ccccccccccc}
+      &   &   &   &   & 1 &   &   &   &   &   \\
+      &   &   &   & 1 &   & 1 &   &   &   &   \\
+      &   &   & 1 &   & 2 &   & 1 &   &   &   \\
+      &   & 1 &   & 3 &   & 3 &   & 1 &   &   \\
+      & 1 &   & 4 &   & 6 &   & 4 &   & 1 &   \\
+    1 &   & 5 &   & 10 &   & \alert{10} &   & 5 &   & 1 \\
+\end{tabular}
+\end{center}
+\end{block}
+
+\vspace{0.3cm}
+\textcolor{gray}{Coeficientes: $1 \;\; 5 \;\; 10 \;\; 10 \;\; 5 \;\; 1$}
+
+% Coluna direita: binômio
+\column{0.55\textwidth}
+
+\begin{block}{Expansão}
+\[
+(a + b)^5
+\]
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{alertblock}{Aplicação direta}
+\[
+\begin{aligned}
+(a + b)^5 =\;&
+1a^5 \\
+&+\, 5a^4b \\
+&+\, 10a^3b^2 \\
+&+\, 10a^2b^3 \\
+&+\, 5ab^4 \\
+&+\, 1b^5
+\end{aligned}
+\]
+\end{alertblock}
+
+\vspace{0.3cm}
+
+\begin{block}{Padrão}
+\begin{itemize}
+\item Expoente de $a$ ↓
+\item Expoente de $b$ ↑
+\item Coeficientes vêm do triângulo
+\end{itemize}
+\end{block}
+
+\end{columns}
+
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Identidade de Pascal}
+
+\begin{block}{Identidade de Pascal}
+Para $1 \leq k \leq n$:
+\[
+\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}
+\]
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{proof}
+Considere um conjunto $S$ com $n$ elementos e fixe um elemento $x \in S$.
+
+Os subconjuntos de tamanho $k$ se dividem em dois grupos disjuntos:
+\begin{itemize}
+    \item Os que \textbf{contêm} $x$: escolhemos os outros $k-1$ elementos de $S \setminus \{x\}$ $\Rightarrow \binom{n-1}{k-1}$ formas.
+    \item Os que \textbf{não contêm} $x$: escolhemos $k$ elementos de $S \setminus \{x\}$ $\Rightarrow \binom{n-1}{k}$ formas.
+\end{itemize}
+
+Como os grupos são disjuntos, $\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}$. \qedhere
+\end{proof}
+\end{frame}
+
+% ============================================================
+\section{Termo Geral}
+% ============================================================
+
+\begin{frame}{Termo Geral da Expansão}
+
+Na expansão de $(a+b)^n$, o \textbf{termo geral} de índice $k$ ($k = 0, 1, \dots, n$) é:
+\[
+T_{k+1} = \binom{n}{k} a^{n-k} b^{k}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Como encontrar um termo específico?}
+
+\begin{enumerate}
+    \item Identifique $n$, $a$ e $b$.
+    \item Escreva $T_{k+1} = \binom{n}{k} a^{n-k} b^k$.
+    \item Resolva para o valor de $k$ desejado.
+\end{enumerate}
+
+\vspace{0.3cm}
+
+\textbf{Exemplo:} Encontre o $3^\circ$ termo da expansão de $(x+y)^5$.
+
+\[
+T_3 = T_{2+1} = \binom{5}{2} x^{5-2} y^{2} = 10 x^3 y^2
+\]
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Exercícios — Termo Geral}
+
+\textbf{Exercício 1:} Encontre o $4^\circ$ termo da expansão de $(2x + 1)^6$.
+
+\vspace{0.4cm}
+
+\textbf{Exercício 2:} Em $(a + b)^{10}$, qual termo contém $b^4$?
+
+\vspace{0.4cm}
+
+\textbf{Exercício 3:} Determine o coeficiente de $x^5 y^3$ em $(x+y)^8$.
+
+\vspace{0.4cm}
+
+\textbf{Exercício 4:} Em $(1 + 2x)^9$, determine o valor de $k$ tal que $T_{k+1}$ seja o termo de maior coeficiente em $x$.
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Resolução — Termo Geral}
+
+\textbf{Exercício 1:} $(2x+1)^6$, $k=3$ (pois $T_4 = T_{3+1}$), $a=2x$, $b=1$.
+\[
+T_4 = \binom{6}{3}(2x)^3 \cdot 1^3 = 20 \cdot 8x^3 = 160x^3
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exercício 2:} Termo com $b^4$: $k=4$.
+\[
+T_5 = \binom{10}{4} a^6 b^4 = 210\, a^6 b^4
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exercício 3:} Coeficiente de $x^5 y^3$ em $(x+y)^8$: $k=3$.
+\[
+\binom{8}{3} = \frac{8!}{3!\,5!} = 56
+\]
+
+\vspace{0.3cm}
+
+\textbf{Exercício 4:} Em $(1+2x)^9$: $T_{k+1} = \binom{9}{k}2^k x^k$. Maior coeficiente quando $k = \lfloor n/2 \rfloor = 4$: $T_5$.
+\end{frame}
+
+% ============================================================
+\section{Binômio com Coeficientes Genéricos}
+% ============================================================
+
+\begin{frame}{Multinômio de Newton}
+
+O Binômio de Newton se generaliza para somas de $m$ termos:
+
+\begin{block}{Teorema Multinomial}
+Para $n \in \mathbb{N}$ e $m$ termos $x_1, x_2, \dots, x_m$:
+\[
+(x_1 + x_2 + \cdots + x_m)^n = \sum_{\substack{k_1+k_2+\cdots+k_m = n \\ k_i \geq 0}} \binom{n}{k_1, k_2, \ldots, k_m} x_1^{k_1} x_2^{k_2} \cdots x_m^{k_m}
+\]
+onde o \textbf{coeficiente multinomial} é:
+\[
+\binom{n}{k_1, k_2, \ldots, k_m} = \frac{n!}{k_1!\, k_2!\, \cdots\, k_m!}
+\]
+\end{block}
+
+\vspace{0.2cm}
+
+\textbf{Exemplo:} Coeficiente de $x^2 y z$ em $(x+y+z)^4$: $k_1=2, k_2=1, k_3=1$.
+\[
+\frac{4!}{2!\,1!\,1!} = 12
+\]
+\end{frame}
+\begin{frame}{Multinômio de Newton — Exemplo Completo}
+
+\begin{block}{Problema}
+Determinar o termo associado a $x^2 y z$ na expansão de:
+\[
+(x + y + z)^4
+\]
+\end{block}
+
+\vspace{0.3cm}
+
+\begin{columns}
+
+% Coluna esquerda: escolha dos expoentes
+\column{0.45\textwidth}
+
+\begin{block}{Escolha dos expoentes}
+Queremos:
+\[
+x^2 y^1 z^1
+\]
+
+Logo:
+\[
+k_1 = 2,\quad k_2 = 1,\quad k_3 = 1
+\]
+
+\vspace{0.2cm}
+
+\textcolor{blue}{Verificação:}
+\[
+2 + 1 + 1 = 4
+\]
+\end{block}
+
+% Coluna direita: cálculo
+\column{0.5\textwidth}
+
+\begin{block}{Coeficiente Multinomial}
+\[
+\binom{4}{2,1,1} =
+\frac{4!}{2!\,1!\,1!}
+\]
+\end{block}
+
+
+\begin{alertblock}{Cálculo}
+\[
+\frac{4!}{2!\,1!\,1!} =
+\frac{24}{2} = 12
+\]
+\end{alertblock}
+
+\end{columns}
+
+
+\begin{block}{Termo na expansão}
+\[
+\boxed{12\,x^2 y z}
+\]
+\end{block}
+
+
+\textcolor{gray}{Cada termo vem de uma distribuição das 4 potências entre $x$, $y$ e $z$.}
+
+\end{frame}
+
+\begin{frame}{Resolução passo a passo de $(x + y + z)^3$}
+
+\textbf{Objetivo:} Expandir completamente a expressão.
+
+\vspace{0.3cm}
+
+\textbf{Passo 1: Entender o que está acontecendo}
+
+\[
+(x + y + z)^3 = (x + y + z)(x + y + z)(x + y + z)
+\]
+
+Ou seja, escolhemos \textbf{um termo de cada parêntese} e multiplicamos.
+
+\vspace{0.4cm}
+
+\textbf{Passo 2: Como os termos são formados?}
+
+Cada termo final terá a forma:
+\[
+x^{k_1}y^{k_2}z^{k_3}
+\quad \text{com} \quad k_1 + k_2 + k_3 = 3
+\]
+
+Isso ocorre porque fazemos \textbf{3 escolhas (uma por parêntese)}.
+
+\vspace{0.4cm}
+
+
+\end{frame}
+\begin{frame}{Aplicação: Distribuição Binomial}
+
+\textbf{Passo 3: Listar todos os casos possíveis}
+
+\begin{itemize}
+    \item Escolher sempre o mesmo termo:
+    \[
+    x^3,\; y^3,\; z^3
+    \]
+
+    \item Escolher dois iguais e um diferente:
+    \[
+    x^2y,\; x^2z,\; xy^2,\; y^2z,\; xz^2,\; yz^2
+    \]
+
+    \item Escolher um de cada:
+    \[
+    xyz
+    \]
+\end{itemize}
+
+\vspace{0.4cm}
+
+\textbf{Passo 4: Quantas vezes cada termo aparece?}
+
+\begin{itemize}
+    \item $x^3, y^3, z^3$ aparecem \textbf{1 vez}
+    \item Termos como $x^2y$ aparecem \textbf{3 vezes}
+    \item O termo $xyz$ aparece \textbf{6 vezes}
+\end{itemize}
+
+\vspace{0.4cm}
+
+\textbf{Resultado final:}
+
+\[
+\begin{aligned}
+(x + y + z)^3 =\;& x^3 + y^3 + z^3 \\
+&+ 3x^2y + 3x^2z 
+&+ 3xy^2 + 3y^2z 
+&+ 3xz^2 + 3yz^2 
+&+ 6xyz
+\end{aligned}
+\]
+\end{frame}
+
+% ============================================================
+\section{Aplicações Computacionais}
+% ============================================================
+
+\begin{frame}{Aplicação: Distribuição Binomial}
+
+A distribuição binomial modela o número de sucessos $k$ em $n$ tentativas independentes, cada uma com probabilidade $p$ de sucesso:
+ 
+\[
+P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Ligação com o Binômio de Newton:}
+\[
+\sum_{k=0}^{n} P(X=k) = \sum_{k=0}^{n} \binom{n}{k} p^k (1-p)^{n-k} = (p + (1-p))^n = 1^n = 1
+\]
+
+\vspace{0.3cm}
+
+Isso confirma que a distribuição está corretamente normalizada.
+\end{frame}
+
+% -------------------------------------------------------
+
+\begin{frame}{Aplicação: Complexidade Algorítmica}
+
+Considere um algoritmo de divisão e conquista que divide o problema em $b$ subproblemas de tamanho $n/c$, com custo de combinação $O(n)$. A equação de recorrência é:
+\[
+T(n) = b\,T(n/c) + O(n)
+\]
+
+\vspace{0.2cm}
+
+O Binômio de Newton aparece ao expandir potências em análises de séries geométricas, por exemplo:
+\[
+(1+\varepsilon)^n \approx 1 + n\varepsilon + \binom{n}{2}\varepsilon^2 + \cdots \quad \text{(para } \varepsilon \ll 1\text{)}
+\]
+
+Essa aproximação é amplamente usada em:
+\begin{itemize}
+    \item Cálculo de erros em ponto flutuante.
+    \item Análise perturbativa em simulações numéricas.
+    \item Estimativas de probabilidade em criptografia.
+\end{itemize}
+\end{frame}
+
+% ============================================================
+\section{Classificação e Resumo}
+% ============================================================
+
+\begin{frame}{Classificação dos Tipos de Problema}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Objetivo} & \textbf{Ferramenta} & \textbf{Fórmula} \\
+\hline
+Expandir $(a+b)^n$     & Binômio de Newton & $\sum_{k}\binom{n}{k}a^{n-k}b^k$ \\
+\hline
+Achar o $k$-ésimo termo & Termo geral & $T_{k+1}=\binom{n}{k}a^{n-k}b^k$ \\
+\hline
+Construir coeficientes & Triângulo de Pascal & $\binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k}$ \\
+\hline
+Somar todos coef.      & Identidade $2^n$ & $\sum_{k}\binom{n}{k}=2^n$ \\
+\hline
+Combinar dois binômios & Vandermonde & $\binom{m+n}{r}=\sum_k\binom{m}{k}\binom{n}{r-k}$ \\
+\hline
+Mais de 2 termos       & Multinômio & $\frac{n!}{k_1!\cdots k_m!}$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+
+\end{document}

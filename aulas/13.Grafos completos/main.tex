@@ -1,0 +1,1234 @@
+    \documentclass[9pt]{beamer}
+    \mode<presentation>
+
+    % Theme choice:
+    \usetheme{Madrid}%Darmstadt 
+
+    \usecolortheme[RGB={0,100,50}]{structure}
+    \usefonttheme{structurebold} 
+    \setbeamercovered{invisible}
+    %\setbeamertemplate{navigation symbols}{}
+    \usepackage{dynblocks}
+    \usepackage{textpos}
+    \usepackage{amsfonts}
+    \usepackage{amsmath}
+    \usepackage{amssymb}
+    \usepackage{amsthm}
+
+    \newtheorem{teorema}{Teorema}\usepackage{mathtools}
+    \renewcommand{\proofname}{Prova} 
+    \usepackage[portuguese]{babel}
+
+    \uselanguage{Portuguese}
+    \languagepath{Portuguese}
+
+    \deftranslation[to=Portuguese]{Theorem}{Teorema}
+    \deftranslation[to=Portuguese]{Lemma}{Lema}
+    \deftranslation[to=Portuguese]{Corollary}{Corolário}
+    \deftranslation[to=Portuguese]{Proof}{Prova}
+
+    \usepackage{dutchcal}
+    \usepackage{hyperref}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage{amsthm}
+
+    \usepackage[affil-it]{authblk} 
+    \usepackage{etoolbox} 
+    \usepackage{lmodern}
+    \usepackage[normalem]{ulem}  % para \sout (strikethrough), normalem preserva \emph
+
+    % TikZ e CircuiTikZ
+    \usepackage{tikz}
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+    \usepackage{circuitikz}
+    \usetikzlibrary{arrows.meta, positioning, circuits.logic.US, calc}
+    \makeatletter
+    \patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+    \makeatother
+
+    \renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+    \renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+    % Title page details: 
+    \title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+    \institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+    Grafos Completos, Bipartidos e Árvores Binárias
+    }}} %add name 
+    % \hspace{0.5pt}
+    \\ \qquad
+    \\Professor: Me. Sergio Souza Novak 
+    \\Faculdade de Engenharia de Software}
+
+    % \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+    \titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+    \date{}
+
+    % Logo only on title page
+    %\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+    \usepackage[pscoord]{eso-pic}
+
+
+    \begin{document}
+
+    \begin{frame}
+    \titlepage
+    \end{frame}
+
+    \begin{frame}{Sumário}
+        \tableofcontents[hideallsubsections]
+    \end{frame}
+    \section{Introdução aos Grafos Completos}
+
+    \begin{frame}{1. O que é um Grafo? (Revisão)}
+        \begin{itemize}
+            \item Um \textbf{grafo} $G = (V, E)$ consiste em um conjunto de vértices ($V$) e um conjunto de arestas ($E$).
+            \item Vértices representam entidades (nós, pontos).
+            \item Arestas representam relações ou conexões entre essas entidades.
+            \item Na \textit{Lógica para Software}, grafos são estruturas fundamentais para modelar redes, dependências e fluxo de controle.
+        \end{itemize}
+        \vspace{0.5cm}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.8, every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                \node (A) at (0, 0) {$v_1$};
+                \node (B) at (2, 1) {$v_2$};
+                \node (C) at (2, -1) {$v_3$};
+                \node (D) at (4, 0) {$v_4$};
+                \draw (A) -- (B);
+                \draw (A) -- (C);
+                \draw (B) -- (C);
+                \draw (B) -- (D);
+            \end{tikzpicture}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}{2. Definição de Grafo Completo}
+        \begin{block}{Definição}
+            Um \textbf{grafo completo} é um grafo simples (sem laços ou arestas múltiplas) no qual \textbf{todo par de vértices distintos é conectado por uma única aresta}.
+        \end{block}
+        \vspace{0.5cm}
+        \begin{itemize}
+            \item Isso significa que existe uma ligação direta entre todos os elementos do conjunto.
+            \item É o grafo ``mais denso'' possível para um determinado número de vértices.
+            \item Representa um cenário onde ``todo mundo conhece todo mundo'' ou ``todos os nós estão interligados''.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{3. Notação}
+        \begin{itemize}
+            \item Um grafo completo com $n$ vértices é denotado pela letra maiúscula \textbf{$K_n$}.
+            \item O ``K'' é frequentemente associado ao termo alemão \textit{komplett} ou em homenagem ao matemático Kazimierz Kuratowski.
+            \item Para especificar um grafo completo, basta saber o número de vértices $n$.
+        \end{itemize}
+        \vspace{0.5cm}
+        \begin{alertblock}{Importante}
+            Um subgrafo de qualquer grafo que por si só forma um grafo completo é chamado de \textbf{clique}.
+        \end{alertblock}
+    \end{frame}
+
+    \begin{frame}{4. Exemplos Iniciais: $K_1$, $K_2$ e $K_3$}
+        \begin{columns}
+            \begin{column}{0.3\textwidth}
+                \centering
+                \textbf{$K_1$}\\
+                (1 vértice, 0 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                    \node (1) at (0,0) {1};
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \centering
+                \textbf{$K_2$}\\
+                (2 vértices, 1 aresta)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                    \node (1) at (0,0) {1};
+                    \node (2) at (0,1.5) {2};
+                    \draw (1) -- (2);
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.3\textwidth}
+                \centering
+                \textbf{$K_3$}\\
+                (3 vértices, 3 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                    \node (1) at (0,0) {1};
+                    \node (2) at (2,0) {2};
+                    \node (3) at (1,1.5) {3};
+                    \draw (1) -- (2) -- (3) -- (1);
+                \end{tikzpicture}\\
+                (Um triângulo)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{5. Exemplos Maiores: $K_4$ e $K_5$}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_4$}\\
+                (4 vértices, 6 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                    \node (1) at (0,0) {1};
+                    \node (2) at (2,0) {2};
+                    \node (3) at (2,2) {3};
+                    \node (4) at (0,2) {4};
+                    \draw (1) -- (2) -- (3) -- (4) -- (1);
+                    \draw (1) -- (3);
+                    \draw (2) -- (4);
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_5$}\\
+                (5 vértices, 10 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm}]
+                    \node (1) at (90:1.5cm) {1};
+                    \node (2) at (18:1.5cm) {2};
+                    \node (3) at (306:1.5cm) {3};
+                    \node (4) at (234:1.5cm) {4};
+                    \node (5) at (162:1.5cm) {5};
+                    \draw (1)--(2) (1)--(3) (1)--(4) (1)--(5);
+                    \draw (2)--(3) (2)--(4) (2)--(5);
+                    \draw (3)--(4) (3)--(5);
+                    \draw (4)--(5);
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{5.1. Mais Exemplos: $K_6$ e $K_7$}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_6$}\\
+                (6 vértices, 15 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm, inner sep=1pt}]
+                    \node (1) at (90:1.5cm) {1};
+                    \node (2) at (30:1.5cm) {2};
+                    \node (3) at (330:1.5cm) {3};
+                    \node (4) at (270:1.5cm) {4};
+                    \node (5) at (210:1.5cm) {5};
+                    \node (6) at (150:1.5cm) {6};
+                    \draw (1)--(2) (1)--(3) (1)--(4) (1)--(5) (1)--(6);
+                    \draw (2)--(3) (2)--(4) (2)--(5) (2)--(6);
+                    \draw (3)--(4) (3)--(5) (3)--(6);
+                    \draw (4)--(5) (4)--(6);
+                    \draw (5)--(6);
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_7$}\\
+                (7 vértices, 21 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm, inner sep=1pt}]
+                    \node (1) at (90:1.5cm) {1};
+                    \node (2) at (38.57:1.5cm) {2};
+                    \node (3) at (347.14:1.5cm) {3};
+                    \node (4) at (295.71:1.5cm) {4};
+                    \node (5) at (244.28:1.5cm) {5};
+                    \node (6) at (192.85:1.5cm) {6};
+                    \node (7) at (141.42:1.5cm) {7};
+                    \draw (1)--(2) (1)--(3) (1)--(4) (1)--(5) (1)--(6) (1)--(7);
+                    \draw (2)--(3) (2)--(4) (2)--(5) (2)--(6) (2)--(7);
+                    \draw (3)--(4) (3)--(5) (3)--(6) (3)--(7);
+                    \draw (4)--(5) (4)--(6) (4)--(7);
+                    \draw (5)--(6) (5)--(7);
+                    \draw (6)--(7);
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{5.2. Exemplos Extremos: $K_8$}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_8$}\\
+                (8 vértices, 28 arestas)\\
+                \vspace{0.5cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.6cm, inner sep=1pt}]
+                    \node (1) at (90:1.8cm) {1};
+                    \node (2) at (45:1.8cm) {2};
+                    \node (3) at (0:1.8cm) {3};
+                    \node (4) at (315:1.8cm) {4};
+                    \node (5) at (270:1.8cm) {5};
+                    \node (6) at (225:1.8cm) {6};
+                    \node (7) at (180:1.8cm) {7};
+                    \node (8) at (135:1.8cm) {8};
+                    \foreach \i in {1,...,7} {
+                        \pgfmathtruncatemacro{\next}{\i+1}
+                        \foreach \j in {\next,...,8} {
+                            \draw (\i) -- (\j);
+                        }
+                    }
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item À medida que $n$ cresce, o número de arestas cresce quadraticamente.
+                    \item A densidade visual de $K_8$ ilustra a complexidade máxima (pior caso) de um problema envolvendo 8 entidades totalmente conectadas.
+                    \item A representação começa a ficar visualmente densa e embaraçada, reforçando o custo do $O(n^2)$.
+                \end{itemize}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{6. Propriedades: Número de Arestas}
+        \begin{itemize}
+            \item Como cada vértice se conecta a todos os outros vértices, o número de arestas cresce rapidamente com o número de vértices.
+            \item O número de arestas em um grafo completo $K_n$ é dado pela combinação de $n$ elementos tomados 2 a 2:
+        \end{itemize}
+        \begin{block}{Fórmula do Número de Arestas}
+            \[ |E| = \binom{n}{2} = \frac{n(n-1)}{2} \]
+        \end{block}
+        \begin{itemize}
+            \item Exemplo para $K_5$: $n=5 \Rightarrow \frac{5 \cdot 4}{2} = 10$ arestas.
+            \item Exemplo para $K_{10}$: $n=10 \Rightarrow \frac{10 \cdot 9}{2} = 45$ arestas.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{7. Propriedades: Grau dos Vértices}
+        \begin{itemize}
+            \item O \textbf{grau} de um vértice é o número de arestas conectadas a ele.
+            \item Em um grafo completo $K_n$, todos os vértices são simétricos e se conectam a todos os outros $n-1$ vértices do grafo.
+        \end{itemize}
+        \begin{block}{Grau em $K_n$}
+            Em um grafo completo $K_n$, o grau de todo vértice é exatamente \textbf{$n - 1$}.
+        \end{block}
+        \begin{itemize}
+            \item Como todos os vértices têm o mesmo grau, dizemos que $K_n$ é um \textbf{grafo regular} de grau $n-1$ (ou simplesmente $(n-1)$-regular).
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{8. Representação Computacional (Matriz de Adjacência)}
+        \begin{itemize}
+            \item Em computação, grafos são frequentemente representados por Matrizes de Adjacência.
+            \item Para um grafo completo $K_n$, a matriz de adjacência $A_{n \times n}$ possui zeros na diagonal principal e uns em todas as outras posições.
+        \end{itemize}
+        \vspace{0.3cm}
+        \textbf{Exemplo para $K_4$:}
+        \[
+        A_{K_4} = \begin{pmatrix}
+        0 & 1 & 1 & 1 \\
+        1 & 0 & 1 & 1 \\
+        1 & 1 & 0 & 1 \\
+        1 & 1 & 1 & 0 
+        \end{pmatrix}
+        \]
+        \begin{itemize}
+            \item Isso reflete que todo nó tem aresta com todos os outros, exceto com ele mesmo.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{9. Aplicações em Redes e Software}
+        \begin{itemize}
+            \item \textbf{Redes de Computadores (Topologia de Malha Total):} Representa uma rede onde cada computador está conectado diretamente a todos os outros. Alta tolerância a falhas, mas custo altíssimo.
+            \item \textbf{Problema do Caixeiro Viajante:} Encontrar o menor caminho passando por todos os vértices em um grafo completo com pesos nas arestas.
+            \item \textbf{Sistemas Multiprocessados:} Conexões entre processadores e memória.
+            \item \textbf{Redes Sociais (Cliques):} Modelagem de subgrupos onde todos os membros interagem entre si.
+        \end{itemize}
+    \end{frame}
+
+    \section{Teoremas, Propriedades e Corolários}
+
+    \begin{frame}{10. Introdução aos Teoremas em Grafos Completos}
+        \begin{itemize}
+            \item Grafos completos ($K_n$) são estruturas extremas na teoria dos grafos.
+            \item Devido à sua densidade máxima de arestas, eles servem como casos base ou limites superiores para muitos teoremas.
+            \item A seguir, exploraremos as principais propriedades estruturais, métricas de conectividade e comportamentos de travessia (Euler e Hamilton).
+            \item Usaremos as definições de \textbf{Teorema} (proposição provada verdadeira) e \textbf{Corolário} (consequência direta de um teorema).
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{11. Teorema 1: O Lema do Aperto de Mãos}
+        \begin{teorema}[Lema do Aperto de Mãos]
+            Em qualquer grafo não direcionado $G = (V,E)$, a soma dos graus de todos os vértices é igual ao dobro do número de arestas:
+            \[ \sum_{v \in V} \text{grau}(v) = 2|E| \]
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item \textbf{Explicação:} Cada aresta conecta exatamente dois vértices. Portanto, ao somar os graus de todos os vértices, cada aresta é contada exatamente duas vezes (uma para cada extremidade).
+                    \item Este teorema é universal, mas tem uma aplicação muito direta nos grafos completos.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[scale=0.8, every node/.style={circle, draw, fill=blue!10, minimum size=0.5cm, inner sep=1pt}]
+                    \node (1) at (0,1) {1};
+                    \node (2) at (1.5,1.5) {2};
+                    \node (3) at (2,0) {3};
+                    \node (4) at (0.5,-0.5) {4};
+                    \draw (1) -- node[above, font=\tiny, red] {+2} (2);
+                    \draw (2) -- node[right, font=\tiny, red] {+2} (3);
+                    \draw (1) -- node[left, font=\tiny, red] {+2} (4);
+                \end{tikzpicture}\\
+                \tiny $\Sigma$ Graus = $2+2+1+1 = 6$\\$2 \times |E| = 2 \times 3 = 6$
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{12. Corolário 1: Número de Arestas em $K_n$}
+        \begin{block}{Corolário}
+            Um grafo completo $K_n$ possui exatamente $\frac{n(n-1)}{2}$ arestas.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Como vimos anteriormente, essa propriedade deriva diretamente do Lema do Aperto de Mãos e do fato de $K_n$ ser regular.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{13. Prova do Corolário 1}
+        \begin{proof}
+            \begin{enumerate}
+                \item Seja $K_n$ um grafo completo com $n$ vértices.
+                \item Por definição, cada vértice em $K_n$ é conectado a todos os outros $n-1$ vértices. Assim, $\text{grau}(v) = n-1$ para todo $v \in V$.
+                \item Aplicando o Lema do Aperto de Mãos:
+                \[ \sum_{v \in V} \text{grau}(v) = 2|E| \]
+                \item Como existem $n$ vértices, a soma é $n \times (n-1)$. Logo:
+                \[ n(n-1) = 2|E| \implies |E| = \frac{n(n-1)}{2} \]
+            \end{enumerate}
+        \end{proof}
+    \end{frame}
+
+    \begin{frame}{19. Propriedade 3: Ciclos Hamiltonianos}
+        \begin{itemize}
+            \item \textbf{Ciclo Hamiltoniano:} Um ciclo que visita \textbf{cada vértice} de um grafo exatamente uma vez, voltando ao início.
+            \item O Problema do Caixeiro Viajante busca o ciclo hamiltoniano de menor custo.
+            \item Diferente do caminho Euleriano, encontrar um ciclo Hamiltoniano em um grafo genérico é um problema NP-Completo.
+            \item \textbf{Mas e em grafos completos?}
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{20. Teorema 4: Ciclos Hamiltonianos em $K_n$}
+        \begin{teorema}
+            Para todo $n \ge 3$, o grafo completo $K_n$ possui ciclos Hamiltonianos.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item \textbf{Explicação:} Como existe uma aresta entre \textbf{qualquer} par de vértices, é trivial construir um ciclo: basta visitar os vértices em qualquer ordem de 1 a $n$, e sempre existirá a aresta $(i, i+1)$, bem como a aresta final $(n, 1)$.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.5cm, inner sep=1pt}]
+                    \node (1) at (90:1cm) {1};
+                    \node (2) at (18:1cm) {2};
+                    \node (3) at (306:1cm) {3};
+                    \node (4) at (234:1cm) {4};
+                    \node (5) at (162:1cm) {5};
+                    % arestas normais
+                    \draw[gray!50] (1)--(3) (1)--(4) (2)--(4) (2)--(5) (3)--(5);
+                    % ciclo hamiltoniano em vermelho
+                    \draw[red, thick, ->] (1) -- (2);
+                    \draw[red, thick, ->] (2) -- (3);
+                    \draw[red, thick, ->] (3) -- (4);
+                    \draw[red, thick, ->] (4) -- (5);
+                    \draw[red, thick, ->] (5) -- (1);
+                \end{tikzpicture}\\
+                \tiny Exemplo de Ciclo em $K_5$
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{21. Corolário 3: Número de Ciclos Hamiltonianos em $K_n$}
+        \begin{block}{Corolário}
+            O número de ciclos Hamiltonianos distintos em um grafo completo $K_n$ é $\frac{(n-1)!}{2}$.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{proof}
+            \begin{enumerate}
+                \item Existem $n!$ permutações possíveis para visitar os $n$ vértices.
+                \item Como é um ciclo, o vértice inicial não importa (uma rota ABC é o mesmo ciclo que BCA e CAB), então dividimos por $n$, resultando em $(n-1)!$.
+                \item Como o grafo não é direcionado, percorrer o ciclo num sentido (A-B-C) ou no oposto (C-B-A) gera o mesmo conjunto de arestas, então dividimos por $2$. Resulta em $\frac{(n-1)!}{2}$.
+            \end{enumerate}
+        \end{proof}
+    \end{frame}
+
+
+    \begin{frame}{29. Teorema 8: Árvores Geradoras em $K_n$}
+        \begin{itemize}
+            \item Uma \textbf{árvore geradora} de um grafo é um subgrafo que é uma árvore (sem ciclos) e que conecta todos os vértices do grafo original.
+        \end{itemize}
+        \begin{teorema}[Fórmula de Cayley]
+            O número de árvores geradoras distintas em um grafo completo rotulado $K_n$ é dado por: $n^{n-2}$
+        \end{teorema}
+        \vspace{0.2cm}
+        \begin{itemize}
+            \item Exemplo para $K_3$ (triângulo): O número de árvores geradoras é $3^{3-2} = 3^1 = 3$. (Basta remover uma das 3 arestas do triângulo).
+        \end{itemize}
+        \vspace{0.2cm}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.7, every node/.style={circle, draw, fill=blue!10, minimum size=0.4cm, inner sep=1pt}]
+                % K3 original
+                \begin{scope}[xshift=-4cm]
+                    \node (1) at (0,1) {1}; \node (2) at (-0.86,-0.5) {2}; \node (3) at (0.86,-0.5) {3};
+                    \draw (1)--(2)--(3)--(1);
+                    \node[draw=none, fill=none, below=0.3cm of 2, xshift=0.86cm] {$K_3$};
+                \end{scope}
+                
+                \node[draw=none, fill=none] at (-2,0) {$\Rightarrow$};
+
+                % Arvore 1
+                \begin{scope}[xshift=0cm]
+                    \node (1) at (0,1) {1}; \node (2) at (-0.86,-0.5) {2}; \node (3) at (0.86,-0.5) {3};
+                    \draw[red, thick] (1)--(2) (1)--(3);
+                    \draw[gray!30, dashed] (2)--(3);
+                \end{scope}
+                % Arvore 2
+                \begin{scope}[xshift=3cm]
+                    \node (1) at (0,1) {1}; \node (2) at (-0.86,-0.5) {2}; \node (3) at (0.86,-0.5) {3};
+                    \draw[red, thick] (1)--(2) (2)--(3);
+                    \draw[gray!30, dashed] (1)--(3);
+                \end{scope}
+                % Arvore 3
+                \begin{scope}[xshift=6cm]
+                    \node (1) at (0,1) {1}; \node (2) at (-0.86,-0.5) {2}; \node (3) at (0.86,-0.5) {3};
+                    \draw[red, thick] (1)--(3) (2)--(3);
+                    \draw[gray!30, dashed] (1)--(2);
+                \end{scope}
+            \end{tikzpicture}
+        \end{center}
+    \end{frame}
+
+    \begin{frame}{30. Exemplos de Árvores Geradoras em $K_4$}
+        \begin{itemize}
+            \item Pela Fórmula de Cayley, $K_4$ possui $4^{4-2} = 16$ árvores geradoras distintas.
+            \item Abaixo estão 3 exemplos dessas 16 possíveis árvores (lembre-se: elas devem conectar os 4 vértices sem formar ciclos):
+        \end{itemize}
+        \vspace{0.5cm}
+        \begin{center}
+            \begin{tikzpicture}[scale=0.9, every node/.style={circle, draw, fill=blue!10, minimum size=0.5cm, inner sep=1pt}]
+                % K4 Original
+                \begin{scope}[xshift=-4cm]
+                    \node (1) at (0,1) {1}; \node (2) at (1,1) {2}; 
+                    \node (3) at (1,0) {3}; \node (4) at (0,0) {4};
+                    \draw[gray!30] (1)--(2)--(3)--(4)--(1) (1)--(3) (2)--(4);
+                    \node[draw=none, fill=none, below=0.3cm of 4, xshift=0.5cm] {$K_4$ (Grafo Base)};
+                \end{scope}
+                
+                \node[draw=none, fill=none] at (-2, 0.5) {$\Rightarrow$};
+
+                % Exemplo 1: Estrela (Star)
+                \begin{scope}[xshift=0cm]
+                    \node (1) at (0,1) {1}; \node (2) at (1,1) {2}; 
+                    \node (3) at (1,0) {3}; \node (4) at (0,0) {4};
+                    \draw[red, thick] (1)--(2) (1)--(3) (1)--(4);
+                    \draw[gray!20, dashed] (2)--(3)--(4) (2)--(4);
+                    \node[draw=none, fill=none, below=0.3cm of 4, xshift=0.5cm, font=\footnotesize] {Exemplo 1 (Estrela)};
+                \end{scope}
+
+                % Exemplo 2: Caminho (Path)
+                \begin{scope}[xshift=3.5cm]
+                    \node (1) at (0,1) {1}; \node (2) at (1,1) {2}; 
+                    \node (3) at (1,0) {3}; \node (4) at (0,0) {4};
+                    \draw[red, thick] (1)--(2) (2)--(3) (3)--(4);
+                    \draw[gray!20, dashed] (1)--(4) (1)--(3) (2)--(4);
+                    \node[draw=none, fill=none, below=0.3cm of 4, xshift=0.5cm, font=\footnotesize] {Exemplo 2 (Caminho)};
+                \end{scope}
+
+                % Exemplo 3: Outro Caminho (Zig-Zag)
+                \begin{scope}[xshift=7cm]
+                    \node (1) at (0,1) {1}; \node (2) at (1,1) {2}; 
+                    \node (3) at (1,0) {3}; \node (4) at (0,0) {4};
+                    \draw[red, thick] (1)--(3) (3)--(2) (2)--(4);
+                    \draw[gray!20, dashed] (1)--(2) (3)--(4) (1)--(4);
+                    \node[draw=none, fill=none, below=0.3cm of 4, xshift=0.5cm, font=\footnotesize] {Exemplo 3 (Zig-Zag)};
+                \end{scope}
+            \end{tikzpicture}
+        \end{center}
+    \end{frame}
+
+    \section{Extensão: Grafos Bipartidos}
+
+    \begin{frame}{31. Introdução aos Grafos Bipartidos}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Até agora vimos os grafos completos, onde ``todo mundo se conecta com todo mundo''.
+                    \item Na vida real (e na computação), muitas vezes lidamos com \textbf{dois conjuntos distintos de entidades} que só interagem entre si, mas nunca dentro do próprio grupo.
+                    \item Exemplos: Motoristas e Passageiros (Uber), Alunos e Disciplinas, Clientes e Servidores, Trabalhadores e Tarefas.
+                    \item Para modelar isso, utilizamos a poderosa estrutura dos \textbf{Grafos Bipartidos}.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=blue!20] (m1) at (0,1.5) {\tiny M1};
+                    \node[fill=blue!20] (m2) at (0,0) {\tiny M2};
+                    
+                    \node[fill=pink!50] (p1) at (2,2) {\tiny P1};
+                    \node[fill=pink!50] (p2) at (2,0.75) {\tiny P2};
+                    \node[fill=pink!50] (p3) at (2,-0.5) {\tiny P3};
+                    
+                    \draw[thick] (m1) -- (p1);
+                    \draw[thick] (m2) -- (p2);
+                    \draw[gray, dashed] (m1) -- (p3);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Motoristas (M) x Passageiros (P)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{32. Definição Formal}
+        \begin{block}{Grafo Bipartido}
+            Um grafo $G = (V, E)$ é bipartido se o seu conjunto de vértices $V$ pode ser particionado em dois subconjuntos disjuntos $U$ e $W$ (ou seja, $U \cup W = V$ e $U \cap W = \emptyset$), de tal forma que toda aresta em $E$ conecte um vértice em $U$ a um vértice em $W$.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item \textbf{Regra de Ouro:} Nenhuma aresta conecta dois vértices do mesmo conjunto.
+                    \item $U$ e $W$ são frequentemente chamados de ``lados'' ou ``partições'' do grafo.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}
+                    \draw[fill=green!10, rounded corners] (-0.5,-0.5) rectangle (0.5, 2.5);
+                    \draw[fill=orange!10, rounded corners] (1.5,-0.5) rectangle (2.5, 2.5);
+                    \node at (0, 2.8) {$U$};
+                    \node at (2, 2.8) {$W$};
+                    
+                    \node[circle, draw, fill=green!40, minimum size=0.4cm, inner sep=1pt] (u1) at (0,2) {};
+                    \node[circle, draw, fill=green!40, minimum size=0.4cm, inner sep=1pt] (u2) at (0,1) {};
+                    \node[circle, draw, fill=green!40, minimum size=0.4cm, inner sep=1pt] (u3) at (0,0) {};
+                    
+                    \node[circle, draw, fill=orange!40, minimum size=0.4cm, inner sep=1pt] (w1) at (2,1.5) {};
+                    \node[circle, draw, fill=orange!40, minimum size=0.4cm, inner sep=1pt] (w2) at (2,0.5) {};
+                    
+                    \draw (u1)--(w1) (u2)--(w1) (u2)--(w2) (u3)--(w2);
+                    \draw[red, thick, dashed] (u1) to[bend right] node[left] {\tiny Proibido!} (u2);
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{33. Representação Visual}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item Na representação visual clássica, colocamos os vértices do conjunto $U$ à esquerda e os de $W$ à direita.
+                    \item Todas as arestas ``cruzam'' o espaço entre os dois lados.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=green!20] (u1) at (0,2) {$u_1$};
+                    \node[fill=green!20] (u2) at (0,1) {$u_2$};
+                    \node[fill=green!20] (u3) at (0,0) {$u_3$};
+                    
+                    \node[fill=orange!20] (w1) at (2,1.5) {$w_1$};
+                    \node[fill=orange!20] (w2) at (2,0.5) {$w_2$};
+                    
+                    \draw (u1) -- (w1);
+                    \draw (u1) -- (w2);
+                    \draw (u2) -- (w1);
+                    \draw (u3) -- (w2);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Conjunto $U$ (Verde) e Conjunto $W$ (Laranja)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{34. Propriedade Fundamental: 2-Colorabilidade}
+        \begin{teorema}
+            Um grafo é bipartido se e somente se o seu Número Cromático $\chi(G)$ for menor ou igual a 2.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Isso significa que você sempre consegue pintar os vértices de um grafo bipartido usando apenas \textbf{duas cores}, sem que dois vértices da mesma cor fiquem conectados.
+                    \item Na prática: Pinte todos os vértices de $U$ com a Cor 1 e todos de $W$ com a Cor 2. Como não há arestas dentro de $U$ nem dentro de $W$, a regra de coloração é respeitada perfeitamente.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=blue!30] (A) at (0,1.5) {};
+                    \node[fill=red!30] (B) at (1.5,1.5) {};
+                    \node[fill=blue!30] (C) at (1.5,0) {};
+                    \node[fill=red!30] (D) at (0,0) {};
+                    \draw (A)--(B)--(C)--(D)--(A);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny $\chi(G) = 2$ (Apenas Azul e Vermelho)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{35. Condição Necessária: Ausência de Ciclos Ímpares}
+        \begin{teorema}[Teorema de König]
+            Um grafo é bipartido se e somente se ele \textbf{não possui nenhum ciclo de comprimento ímpar} (ciclos com 3, 5, 7... arestas).
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Se houvesse um ciclo ímpar (ex: um triângulo), ao tentar pintar o grafo com 2 cores, você inevitavelmente chegaria em dois vértices adjacentes que precisariam ter a mesma cor.
+                    \item Assim que você encontra um ciclo ímpar (ex: subgrafo $K_3$) em qualquer rede, você tem certeza matemática de que ela \textbf{não} é bipartida.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt}]
+                    \node[fill=blue!30] (1) at (90:1cm) {};
+                    \node[fill=red!30] (2) at (18:1cm) {};
+                    \node[fill=blue!30] (3) at (306:1cm) {};
+                    \node[fill=red!30] (4) at (234:1cm) {};
+                    \node[fill=blue!30, thick, draw=red] (5) at (162:1cm) {};
+                    
+                    \draw (1)--(2)--(3)--(4)--(5);
+                    \draw[red, very thick, dashed] (5)-- node[above, sloped] {\tiny Conflito!} (1);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Ciclo de 5 arestas (Falha ao colorir)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{36. O Grafo Bipartido Completo ($K_{m,n}$)}
+        \begin{block}{Definição}
+            Um \textbf{Grafo Bipartido Completo}, denotado por $K_{m,n}$, é um grafo bipartido onde \textbf{cada} vértice do conjunto $U$ está conectado a \textbf{todos} os vértices do conjunto $W$.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Sendo $m = |U|$ (número de vértices em $U$) e $n = |W|$ (número de vértices em $W$).
+            \item É a estrutura ``mais densa'' possível sem violar a regra de ser bipartido.
+            \item Faz paralelo com o $K_n$, mas focado nas relações extremas entre dois grupos.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{37. Exemplos de $K_{m,n}$: $K_{2,3}$ e $K_{3,3}$}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_{2,3}$}\\
+                \vspace{0.3cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=green!20] (u1) at (0,1.5) {};
+                    \node[fill=green!20] (u2) at (0,0) {};
+                    
+                    \node[fill=orange!20] (w1) at (2,2) {};
+                    \node[fill=orange!20] (w2) at (2,0.75) {};
+                    \node[fill=orange!20] (w3) at (2,-0.5) {};
+                    
+                    \foreach \u in {1,2} {
+                        \foreach \w in {1,2,3} {
+                            \draw (u\u) -- (w\w);
+                        }
+                    }
+                \end{tikzpicture}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \textbf{$K_{3,3}$}\\
+                (Crucial no Teorema da Planaridade!)\\
+                \vspace{0.3cm}
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=green!20] (u1) at (0,2) {};
+                    \node[fill=green!20] (u2) at (0,1) {};
+                    \node[fill=green!20] (u3) at (0,0) {};
+                    
+                    \node[fill=orange!20] (w1) at (2,2) {};
+                    \node[fill=orange!20] (w2) at (2,1) {};
+                    \node[fill=orange!20] (w3) at (2,0) {};
+                    
+                    \foreach \u in {1,2,3} {
+                        \foreach \w in {1,2,3} {
+                            \draw (u\u) -- (w\w);
+                        }
+                    }
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{38. Propriedades de $K_{m,n}$}
+        \begin{itemize}
+            \item \textbf{Número de Vértices:} O total de vértices em $K_{m,n}$ é simplesmente a soma $m + n$.
+            \item \textbf{Número de Arestas:} Como cada vértice dos $m$ se conecta a cada um dos $n$, o número total de arestas é dado pelo produto cartesiano das partições:
+        \end{itemize}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{block}{Fórmula do Número de Arestas em $K_{m,n}$}
+                    \[ |E| = m \times n \]
+                \end{block}
+                \begin{itemize}
+                    \item Exemplo: $K_{3,3}$ possui $3+3 = 6$ vértices e $3 \times 3 = 9$ arestas.
+                    \item Todos os vértices do conjunto de tamanho $m$ possuem grau $n$, e vice-versa.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt}]
+                    \node[fill=green!20] (u1) at (0,1.5) {};
+                    \node[fill=green!20] (u2) at (0,0.5) {};
+                    \node[fill=green!20] (u3) at (0,-0.5) {};
+                    
+                    \node[fill=orange!20] (w1) at (2,1) {};
+                    \node[fill=orange!20] (w2) at (2,0) {};
+                    
+                    \foreach \u in {1,2,3} {
+                        \foreach \w in {1,2} {
+                            \draw[gray!50] (u\u) -- (w\w);
+                        }
+                    }
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny $K_{3,2}$ com $3 \times 2 = 6$ arestas
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{39. Aplicação: O Problema da Atribuição (Matching)}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item \textbf{Problema Prático:} 3 trabalhadores e 3 tarefas. Como associar de forma ótima?
+                    \item \textbf{Solução Bipartida:} Conjunto $U$ (Trabalhadores) e $W$ (Tarefas). Arestas indicam ``sabe fazer''.
+                    \item Objetivo do \textbf{Algoritmo Húngaro}: Encontrar o \textbf{Casamento Perfeito} (cada trabalhador faz exatamente uma tarefa).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={draw, rounded corners, fill=blue!10, inner sep=3pt, font=\tiny}]
+                    \node (t1) at (0,2) {Trab. 1};
+                    \node (t2) at (0,1) {Trab. 2};
+                    \node (t3) at (0,0) {Trab. 3};
+                    
+                    \node[fill=orange!10] (f1) at (2.5,2) {Tarefa A};
+                    \node[fill=orange!10] (f2) at (2.5,1) {Tarefa B};
+                    \node[fill=orange!10] (f3) at (2.5,0) {Tarefa C};
+                    
+                    \draw[gray!30] (t1)--(f2) (t2)--(f3) (t3)--(f1) (t3)--(f2);
+                    \draw[red, thick, ->] (t1) -- (f1);
+                    \draw[red, thick, ->] (t2) -- (f2);
+                    \draw[red, thick, ->] (t3) -- (f3);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Arestas em vermelho (Casamento Perfeito)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{40. Aplicação em Arquitetura de Software}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item \textbf{Sistemas Cliente-Servidor:} Clientes não interagem diretamente entre si, mas todos falam com os Servidores.
+                    \item \textbf{Bancos de Dados Relacionais:} Tabelas e chaves estrangeiras comumente formam relações bipartidas.
+                    \item \textbf{Modelagem:} Compreender a arquitetura de grafo bipartido economiza recursos: \textit{você não precisa preparar o sistema para conexões entre clientes!}
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={inner sep=2pt, font=\tiny}]
+                    \node[circle, draw, fill=blue!10] (c1) at (0,2) {C1};
+                    \node[circle, draw, fill=blue!10] (c2) at (0,1) {C2};
+                    \node[circle, draw, fill=blue!10] (c3) at (0,0) {C3};
+                    
+                    \node[rectangle, draw, fill=gray!20, minimum height=0.6cm] (s1) at (2,1.5) {DB 1};
+                    \node[rectangle, draw, fill=gray!20, minimum height=0.6cm] (s2) at (2,0.5) {DB 2};
+                    
+                    \draw[->] (c1)--(s1); \draw[->] (c1)--(s2);
+                    \draw[->] (c2)--(s1);
+                    \draw[->] (c3)--(s2);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny $C$ (Clientes) e $DB$ (Servidores)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \section{Estruturas Hierárquicas: Árvores Binárias}
+
+    \begin{frame}{41. O que é uma Árvore (em Grafos)?}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Na teoria dos grafos, uma \textbf{Árvore} é um grafo conexo e \textbf{acíclico} (não possui ciclos).
+                    \item Se você adicionar apenas \textbf{uma aresta} a uma árvore, você cria um ciclo. Se remover uma aresta, você desconecta o grafo.
+                    \item Em Engenharia de Software, as árvores são usadas para modelar \textbf{hierarquia} (ex: sistemas de pastas do Windows/Linux, hierarquias de classes na Orientação a Objetos).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[every node/.style={circle, draw, fill=blue!10, minimum size=0.4cm, inner sep=1pt}]
+                    \node (1) at (0,2) {};
+                    \node (2) at (-1,1) {};
+                    \node (3) at (1,1) {};
+                    \node (4) at (-1,0) {};
+                    \node (5) at (0,0) {};
+                    \node (6) at (1.5,0) {};
+                    \draw (1)--(2) (1)--(3) (2)--(4) (2)--(5) (3)--(6);
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Exemplo de Grafo Acíclico Conexo (Árvore)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{42. A Árvore Binária}
+        \begin{block}{Definição}
+            Uma \textbf{Árvore Binária} é uma árvore com raiz na qual cada nó tem \textbf{no máximo dois filhos}, tipicamente chamados de \textit{filho esquerdo} e \textit{filho direito}.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item Diferente dos grafos completos ou bipartidos, onde os nós têm muitos vizinhos ``iguais'', na árvore binária existe uma relação rígida de \textbf{pai-filho}.
+                    \item Isso a torna extremamente eficiente para decisões de ``sim/não'' ou ``maior/menor''.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1cm,
+                    level 1/.style={sibling distance=1.5cm},
+                    every node/.style={circle, draw, fill=blue!10, minimum size=0.4cm, inner sep=1pt, font=\tiny}]
+                    \node {Pai}
+                    child {node {Esq.}}
+                    child {node {Dir.}};
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{43. Anatomia de uma Árvore Binária}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item \textbf{Raiz (Root):} O topo da árvore (nível 0).
+                    \item \textbf{Nós Internos:} Possuem pelo menos 1 filho.
+                    \item \textbf{Folhas (Leaves):} Nós sem filhos (o fim da linha).
+                    \item \textbf{Altura (Height):} A maior distância da raiz até a folha mais profunda.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1cm,
+                    level 1/.style={sibling distance=2.5cm},
+                    level 2/.style={sibling distance=1.2cm},
+                    every node/.style={circle, draw, fill=blue!10, minimum size=0.5cm, inner sep=1pt}]
+                    \node[fill=red!20] (A) {A}
+                    child {node {B}
+                        child {node[fill=green!20] {D}}
+                        child {node[fill=green!20] {E}}
+                    }
+                    child {node {C}
+                        child[missing] {}
+                        child {node[fill=green!20] {F}}
+                    };
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Raiz (Vermelho), Nós (Azul), Folhas (Verde)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{44. Árvore Binária de Busca (BST)}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Uma das aplicações mais geniais das árvores binárias é a \textbf{Binary Search Tree (BST)}.
+                    \item Ela impõe uma \textbf{regra de ordenação lógica}:
+                \end{itemize}
+                \begin{block}{A Regra de Ouro da BST}
+                    Para todo nó $N$: \\
+                    1. Todos os valores à \textbf{esquerda} de $N$ são \textbf{menores} que o valor de $N$. \\
+                    2. Todos os valores à \textbf{direita} de $N$ são \textbf{maiores} que o valor de $N$.
+                \end{block}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1.2cm,
+                    level 1/.style={sibling distance=1.5cm},
+                    every node/.style={circle, draw, fill=orange!20, minimum size=0.6cm, inner sep=1pt}]
+                    \node {$N$}
+                    child {node {$< N$}}
+                    child {node {$> N$}};
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{45. Exemplo Visual de uma BST}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item Veja como a busca funciona logicamente.
+                    \item Para buscar o número 7: \\
+                    1. $7 < 10$ (vai para a esquerda) \\
+                    2. $7 > 5$ (vai para a direita) \\
+                    3. $7 == 7$ (Encontrou!)
+                    \item Reduzimos as possibilidades pela metade a cada passo.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1.2cm,
+                    level 1/.style={sibling distance=2.5cm},
+                    level 2/.style={sibling distance=1.2cm},
+                    every node/.style={circle, draw, fill=orange!20, minimum size=0.5cm, inner sep=1pt}]
+                    \node {10}
+                    child {node {5}
+                        child {node {2}}
+                        child {node[fill=yellow!50] {7}}
+                    }
+                    child {node {15}
+                        child {node {12}}
+                        child {node {20}}
+                    };
+                \end{tikzpicture}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \section{Teoremas e Propriedades das Árvores Binárias}
+
+    \begin{frame}{46. Classificação: Árvore Binária Estrita (Full)}
+        \begin{block}{Definição}
+            Uma \textbf{Árvore Binária Estrita} (ou Cheia/Própria) é aquela em que \textbf{todo nó tem exatamente 0 ou 2 filhos}. Nenhum nó interno tem apenas 1 filho.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item Utilizada frequentemente para representar expressões matemáticas rigorosas (onde todo operador binário exige 2 operandos).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1cm,
+                    level 1/.style={sibling distance=1.5cm},
+                    level 2/.style={sibling distance=1cm},
+                    every node/.style={circle, draw, fill=blue!10, minimum size=0.4cm, inner sep=1pt}]
+                    \node {A}
+                    child {node {B}
+                        child {node {D}}
+                        child {node {E}}
+                    }
+                    child {node {C}};
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Árvore Estrita (0 ou 2 filhos)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{47. Classificação: Árvore Binária Completa}
+        \begin{block}{Definição}
+            Uma \textbf{Árvore Binária Completa} tem todos os seus níveis completamente preenchidos, \textit{exceto possivelmente o último}, que deve ser preenchido estritamente \textbf{da esquerda para a direita}.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item Excelente para implementação utilizando \textbf{Arrays} em vez de ponteiros (a base da estrutura de dados \textit{Heap}).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1cm,
+                    level 1/.style={sibling distance=2cm},
+                    level 2/.style={sibling distance=1cm},
+                    every node/.style={circle, draw, fill=blue!10, minimum size=0.4cm, inner sep=1pt}]
+                    \node {1}
+                    child {node {2}
+                        child {node {4}}
+                        child {node {5}}
+                    }
+                    child {node {3}
+                        child {node {6}}
+                        child[missing] {}
+                    };
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Árvore Completa (preenchida à esquerda)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{48. Classificação: Árvore Binária Perfeita}
+        \begin{block}{Definição}
+            Uma \textbf{Árvore Binária Perfeita} é aquela em que \textbf{todos os nós internos têm 2 filhos} e \textbf{todas as folhas estão exatamente no mesmo nível}.
+        \end{block}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{itemize}
+                    \item É a árvore binária mais densa possível para uma dada altura.
+                    \item Extremamente rara na prática, mas fundamental para a análise de complexidade (o melhor caso).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=1cm,
+                    level 1/.style={sibling distance=2cm},
+                    level 2/.style={sibling distance=1cm},
+                    every node/.style={circle, draw, fill=green!20, minimum size=0.4cm, inner sep=1pt}]
+                    \node {1}
+                    child {node {2}
+                        child {node {4}}
+                        child {node {5}}
+                    }
+                    child {node {3}
+                        child {node {6}}
+                        child {node {7}}
+                    };
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Árvore Perfeita (Totalmente Simétrica)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{49. Teorema 1: Nós Máximos por Nível}
+        \begin{teorema}
+            O número máximo de nós em um determinado nível $k$ de uma árvore binária é \textbf{$2^k$}, considerando a raiz no nível $k=0$.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item \textbf{Nível 0 (Raiz):} $2^0 = 1$ nó.
+            \item \textbf{Nível 1:} $2^1 = 2$ nós (filhos da raiz).
+            \item \textbf{Nível 2:} $2^2 = 4$ nós.
+            \item \textbf{Nível 3:} $2^3 = 8$ nós.
+            \item Como a ramificação é binária (base 2), a cada nível a capacidade dobra. O crescimento é exponencial.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{50. Teorema 2: Nós em uma Árvore Perfeita}
+        \begin{teorema}
+            O número total de nós ($N$) de uma árvore binária perfeita de altura $h$ é a soma de uma progressão geométrica: \textbf{$N = 2^{h+1} - 1$}.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Para uma árvore perfeita com altura $h=2$ (Raiz + 2 níveis abaixo):
+            \item $N = 2^{2+1} - 1 = 2^3 - 1 = 8 - 1 = \textbf{7}$ nós.
+            \item Isso prova matematicamente o porquê de buscas binárias serem tão rápidas: com apenas altura 20 ($h=20$), podemos armazenar $2^{21} - 1 \approx 2$ \textbf{milhões} de nós!
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{51. Teorema 3: Árvore Degenerada (Pior Caso)}
+        \begin{teorema}
+            O número mínimo de nós ($N$) em uma árvore binária de altura $h$ é \textbf{$N = h + 1$}.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Isso acontece quando cada nó tem \textbf{apenas 1 filho}.
+                    \item A árvore binária sofre uma "degeneração" e se transforma em uma simples \textbf{Lista Encadeada} (\textit{Linked List}).
+                    \item Toda a vantagem do $O(\log N)$ é perdida, voltando a ser uma busca ineficiente $O(N)$.
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=0.8cm,
+                    level 1/.style={sibling distance=1cm},
+                    every node/.style={circle, draw, fill=red!20, minimum size=0.4cm, inner sep=1pt}]
+                    \node {1}
+                    child[missing] {}
+                    child {node {2}
+                        child[missing] {}
+                        child {node {3}
+                        child[missing] {}
+                        child {node {4}}
+                        }
+                    };
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny Árvore Degenerada (Pior caso)
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{52. Propriedade: Folhas vs. Nós Internos}
+        \begin{teorema}
+            Em qualquer \textbf{Árvore Binária Estrita} (onde nós têm 0 ou 2 filhos), o número de folhas ($L$) é sempre igual ao número de nós internos ($I$) mais um: \textbf{$L = I + 1$}.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{columns}
+            \begin{column}{0.6\textwidth}
+                \begin{itemize}
+                    \item Não importa a estrutura da árvore. Se todo nó ramifica para 2, a base será exatamente 1 unidade maior que os nós do meio.
+                    \item Exemplo prático: Torneios de eliminação (chaveamentos esportivos). Para haver 8 times na base (Folhas), são necessários 7 jogos (Nós Internos).
+                \end{itemize}
+            \end{column}
+            \begin{column}{0.4\textwidth}
+                \centering
+                \begin{tikzpicture}[level distance=0.8cm,
+                    level 1/.style={sibling distance=1.5cm},
+                    level 2/.style={sibling distance=0.8cm},
+                    every node/.style={circle, draw, minimum size=0.4cm, inner sep=1pt}]
+                    \node[fill=gray!20] {I}
+                    child {node[fill=gray!20] {I}
+                        child {node[fill=green!20] {L}}
+                        child {node[fill=green!20] {L}}
+                    }
+                    child {node[fill=gray!20] {I}
+                        child {node[fill=green!20] {L}}
+                        child {node[fill=green!20] {L}}
+                    };
+                \end{tikzpicture}\\
+                \vspace{0.2cm}
+                \tiny $I=3$ e $L=4$
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{53. Teorema das Arestas em Árvores}
+        \begin{teorema}
+            Toda árvore (binária ou genérica) com $N$ vértices possui exatamente \textbf{$N - 1$ arestas}.
+        \end{teorema}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Consequência direta do Lema do Aperto de Mãos. 
+            \item Como a árvore é conectada e acíclica, para conectar o primeiro nó a um novo nó, você precisa de exatamente 1 aresta extra.
+            \item Se houvesse menos que $N-1$ arestas, o grafo estaria \textbf{desconectado}.
+            \item Se houvesse $N$ ou mais arestas, inevitavelmente se formaria um \textbf{ciclo}.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{54. A Relação Logarítmica: $h \approx \log_2(N)$}
+        \begin{block}{Equação da Altura Mínima}
+            A altura mínima $h_{min}$ para acomodar $N$ nós é: \textbf{$h \approx \lceil \log_2(N+1) \rceil - 1$}
+        \end{block}
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Na computação, a altura $h$ de uma árvore representa o \textbf{número máximo de "ifs" ou "saltos"} necessários para encontrar uma informação.
+            \item O crescimento logarítmico significa que o volume de dados pode crescer brutalmente, mas a altura da árvore cresce de forma ínfima.
+            \item Essa é a prova matemática do porquê bancos de dados e sistemas de busca são viáveis em larga escala.
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{55. Conclusão: O Desafio do Balanceamento}
+        \begin{itemize}
+            \item Estudamos os \textbf{Teoremas} e vimos os \textbf{Extremos}:
+            \item \textbf{Melhor Caso (Árvore Perfeita):} A busca é $O(\log N)$.
+            \item \textbf{Pior Caso (Árvore Degenerada):} A busca é $O(N)$.
+        \end{itemize}
+        \vspace{0.2cm}
+        \begin{block}{O que os Cientistas da Computação Fizeram?}
+            Inventaram Árvores de Busca \textbf{Auto-Balanceáveis} (Árvore AVL, Red-Black). Toda vez que um nó é inserido, algoritmos aplicam "Rotações" na árvore para garantir matematicamente que ela se mantenha o mais próxima possível de uma Árvore Perfeita, salvaguardando a performance $O(\log N)$.
+        \end{block}
+    \end{frame}
+
+    \end{document}

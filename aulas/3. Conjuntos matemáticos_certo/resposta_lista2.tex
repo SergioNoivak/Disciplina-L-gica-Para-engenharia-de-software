@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Respostas da Lista de Exercícios 2.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Resolução — Teoria dos Conjuntos}
+
+\begin{block}{Exercício 1 — Propriedades do Conjunto Vazio}
+Considere um conjunto arbitrário $A$.
+\begin{itemize}
+    \item \textbf{a) $\varnothing \subseteq A$:} \\
+    Por definição, $X \subseteq Y$ se $\forall x (x \in X \Rightarrow x \in Y)$. No caso de $\varnothing \subseteq A$, a afirmação é $\forall x (x \in \varnothing \Rightarrow x \in A)$. Como $x \in \varnothing$ é sempre falso, a implicação é vacuamente verdadeira.
+    
+    \item \textbf{b) $A \cap \varnothing = \varnothing$:} \\
+    $x \in A \cap \varnothing \iff x \in A \land x \in \varnothing$. Como $x \in \varnothing$ é falso para qualquer $x$, a conjunção é falsa. Logo, o conjunto resultante não possui elementos, sendo igual a $\varnothing$.
+    
+    \item \textbf{c) $A \cup \varnothing = A$:} \\
+    $x \in A \cup \varnothing \iff x \in A \lor x \in \varnothing$. Como $x \in \varnothing$ é sempre falso, $x \in A \cup \varnothing \iff x \in A$.
+    
+    \item \textbf{d) Se $A \subseteq \varnothing$, então $A = \varnothing$:} \\
+    Já sabemos que $\varnothing \subseteq A$ (item a). Se também $A \subseteq \varnothing$, pela antissimetria da inclusão, $A = \varnothing$. De outra forma, se existisse $x \in A$, então $x \in \varnothing$ (pela inclusão), o que é impossível.
+    
+    \item \textbf{e) $\varnothing \cap \varnothing = \varnothing$:} \\
+    Caso particular do item b, onde $A = \varnothing$.
+    
+    \item \textbf{f) $\varnothing \cup \varnothing = \varnothing$:} \\
+    Caso particular do item c, onde $A = \varnothing$.
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercício 2 — Propriedade Reflexiva}
+Provar que $A \subseteq A$. \\
+Sabemos que para qualquer proposição $P$, $P \Rightarrow P$ é uma tautologia. A definição de inclusão é $A \subseteq A \iff \forall x (x \in A \Rightarrow x \in A)$. Como a implicação interna é sempre verdadeira, a inclusão é válida para qualquer conjunto.
+\end{block}
+
+\begin{block}{Exercício 3 — Antissimetria da Inclusão}
+Se $A \subseteq B$ e $B \subseteq A$, então $A = B$. \\
+Pela definição de igualdade de conjuntos (Extensionalidade), $A = B \iff \forall x (x \in A \iff x \in B)$. \\
+Temos:
+1. $A \subseteq B \implies \forall x (x \in A \Rightarrow x \in B)$
+2. $B \subseteq A \implies \forall x (x \in B \Rightarrow x \in A)$ \\
+Pela regra da bicondicional $(P \Rightarrow Q) \land (Q \Rightarrow P) \equiv (P \iff Q)$, temos $\forall x (x \in A \iff x \in B)$, o que prova $A = B$.
+\end{block}
+
+\begin{block}{Exercício 4 — Interseção como subconjunto}
+Provar que $A \cap B \subseteq A$. \\
+$x \in A \cap B \iff x \in A \land x \in B$. Pela regra da simplificação lógica ($P \land Q \implies P$), se $x \in A \land x \in B$, então $x \in A$. Logo, por definição de inclusão, $A \cap B \subseteq A$.
+\end{block}
+
+\begin{block}{Exercício 5 — União como superconjunto}
+Provar que $A \subseteq A \cup B$. \\
+$x \in A \cup B \iff x \in A \lor x \in B$. Pela regra da adição lógica ($P \implies P \lor Q$), se $x \in A$, então é verdade que $x \in A$ ou $x \in B$. Logo, $A \subseteq A \cup B$.
+\end{block}
+
+\begin{block}{Exercício 6 — Definição de Pertinência na Interseção}
+Se $x \in A \cap B$, então $x \in A$ e $x \in B$. \\
+A definição formal da interseção é $A \cap B = \{x \mid x \in A \text{ e } x \in B\}$. Portanto, a pertinência $x \in A \cap B$ implica diretamente, por definição, que $x$ satisfaz a propriedade de pertencer a ambos os conjuntos simultaneamente.
+\end{block}
+
+\begin{block}{Exercício 7 — Pertinência na União}
+Se $x \in A$, então $x \in A \cup B$. \\
+A definição de união é $A \cup B = \{x \mid x \in A \text{ ou } x \in B\}$. Como a disjunção lógica ($P \lor Q$) é verdadeira se pelo menos uma das partes for verdadeira, o fato de $x \in A$ ser verdade garante que a condição de pertinência da união seja satisfeita.
+\end{block}
+
+\begin{block}{Exercício 8 — Comutatividade da Interseção}
+Provar $A \cap B = B \cap A$. \\
+$x \in A \cap B \iff x \in A \land x \in B$. \\
+Pela propriedade comutativa da conjunção lógica ($P \land Q \equiv Q \land P$): \\
+$x \in A \land x \in B \iff x \in B \land x \in A \iff x \in B \cap A$. \\
+Como $x \in A \cap B \iff x \in B \cap A$, os conjuntos são iguais por extensionalidade.
+\end{block}
+
+\end{document}

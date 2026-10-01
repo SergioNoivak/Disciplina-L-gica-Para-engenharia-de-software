@@ -1,0 +1,424 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% Pacotes
+% ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}
+\usepackage{amsfonts}
+\usepackage{amsmath} % Recomendado para o comando \text{}
+\usepackage{amssymb}   
+% ------------------------------------------------ 
+% Configuração de página
+% ------------------------------------------------
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt
+}
+% Caixa para resposta discursiva
+\newcommand{\resposta}[1]{
+\noindent
+\framebox[\textwidth]{
+\begin{minipage}{0.98\textwidth}
+\vspace{#1}
+\end{minipage}
+}
+}
+\newcommand{\solucao}[1]{
+\noindent
+\framebox[\textwidth]{
+\begin{minipage}{0.98\textwidth}
+\vspace{0.2cm}
+#1
+\vspace{0.2cm}
+\end{minipage}
+}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Comandos auxiliares
+% ------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ------------------------------------------------
+% Documento
+% ------------------------------------------------
+\begin{document}
+
+% ------------------------------------------------
+% Cabeçalho
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{@{} L{4cm} X @{}}
+    \raisebox{-0.5cm}{\includegraphics[width=4cm]{Universidade_de_Rio_Verde.jpg}} &
+    \hfill
+    \begin{tabular}{|>{\centering\arraybackslash}m{10cm}|>{\raggedright\arraybackslash}p{1.8cm}|}
+        \hline
+        \cellcolor{black}\color{white}\rule{0pt}{1.2cm}\textbf{GABARITO - LISTA DE EXERCÍCIOS} 
+        & 
+        \scriptsize Nota \tabularnewline
+        \hline
+    \end{tabular} 
+\end{tabularx}
+\vspace{0.3cm}
+
+% ------------------------------------------------  
+% Tabela principal
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{|X|L{2cm}|}
+\hline
+\textbf{Curso} & \textbf{Campus} \\
+\textit{Engenharia de Software} & \textit{Rio Verde} \\
+\hline
+\multicolumn{2}{|l|}{\textbf{Disciplina}} \\  
+\multicolumn{2}{|l|}{ \textit{Lógica para Engenharia de  Software}} \\
+\hline
+\textbf{Nome do(a) acadêmico(a)} & \textbf{Valor} \\
+& - \\
+\hline
+\textbf{Professor} & \textbf{Turma} \\
+\textit{ Sergio Souza Novak} & \textit{B} \\
+\hline
+\textbf{Data} & \textbf{Código} \\
+\textit{18/03/2026} & \textit{ESW418} \\
+\hline
+\end{tabularx}
+
+\vspace{0.5cm}
+
+\begin{center}
+    \rule{\textwidth}{0.4pt}
+    \textbf{QUESTÕES}
+\end{center}
+
+\vspace{0.5cm}
+
+% -------------------------------------
+
+
+\textbf{1)} Construa a tabela-verdade completa da proposição $P \Leftrightarrow Q$. Em seguida, indique explicitamente em quais casos a dupla implicação é verdadeira.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{$P$} & \textbf{$Q$} & \textbf{$P \Leftrightarrow Q$} \\
+\hline
+V & V & V \\
+V & F & F \\
+F & V & F \\
+F & F & V \\
+\hline
+\end{tabular}
+\end{center}
+A dupla implicação $P \Leftrightarrow Q$ é \textbf{verdadeira} nos casos em que as proposições $P$ e $Q$ possuem o \textbf{mesmo valor lógico} (ambas verdadeiras na primeira linha ou ambas falsas na quarta linha).
+}
+}
+\vspace{0.8cm}
+
+\textbf{2)} Considere a implicação: \textit{“Se um triângulo é equilátero, então ele é isósceles.”} Identifique claramente a hipótese e a conclusão.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+\textbf{Hipótese ($P$):} Um triângulo é equilátero.\\
+\textbf{Conclusão ($Q$):} Ele é isósceles.
+}
+}
+
+\vspace{0.8cm}
+
+\textbf{3)} Demonstre que $A \cup A = A$.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+Pela definição da operação de união, temos que $x \in A \cup A \Leftrightarrow x \in A \lor x \in A$.\\
+Pela propriedade da idempotência da disjunção ($P \lor P \Leftrightarrow P$), deduzimos que $x \in A \lor x \in A \Leftrightarrow x \in A$.\\
+Portanto, a união contém exatamente os mesmos elementos do próprio conjunto $A$, validando $A \cup A = A$.
+}
+}
+
+\vspace{0.8cm}
+
+\textbf{4)} Seja $m$ um inteiro par e $n$ um inteiro par. Prove que a soma $m+n$ é um número par.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+Sendo $m$ e $n$ pares, denote-os por $m = 2k$ e $n = 2j$ (onde $k, j \in \mathbb{Z}$).\\
+A soma é expressa por: $m+n = 2k + 2j = 2(k+j)$.\\
+Como a soma de dois inteiros sempre resulta num inteiro ($k+j \in \mathbb{Z}$), logo definimos $z = k+j$. Assim, a expressão vira $2z$, que é exatamente a definição de um inteiro par.
+}
+}
+\vspace{0.8cm}
+
+\textbf{5) } Uma relação de equivalência é uma relação binária $R$ em um conjunto $A$, tal que $R$ é reflexiva, simétrica e transitiva.
+
+Considere as relações binárias apresentadas a seguir:
+\begin{itemize}
+    \item $R_1 = \{(a, b) : a, b \in \mathbb{Z} \text{ e } a = b\}$;
+    \item $R_2 = \{(a, b) : a, b \in \mathbb{Z} \text{ e } a < b\}$;
+    \item $R_3 = \{(a, b) : a, b \in \mathbb{Z} \text{ e } a = b + 1\}$;
+    \item $R_4 = \{(a, b) : a, b \in \mathbb{Z} \text{ e } a - b \text{ é um múltiplo de 3}\}$.
+\end{itemize}
+
+São relações de equivalência apenas o que se apresenta em:
+\begin{enumerate}[label=\Alph*)]
+    \item[\textcolor{blue}{\textbf{A)}}] \textcolor{blue}{$R_1$ e $R_4$.}
+    \item $R_2$ e $R_3$.
+    \item $R_1$ e $R_3$. 
+    \item $R_1, R_2$ e $R_4$.
+    \item $R_2, R_3$ e $R_4$.
+\end{enumerate} 
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Justificativa:}\\
+Para ser uma relação de equivalência, a relação $R$ deve ser simultaneamente reflexiva, simétrica e transitiva.\\\\
+\textbf{Analisando $R_1$ ($a = b$):}
+\begin{itemize}
+    \item \textbf{Reflexiva:} $a = a$ (Verdadeiro $\forall a \in \mathbb{Z}$).
+    \item \textbf{Simétrica:} $a = b \Rightarrow b = a$ (Verdadeiro).
+    \item \textbf{Transitiva:} $a = b \land b = c \Rightarrow a = c$ (Verdadeiro).
+\end{itemize}
+Portanto, $R_1$ \textbf{é} uma relação de equivalência.\\\\
+\textbf{Analisando $R_2$ ($a < b$):}
+\begin{itemize}
+    \item \textbf{Reflexiva:} $a < a$ (Falso, um número não é estritamente menor que ele mesmo).
+\end{itemize}
+Falha na reflexividade, portanto $R_2$ \textbf{não é} uma relação de equivalência.\\\\
+\textbf{Analisando $R_3$ ($a = b + 1$):}
+\begin{itemize}
+    \item \textbf{Reflexiva:} $a = a + 1$ (Falso, nenhum número é igual ao seu sucessor).
+\end{itemize}
+Falha na reflexividade, portanto $R_3$ \textbf{não é} uma relação de equivalência. (Também falharia em simetria e transitividade).\\\\
+\textbf{Analisando $R_4$ ($a - b$ é múltiplo de 3):}
+Isto significa que $a \equiv b \pmod 3$, uma propriedade de congruência.
+\begin{itemize}
+    \item \textbf{Reflexiva:} $a - a = 0$. Como $0 = 3 \cdot 0$, 0 é múltiplo de 3 (Verdadeiro).
+    \item \textbf{Simétrica:} Se $a - b = 3k$, então $b - a = -3k = 3(-k)$. Como $-k \in \mathbb{Z}$, a propriedade se mantém (Verdadeiro).
+    \item \textbf{Transitiva:} Se $a - b = 3k$ e $b - c = 3j$, somando as duas temos $(a - b) + (b - c) = 3k + 3j \Rightarrow a - c = 3(k+j)$. Como $k+j \in \mathbb{Z}$, é múltiplo de 3 (Verdadeiro).
+\end{itemize}
+Portanto, $R_4$ \textbf{é} uma relação de equivalência.\\\\
+Logo, apenas $R_1$ e $R_4$ são relações de equivalência.
+}
+}
+
+\vspace{0.8cm}
+
+\textbf{6)} Prove que $A \cap A = A$.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+A partir da definição geométrica de interseção de conjuntos: $x \in A \cap A \Leftrightarrow x \in A \land x \in A$.\\
+A partir da propriedade de idempotência da conjunção, sabemos que $P \land P \Leftrightarrow P$. Desse modo: $x \in A \land x \in A \Leftrightarrow x \in A$.\\
+Sendo assim, o conjunto interseção compartilha os exatos membros do conjunto original $A$, demonstrando que $A \cap A = A$.
+}
+}
+
+\vspace{0.8cm}
+
+\textbf{7)} Sejam $x$ e $y$ dois inteiros pares. Prove que o produto $xy$ é um múltiplo de 4.
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Solução:}\\
+Dado que $x$ e $y$ são pares, assuma que $x = 2k$ e $y = 2j$ (com $k, j \in \mathbb{Z}$).\\
+A multiplicação é dada por: $xy = (2k)(2j) = 4kj$.\\
+Logo, como $k \cdot j$ resulta integralmente num número inteiro ($z = kj$), o produto de $x$ e $y$ tem o modelo $4z$. Portanto é, sem dúvida, múltiplo de 4.
+}
+}
+
+\vspace{0.8cm}
+
+\textbf{8) } Uma relação $R$ em um conjunto $S$ é uma relação de equivalência se ela satisfizer todas as propriedades a seguir:
+\begin{enumerate}
+    \item \textbf{Reflexividade.} Para todo $a \in S$, $a R a$;
+    \item \textbf{Simetria.} Para todos $a, b \in S$, $a R b \Leftrightarrow b R a$;
+    \item \textbf{Transitividade.} Para todos $a, b, c \in S$, se $a R b$ e $b R c$, então, $a R c$.
+\end{enumerate}
+
+Uma partição de um conjunto $S$ é uma coleção de subconjuntos disjuntos não vazios, cuja união é igual a $S$. Se $R$ é uma relação de equivalência em um conjunto $S$ e se $x \in S$, denota-se por $[x]$ o conjunto de todos os elementos relacionados a $x$ em $S$ e chama-se esse conjunto de classe de equivalência de $x$.
+
+A partir dessas informações, considere que, em uma rede social corporativa, haja 8 usuários de diferentes departamentos. Os administradores dessa rede pretendem mapear os usuários que compartilham os mesmos interesses profissionais. Assim, fizeram uma tabela relacionando os usuários considerando pares. Dessa forma, dois usuários fazem parte de uma linha na tabela se possuem o mesmo interesse profissional. Obviamente, apesar de não estar evidente na tabela, um usuário também tem relação consigo mesmo.
+
+Os usuários estão numerados de 1 até 8 e a tabela resultante pode ser vista a seguir.
+
+\begin{center}
+\textbf{Usuários com interesses semelhantes} \\
+\vspace{0.2cm}
+\begin{tabular}{|c|c|}
+\hline
+1 & 3 \\ \hline
+2 & 5 \\ \hline
+3 & 8 \\ \hline
+5 & 7 \\ \hline
+2 & 6 \\ \hline
+4 & 4 \\ \hline
+8 & 1 \\ \hline
+6 & 5 \\ \hline
+7 & 2 \\ \hline
+1 & 8 \\ \hline
+\end{tabular}
+\end{center}
+
+Com base nesse cenário e no conceito de relações de equivalência, assinale a opção correta.
+ 
+\begin{enumerate}[label=\Alph*)]
+    \item[\textcolor{blue}{\textbf{A)}}] \textcolor{blue}{A relação descrita pela tabela não é uma relação de equivalência. (Sua transitividade falha pois não há ligação entre 6 e 7 na tabela, por exemplo)}
+    \item O subconjunto de usuários representados pelos números 2, 5, 6 e 7 forma uma classe de equivalência.
+    \item A relação descrita pela tabela apresenta a propriedade de simetria, mas não a de transitividade.
+    \item O subconjunto de usuários representados pelos números 1, 3 e 4 forma uma classe de equivalência.
+    \item O usuário 4 não pertence a nenhuma classe de equivalência.
+\end{enumerate}
+
+\vspace{0.2cm}
+\solucao{
+\textcolor{blue}{
+\textbf{Justificativa:}\\
+Para ser de equivalência, a relação contida na tabela das linhas precisa cumprir as três propriedades. Analisando as informações:
+\begin{itemize}
+    \item \textbf{Reflexividade:} O próprio enunciado garante: "\textit{Obviamente, apesar de não estar evidente na tabela, um usuário também tem relação consigo mesmo}". Assim, $\forall x \in \{1 \dots 8\}$, $xRx$ é aceito.
+    \item \textbf{Simetria:} Analisando os pares expostos na tabela:
+    \begin{itemize}
+        \item Existe (1,3), mas \textbf{não existe (3,1)}.
+        \item Existe (2,5), mas \textbf{não existe (5,2)}.
+        \item Existe (3,8), mas \textbf{não existe (8,3)}.
+    \end{itemize}
+    A relação não apresenta os pares inversos, portanto \textbf{falha na simetria}.
+    \item \textbf{Transitividade:} Observando as ligações:
+    \begin{itemize}
+        \item Temos a relação $(1,3)$ e também a relação $(3,8)$.
+        \item Pela transitividade, deveríamos ter a relação $(1,8)$. E de fato a relação aparece na última linha da tabela.
+        \item Porém, temos a relação $(6,5)$ e a relação $(5,7)$. Pela transitividade deveríamos obrigatoriamente ter a relação $(6,7)$ na tabela, o que \textbf{não acontece}.
+        \item Outro caso: temos $(7,2)$ e $(2,6)$. Pela transitividade deveríamos ter $(7,6)$, o que \textbf{não acontece}.
+    \end{itemize}
+    Portanto, a tabela também \textbf{falha na transitividade}.
+\end{itemize}
+Como falha na simetria e na transitividade, a alternativa A está correta ao afirmar que "a relação descrita não é uma relação de equivalência", e a alternativa C está incorreta. Alternativas B e D estão incorretas porque não definem classes de equivalência válidas (já que a relação em si não é de equivalência, além de faltar conexões nos subconjuntos citados). A alternativa E está incorreta pois 4 se relaciona consigo mesmo.
+}
+}
+
+% ------------------------------------------------
+% Colinha / Resumo de Definições
+% ------------------------------------------------
+
+\section*{Resumo de Definições (Referência)}
+
+\textbf{Conjunto Vazio}
+
+\[
+\varnothing = \{x \mid x \neq x\}
+\]
+
+\[
+(\forall x)(x \notin \varnothing)
+\]
+
+\textbf{Paridade}
+
+\[
+n \in \mathbb{Z} \text{ é par } \Leftrightarrow \exists k \in \mathbb{Z} \; (n = 2k)
+\]
+
+\[
+n \in \mathbb{Z} \text{ é ímpar } \Leftrightarrow \exists k \in \mathbb{Z} \; (n = 2k + 1)
+\]
+
+\textbf{Múltiplo de 4}
+
+\[
+n \in \mathbb{Z} \text{ é múltiplo de 4 } \Leftrightarrow \exists k \in \mathbb{Z} \; (n = 4k)
+\]
+
+\vspace{0.3cm}
+
+\textbf{Relação de Contido}
+
+\[
+A \subseteq B \Leftrightarrow (\forall x)(x \in A \Rightarrow x \in B)
+\]
+
+\vspace{0.3cm}
+
+\textbf{União de Conjuntos}
+
+\[
+A \cup B = \{x \mid x \in A \lor x \in B\}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Interseção de Conjuntos}
+
+\[
+A \cap B = \{x \mid x \in A \land x \in B\}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Relação Binária}
+
+Uma relação $R$ entre dois conjuntos $A$ e $B$ é um subconjunto do produto cartesiano:
+
+\[
+R \subseteq A \times B
+\]
+
+Quando $A=B$, dizemos que $R$ é uma relação em $A$:
+
+\[
+R \subseteq A \times A
+\]
+
+\vspace{0.3cm}
+
+\textbf{Propriedades de Relações}
+
+\textbf{Reflexiva}
+
+\[
+(\forall a \in A)(aRa)
+\]
+
+\textbf{Simétrica}
+
+\[
+(\forall a,b \in A)(aRb \Rightarrow bRa)
+\]
+
+\textbf{Transitiva}
+
+\[
+(\forall a,b,c \in A)((aRb \land bRc) \Rightarrow aRc)
+\]
+\end{document}

@@ -1,0 +1,175 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,arrows.meta,decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt} 
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Lista de Exercícios --- Grafos e Árvores}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=white, colframe=black, height=#1, boxrule=0.5pt, arc=0pt] \textit{Resposta:} \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+% -------------------------------------------------------
+% Questão 1: Grafos Completos (Kn)
+% -------------------------------------------------------
+\item \textbf{Grafos Completos ($K_n$): Definição e Propriedades}
+Um grafo completo $K_n$ é aquele em que existe uma aresta conectando cada par de vértices distintos.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o grafo $K_7$ no espaço abaixo.
+    \item Qual é o grau de cada vértice em um $K_7$?
+    \item Calcule o número total de arestas de um grafo completo $K_{10}$. Mostre a fórmula utilizada.
+\end{enumerate}
+\quadro{10cm}
+
+% -------------------------------------------------------
+% Questão 2: Ciclos Hamiltonianos
+% -------------------------------------------------------
+\item \textbf{Ciclos Hamiltonianos em Grafos Completos}
+Sabe-se que um Ciclo Hamiltoniano é um caminho fechado que visita todos os vértices exatamente uma vez, voltando à origem.
+\begin{center}
+    \begin{tikzpicture}[scale=1.7, every node/.style={circle, draw=black, thick, minimum size=0.5cm, inner sep=0pt}]
+        \node (1) at (90:1.2) {};
+        \node (2) at (18:1.2) {};
+        \node (3) at (306:1.2) {};
+        \node (4) at (234:1.2) {};
+        \node (5) at (162:1.2) {};
+        % All edges (K5)
+        \draw[gray!50] (1)--(3) (1)--(4) (2)--(4) (2)--(5) (3)--(5);
+        % Hamilton cycle
+        \draw[black, thick, ->] (1)--(2);
+        \draw[black, thick, ->] (2)--(3);
+        \draw[black, thick, ->] (3)--(4);
+        \draw[black, thick, ->] (4)--(5);
+        \draw[black, thick, ->] (5)--(1);
+    \end{tikzpicture}
+\end{center}
+Utilizando a fórmula correta, calcule quantos ciclos Hamiltonianos distintos existem em um grafo completo de 6 vértices ($K_6$). Apresente a fórmula e o cálculo.
+\quadro{4cm}
+
+% -------------------------------------------------------
+% Questão 5: Bipartido Completo
+% -------------------------------------------------------
+\item \textbf{Grafos Bipartidos Completos ($K_{m,n}$)}
+Desenhe o grafo bipartido completo $K_{3,2}$, separando os conjuntos em esquerda e direita.
+\quadro{5cm}
+
+% -------------------------------------------------------
+% Questão 6: Aplicação Prática Bipartidos
+% -------------------------------------------------------
+\item \textbf{Aplicações: O Problema da Atribuição}
+Uma \textit{software house} possui 4 programadores (Ana, Bob, Carlos, Dani) e 4 tarefas urgentes (Frontend, Backend, IA, DevOps). Sabe-se que: Ana domina Frontend e IA; Bob sabe apenas Backend; Carlos sabe DevOps e IA; Dani sabe Frontend e DevOps.
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um grafo bipartido, desenhando os nós e as arestas.
+    \item Mostre, destacando no grafo ou listando os pares, se existe um \textbf{Casamento Perfeito} (\textit{Perfect Matching}), ou seja, um cenário onde cada programador receba exatamente 1 tarefa que sabe fazer sem que falte tarefa para ninguém.
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 7: Árvores - Classificação
+% -------------------------------------------------------
+\item \textbf{Árvores Binárias: Classificação}
+Na ciência da computação, a estrutura das árvores importa muito para a performance dos algoritmos.
+\begin{enumerate}[label=\alph*)]
+    \item Qual a diferença fundamental entre uma Árvore Binária \textbf{Estrita} (Full) e uma Árvore Binária \textbf{Perfeita}?
+    \item É possível que uma árvore seja considerada ``Completa'' mas não seja ``Perfeita''? Dê um exemplo desenhando uma pequena árvore de 4 nós que ilustre isso.
+\end{enumerate}
+\quadro{5cm}
+
+
+% -------------------------------------------------------
+% Questão 9: Teoremas de Altura
+% -------------------------------------------------------
+\item \textbf{Teoremas de Capacidade em Árvores}
+Em Engenharia de Software, o estudo da complexidade de banco de dados frequentemente utiliza as propriedades expansivas de árvores binárias.
+\begin{center}
+    \begin{tikzpicture}[level distance=0.8cm,
+        level 1/.style={sibling distance=3cm},
+        level 2/.style={sibling distance=1.5cm},
+        every node/.style={circle, draw=black, thick, minimum size=0.4cm, inner sep=0pt}]
+        \node (root) {}
+          child {node {}
+            child {node {}}
+            child {node {}}
+          }
+          child {node {}
+            child {node {}}
+            child {node {}}
+          };
+        
+        \node[draw=none, right] at (2.5,0) {\small $k=0 \rightarrow 2^0 = 1$ nó};
+        \node[draw=none, right] at (2.5,-0.8) {\small $k=1 \rightarrow 2^1 = 2$ nós};
+        \node[draw=none, right] at (2.5,-1.6) {\small $k=2 \rightarrow 2^2 = 4$ nós};
+        
+        \draw[dashed, gray] (root) -- (2.5,0);
+        \draw[dashed, gray] (1.5,-0.8) -- (2.5,-0.8);
+        \draw[dashed, gray] (2.25,-1.6) -- (2.5,-1.6);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Utilizando a fórmula apropriada, quantos nós \textit{no máximo} podem existir no nível $k=66$ (considerando que a raiz ocupa o nível 0)?
+    \item Se uma árvore binária é perfeita e possui altura $h=312$, qual o seu número total de nós? Demonstre o cálculo.
+\end{enumerate}
+\quadro{7cm}
+
+% -------------------------------------------------------
+% Questão 10: Lema e Pior Caso
+% -------------------------------------------------------
+\item \textbf{Pior Caso (Degeneração) e a Relação das Arestas}
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe uma árvore degenerada com 5 nós. Por que cientistas da computação consideram essa formação um ``pior caso'' para a busca (qual a sua notação Big-O)?
+    \item Baseando-se no Lema do Aperto de Mãos aplicado a árvores (Grafos Acíclicos Conexos), quantas arestas obrigatoriamente existem em uma árvore binária que possui exatos 150 vértices? Justifique matematicamente porque não pode haver uma aresta a mais nem uma a menos.
+\end{enumerate}
+\quadro{10cm}
+
+\end{enumerate}
+
+\end{document}

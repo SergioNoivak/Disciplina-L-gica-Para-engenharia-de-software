@@ -1,0 +1,139 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!50!black},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+}
+\newtcolorbox{exercisebox}[1]{
+  title=\textbf{Exercício #1},
+  fonttitle=\bfseries,
+  coltitle=white,
+  colbacktitle=maincolor
+}
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{RESPOSTA - Lista de exercícios de Divisibilidade }\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+% =====================================================
+\begin{exercisebox}{1}
+Prove que para quaisquer inteiros \(a,b,c\), se 
+\(a \mid b\) e \(a \mid c\), então \(a \mid (b+c)\).
+\end{exercisebox}
+
+\begin{proof}
+Sejam \(a,b,c \in \mathbb{Z}\). Suponha que \(a\) divide
+\(b\) e que \(a\) divide \(c\). Pela definição de
+divisibilidade, existem inteiros \(k_1\) e \(k_2\) tais que
+\(b = ak_1\) e \(c = ak_2\).
+Somando essas igualdades, obtemos
+\(b+c = ak_1 + ak_2 = a(k_1+k_2)\).
+Como o conjunto dos inteiros é fechado para a adição,
+segue que \(k_1+k_2 \in \mathbb{Z}\).
+Logo, existe um inteiro \(k\) tal que
+\(b+c = ak\), concluindo-se que \(a\) divide \(b+c\).
+\end{proof}
+
+% =====================================================
+\begin{exercisebox}{2}
+Prove que, para quaisquer inteiros \(a\) e \(b\),
+se \(a \mid b\), então \(a \mid (-b)\).
+\end{exercisebox}
+
+\begin{proof}
+Sejam \(a,b \in \mathbb{Z}\) tais que \(a\) divide \(b\).
+Então existe um inteiro \(k\) para o qual
+\(b = ak\).
+Multiplicando ambos os lados da igualdade por \(-1\),
+obtemos \(-b = -(ak) = a(-k)\).
+Como \(-k\) também é um inteiro,
+segue diretamente da definição de divisibilidade que
+\(a\) divide \(-b\).
+\end{proof}
+
+% =====================================================
+\begin{exercisebox}{3}
+Prove que, para quaisquer inteiros \(a,b,c\),
+se \(a \mid b\) e \(b \mid c\),
+então \(a \mid c\).
+\end{exercisebox}
+
+\begin{proof}
+Sejam \(a,b,c \in \mathbb{Z}\).
+Suponha que \(a\) divide \(b\) e que \(b\) divide \(c\).
+Então existem inteiros \(k_1\) e \(k_2\) tais que
+\(b = ak_1\) e \(c = bk_2\).
+Substituindo a expressão de \(b\) na igualdade que define
+\(c\), obtemos
+\(c = (ak_1)k_2 = a(k_1k_2)\).
+Como o produto de inteiros é ainda um inteiro,
+temos \(k_1k_2 \in \mathbb{Z}\).
+Portanto, pela definição de divisibilidade,
+conclui-se que \(a\) divide \(c\).
+\end{proof}
+
+\end{document}

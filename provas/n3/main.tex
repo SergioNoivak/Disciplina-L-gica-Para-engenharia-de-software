@@ -1,0 +1,598 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% Pacotes
+% ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}\usepackage{amsfonts}
+\usepackage{amsmath} % Recomendado para o comando \text{}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\definecolor{maincolor}{RGB}{0,100,50} 
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multicol}
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=white, colframe=black, height=#1, boxrule=0.5pt, arc=0pt] \textit{Resposta:} \end{tcolorbox}}
+
+\newtcolorbox{codeblock}{%
+  colback=black!2,
+  colframe=gray!30,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  fontupper=\small
+}
+
+\lstset{
+    language=Java,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    frame=none,
+    numbers=none,
+    tabsize=2,
+    commentstyle=\itshape\color{gray},
+    morekeywords={this}
+}
+
+% TikZ Styles for ER Diagrams
+\tikzset{
+    block/.style={rectangle, draw, thick, minimum width=2cm, minimum height=1cm, fill=white},
+    diamond_node/.style={diamond, draw, thick, minimum width=2cm, minimum height=1cm, fill=white, aspect=2},
+    attribute/.style={ellipse, draw, thin, minimum width=1.5cm, minimum height=0.6cm, fill=white, font=\scriptsize},
+    line/.style={draw, thick}, 
+}
+% ------------------------------------------------ 
+% Configuração de página
+% ------------------------------------------------
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt % Adicione isso
+}% Caixa para resposta discursiva
+\newcommand{\resposta}[1]{
+\noindent
+\framebox[\textwidth]{
+\begin{minipage}{0.98\textwidth}
+\vspace{#1}
+\end{minipage}
+}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Comandos auxiliares
+% ------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ------------------------------------------------
+% Documento
+% ------------------------------------------------
+\begin{document}
+
+% ------------------------------------------------
+% Cabeçalho - Corrigido para evitar aninhamento problemático
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{@{} L{4cm} X @{}}
+    \raisebox{-0.5cm}{\includegraphics[width=4cm]{Universidade_de_Rio_Verde.jpg}} &
+    \hfill
+    \begin{tabular}{|>{\centering\arraybackslash}m{10cm}|>{\raggedright\arraybackslash}p{1.8cm}|}
+        \hline
+        \cellcolor{black}\color{white}\rule{0pt}{1.2cm}\textbf{AVALIAÇÃO 3} 
+        & 
+        \small Nota \tabularnewline
+        \hline
+    \end{tabular} 
+\end{tabularx}
+
+% ------------------------------------------------  
+% Tabela principal - Estrutura limpa
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{|X|L{2cm}|}
+\hline
+\textbf{Curso} & \textbf{Campus} \\
+\textit{Engenharia de Software} & \textit{Rio Verde} \\
+\hline
+\multicolumn{2}{|l|}{ \textit{Lógica para Engenharia de Software}} \\
+\hline
+\textbf{Nome do(a) acadêmico(a)} & \textbf{Valor} \\
+& 7,0 \\
+\hline
+\textbf{Professor} & \textbf{Turma} \\
+\textit{ Sergio Souza Novak} & \textit{A} \\
+\hline
+\textbf{Data da Avaliação} & \textbf{Código} \\
+\textit{ 22/06/2026} & \textit{ESW418} \\
+\hline
+\end{tabularx}
+ 
+% ------------------------------------------------
+% Barra de Atenção
+% ------------------------------------------------
+\vspace{0.2cm}
+
+\begin{tabularx}{\textwidth}{|X|}
+\hline
+\cellcolor{black}\color{white}
+\centering \textbf{ATENÇÃO:} Somente serão passíveis de \textbf{REVISÃO} avaliações resolvidas à \textbf{TINTA}. \tabularnewline
+\hline
+\end{tabularx}
+
+
+\textbf{ORIENTAÇÕES PARA A RESOLUÇÃO}  
+
+\begin{itemize}
+    \item A avaliação é individual, com consulta apenas ao material escrito a mão (à caneta);
+    \item A interpretação de texto faz parte da avaliação;
+\end{itemize}
+
+
+\begin{center}
+    \rule{\textwidth}{0.4pt}
+    \textbf{QUESTÕES}
+\end{center}
+
+\vspace{0.5cm} 
+\begin{enumerate}
+    \item \textbf{(ENADE)} Considere as seguintes afirmativas sobre o algoritmo de pesquisa binária:
+\begin{enumerate}[label=\Roman*.]
+    \item a entrada deve estar ordenada
+    \item uma pesquisa com sucesso é feita em tempo logarítmico na media
+    \item uma pesquisa sem sucesso é feita em tempo logarítmico na media
+    \item o pior caso de qualquer busca é logarítmico
+\end{enumerate}
+
+As afirmativas corretas são:
+\begin{enumerate}[label=(\Alph*)]
+    \item Somente I e II.
+    \item Somente I, II e III.
+    \item Somente II e III.
+    \item Somente III e IV.
+    \item Todas as afirmativas estão corretas.
+\end{enumerate}
+     
+    
+    \item Converta o grafo direcionado (digrafo) abaixo para o formato de Lista de Adjacência, nos moldes do livro Cormen (array com listas encadeadas).
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={-{Latex[length=3mm, width=2.5mm]}, thick}
+    ]
+        \node[vertex] (1) at (3,4) {1};
+        \node[vertex] (2) at (1,2.5) {2};
+        \node[vertex] (3) at (5,2.5) {3};
+        \node[vertex] (4) at (0,0.5) {4};
+        \node[vertex] (5) at (3,1) {5};
+        \node[vertex] (6) at (6,0.5) {6};
+        \node[vertex] (7) at (3,-1) {7};
+
+        \draw[edge] (1) -- (2);
+        \draw[edge] (1) -- (3);
+        \draw[edge] (5) -- (1);
+        \draw[edge] (2) -- (4);
+        \draw[edge] (2) -- (5);
+        \draw[edge] (3) -- (5);
+        \draw[edge] (6) -- (3);
+        \draw[edge] (4) -- (5);
+        \draw[edge] (4) -- (7);
+        \draw[edge] (5) -- (6);
+        \draw[edge] (7) -- (5);
+        \draw[edge] (6) -- (7);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Preencha a lista de adjacência abaixo para cada vértice.
+    \item Qual é a vantagem da lista de adjacência em relação à matriz para este grafo?
+\end{enumerate}
+
+\begin{center}
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.5\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{c|l}
+        \textbf{Vértice} & \textbf{Lista} \\ \hline
+        1 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        2 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        3 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        4 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        5 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        6 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        7 & $\to$ \underline{\hspace{5cm}} \\
+    \end{tabular}
+    \end{tcolorbox}
+\end{center}
+\quadro{6cm}
+
+
+    \item  Com base no comportamento das curvas no gráfico abaixo, assinale a alternativa que associa corretamente a cor/formato do ponto à sua respectiva complexidade:
+    \begin{center}
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=11cm, height=7cm,
+            axis lines = left,
+            xlabel = {$n$ (Entrada)},
+            ylabel = {$T(n)$ (Custo)},
+            ymin=0, ymax=1000, xmin=0, xmax=110,
+            xtick={0,10,20,30,40,50,60,70,80,90,100},
+            grid=both,
+            grid style={line width=.1pt, draw=black!10},
+            legend pos=outer north east,
+            legend style={font=\small},
+        ]
+            % O(log n) - Azul (Círculo)
+            \addplot[blue, only marks, mark=*, mark size=3pt] coordinates {
+                (1,0) (2,10) (4,20) (8,30) (16,40) (32,50) (64,60) (100,66)
+            };
+            \addlegendentry{Pontos Azuis ($\bullet$)}
+            
+            % O(n) - Vermelho (Quadrado)
+            \addplot[red, only marks, mark=square*, mark size=3pt] coordinates {
+                (1,10) (5,50) (10,100) (20,200) (30,300) (50,500) (70,700) (100,1000)
+            };
+            \addlegendentry{Pontos Vermelhos ($\blacksquare$)}
+            
+            % O(n log n) - Verde (Triângulo)
+            \addplot[green!60!black, only marks, mark=triangle*, mark size=3.5pt] coordinates {
+                (1,0) (2,20) (4,80) (8,240) (10,332) (16,640) (20,864)
+            };
+            \addlegendentry{Pontos Verdes ($\blacktriangle$)}
+        \end{axis}
+    \end{tikzpicture}
+    \end{center}
+    
+    \begin{enumerate}[label=\alph*)]
+        \item Azul: $O(n)$; Vermelho: $O(n \log n)$; Verde: $O(\log n)$.
+        \item Azul: $O(\log n)$; Vermelho: $O(n \log n)$; Verde: $O(n)$.
+        \item Azul: $O(\log n)$; Vermelho: $O(n)$; Verde: $O(n \log n)$.
+        \item Azul: $O(n \log n)$; Vermelho: $O(n)$; Verde: $O(\log n)$.
+    \end{enumerate}
+
+    \item O algoritmo abaixo percorre todas as arestas de um grafo completo $K_n$ (representado por uma matriz de adjacência $W$ de pesos) para calcular a soma dos pesos e, em seguida, a média aritmética.
+
+    \begin{center}
+        \begin{tikzpicture}[
+            vertex/.style={circle, draw=black, thick, minimum size=0.8cm},
+        ]
+            \node[vertex] (1) at (90:2.2)  {$S_1$};
+            \node[vertex] (2) at (18:2.2)  {$S_2$};
+            \node[vertex] (3) at (306:2.2) {$S_3$};
+            \node[vertex] (4) at (234:2.2) {$S_4$};
+            \node[vertex] (5) at (162:2.2) {$S_5$};
+
+            \draw[thick] (1) -- node[above right] {\small 12} (2);
+            \draw[thick] (2) -- node[right]       {\small 8}  (3);
+            \draw[thick] (3) -- node[below]       {\small 15} (4);
+            \draw[thick] (4) -- node[left]        {\small 6}  (5);
+            \draw[thick] (5) -- node[above left]  {\small 10} (1);
+            \draw[thick] (1) -- node[pos=0.3, right] {\small 20} (3);
+            \draw[thick] (1) -- node[pos=0.3, left]  {\small 14} (4);
+            \draw[thick] (2) -- node[pos=0.7, left]  {\small 9}  (4);
+            \draw[thick] (2) -- node[pos=0.3, left]  {\small 18} (5);
+            \draw[thick] (3) -- node[pos=0.3, right] {\small 11} (5);
+        \end{tikzpicture}
+    \end{center}
+
+    \begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+        \textbf{PESO-MÉDIO($W, n$)} \\
+        \begin{tabular}{llcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & $soma \leftarrow 0$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            2 & $qtd \leftarrow 0$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            3 & \textbf{para} $i = 1$ \textbf{até} $n$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            4 & \quad \textbf{para} $j = i+1$ \textbf{até} $n$: & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            5 & \quad \quad $soma \leftarrow soma + W[i,j]$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            6 & \quad \quad $qtd \leftarrow qtd + 1$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            7 & $media \leftarrow soma / qtd$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            8 & \textbf{retornar} $media$ & \underline{\hspace{1cm}} & \underline{\hspace{1cm}} \\
+            \hline
+        \end{tabular}
+    \end{tcolorbox}
+
+    \begin{enumerate}[label=\alph*)]
+        \item Preencha as colunas \textbf{custo} e \textbf{vezes} para cada linha do algoritmo.
+        \item Determine a complexidade assintótica $T(n)$ do algoritmo no pior caso, expressando-a em notação Big-O.
+    \end{enumerate}
+    \quadro{6cm}
+
+\item O Programa Nacional de Banda Larga do governo federal abriu uma licitação para que uma empresa de telecomunicações conecte 6 cidades isoladas do interior ($A$ a $F$) com internet de fibra óptica de alta velocidade. O edital exige que todas as cidades fiquem interligadas (seja de forma direta ou indireta), mas o consórcio vencedor precisa realizar a obra com o menor orçamento possível. Os custos orçados (em milhões de reais) para o cabeamento entre cada par de cidades viável estão representados no projeto topológico abaixo.
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={thick}
+    ]
+        \node[vertex] (A) at (0,2) {A};
+        \node[vertex] (B) at (3,3) {B};
+        \node[vertex] (C) at (6,2) {C};
+        \node[vertex] (D) at (6,0) {D};
+        \node[vertex] (E) at (3,-1) {E};
+        \node[vertex] (F) at (0,0) {F};
+
+        \draw[edge] (A) -- node[above left] {3} (B);
+        \draw[edge] (A) -- node[left] {4} (F);
+        \draw[edge] (B) -- node[left, pos=0.3] {5} (F);
+        \draw[edge] (C) -- node[right] {6} (D);
+        \draw[edge] (C) -- node[above right] {7} (B);
+        \draw[edge] (E) -- node[below left] {8} (F);
+        \draw[edge] (A) -- node[right, pos=0.2] {9} (E);
+        \draw[edge] (B) -- node[left, pos=0.8] {10} (D);
+        \draw[edge] (D) -- node[below right] {2} (E);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Aplique o algoritmo de Kruskal para encontrar a Árvore Geradora Mínima (MST). Liste as arestas em ordem crescente de peso.
+    \item Para cada aresta analisada, indique se ela foi \textbf{adicionada} à MST ou \textbf{rejeitada} (por formar ciclo). Mostre a evolução dos conjuntos de vértices (simulando a estrutura Union-Find).
+    \item Desenhe a Árvore Geradora Mínima resultante.
+    \item Qual é o custo total mínimo para interligar as 6 cidades?
+\end{enumerate}
+\quadro{12cm} 
+
+
+\item Em um laboratório de Engenharia de Software, uma rede local (LAN) possui exatamente 15 servidores. O arquiteto de redes configurou a topologia de forma que cada servidor esteja diretamente conectado a exatamente 4 outros servidores através de cabos de rede. 
+
+assinale a alternativa que indica corretamente a quantidade total de cabos de rede (arestas) utilizados nessa topologia:
+\begin{enumerate}[label=\alph*)]
+    \item 15 cabos.
+    \item 30 cabos.
+    \item 60 cabos.
+    \item 120 cabos.
+\end{enumerate}
+\item \textbf{Texto de Apoio:}
+\vspace{0.3cm}
+
+    RAMOS, Reinaldo Augusto de Oliveira; SILVA, Fabiana Raulino da; ROSETTI, Rafael Diogo. \textbf{Limites e possibilidades da complexidade computacional quântica}. TECCOGS — Revista Digital de Tecnologias Cognitivas, n. 29-30, p. 108-130, 2024. Recebido em: 3 dez. 2024. Aprovado em: 23 dez. 2024.
+\vspace{0.3cm}
+
+    A teoria da complexidade computacional é uma área central da ciência da computação que busca classificar problemas computacionais de acordo com o esforço necessário para resolvê-los em termos de tempo, espaço e outros recursos. Tradicionalmente, os problemas são classificados em classes como P (problemas resolvíveis em tempo polinomial) e NP (problemas verificáveis em tempo polinomial). No entanto, o advento da computação quântica introduziu novas classes de complexidade, como BQP (\textit{Bounded-error Quantum Polynomial time}), que se referem à capacidade de resolver problemas com algoritmos quânticos em tempo polinomial, com uma margem de erro aceitável. O algoritmo de Shor, proposto por Peter Shor em 1994, trouxe uma contribuição fundamental ao resolver o problema de fatoração de inteiros em tempo polinomial, com complexidade $O((\log N)^3)$.
+
+Outro avanço relevante trazido pela computação quântica é o algoritmo de Grover, que realiza buscas em listas ou bancos de dados desordenados com complexidade $O(\sqrt{N})$. Esse algoritmo representa uma abordagem eficiente para o problema de busca, que no modelo clássico requer $O(N)$ operações para ser resolvido de maneira exaustiva. Embora o ganho de eficiência do algoritmo de Grover não seja exponencial, ele oferece uma redução quadrática, o que ainda é significativo em cenários em que o tamanho da entrada $N$ é muito grande. 
+
+O problema do Caixeiro Viajante (\textit{Traveling Salesman Problem} – TSP) envolve um vendedor (ou ``caixeiro viajante'') que deve visitar um conjunto de cidades, passando por cada uma exatamente uma vez e retornando à cidade de origem. O objetivo é determinar a rota mais curta possível que completa esse percurso. Este problema pode ser formalizado como uma questão de minimização sobre um grafo completo, em que as cidades representam os nós e as distâncias entre elas representam as arestas ponderadas do grafo.
+
+O TSP é um problema NP-difícil, uma vez que se encontra fora da classe P – para tamanhos de entrada muito grandes, os algoritmos conhecidos demandam tempo exponencial. Além disso, o TSP pertence à categoria dos problemas NP-completos em sua versão de decisão, e aqui a questão não é encontrar a rota mais curta, mas determinar se existe uma rota que não excede uma determinada distância $D$. A complexidade do TSP está no crescimento exponencial do número de rotas possíveis conforme o número de cidades aumenta: para $n$ cidades, existem $(n-1)!/2$ possíveis rotas, o que torna inviável uma solução exata por força bruta para grandes valores de $n$.
+
+Com base no texto acima, o artigo menciona quatro complexidades computacionais associadas a diferentes algoritmos e problemas: o TSP por força bruta com $(n-1)!/2$ rotas, a busca clássica com $O(N)$, o algoritmo de Grover com $O(\sqrt{N})$ e o algoritmo de Shor com $O((\log N)^3)$.
+
+Assinale a alternativa que classifica corretamente essas complexidades da \textbf{maior} (mais custosa) para a \textbf{menor} (mais eficiente):
+\begin{enumerate}[label=\alph*)]
+    \item $O(N)$ $>$ $O(\sqrt{N})$ $>$ $O((\log N)^3)$ $>$ $O(n!)$
+    \item $O(n!)$ $>$ $O(N)$ $>$ $O((\log N)^3)$ $>$ $O(\sqrt{N})$
+    \item $O(n!)$ $>$ $O(N)$ $>$ $O(\sqrt{N})$ $>$ $O((\log N)^3)$
+    \item $O((\log N)^3)$ $>$ $O(\sqrt{N})$ $>$ $O(N)$ $>$ $O(n!)$
+\end{enumerate}
+\item Em Engenharia de Software, o estudo da complexidade de banco de dados frequentemente utiliza as propriedades expansivas de árvores binárias.
+
+\begin{enumerate}[label=\alph*)]
+    \item Utilizando a fórmula apropriada, quantos nós \textit{no máximo} podem existir no nível $k=66$ (considerando que a raiz ocupa o nível 0)?
+    \item Se uma árvore binária é perfeita e possui altura $h=312$, qual o seu número total de nós? Demonstre o cálculo.
+\end{enumerate}
+\quadro{7cm}
+\end{enumerate}
+
+% ============================================================
+% FORMULÁRIO DE APOIO
+% ============================================================
+\newpage
+\begin{center}
+    {\Large \textbf{FORMULÁRIO DE APOIO}}\\[0.3cm]
+    {\small Consulta permitida durante a prova. Não destacar.}
+\end{center}
+\vspace{0.5cm}
+
+\hrule
+\vspace{0.4cm}
+
+% --- 1. Teorema do Aperto de Mãos ---
+\noindent\textbf{1. Teorema do Aperto de Mãos (\textit{Handshaking Lemma})}
+
+Em qualquer grafo $G = (V, E)$, a soma dos graus de todos os vértices é igual ao dobro do número de arestas:
+$$\sum_{v \in V} \text{grau}(v) = 2 \cdot |E|$$
+
+\textbf{Consequência:} Se todos os $n$ vértices possuem o mesmo grau $d$ (grafo regular), então:
+$$|E| = \frac{n \cdot d}{2}$$
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.4cm}
+
+% --- 2. Algoritmo de Kruskal ---
+\noindent\textbf{2. Algoritmo de Kruskal (Árvore Geradora Mínima — MST)}
+
+\begin{tcolorbox}[colback=white, colframe=black, fontupper=\small]
+\textbf{KRUSKAL($G, n$)}\\
+1. Ordenar todas as arestas de $G$ em ordem crescente de peso.\\
+2. Inicializar cada vértice como um conjunto independente (Union-Find).\\
+3. \textbf{Para} cada aresta $(u, v)$ em ordem crescente de peso:\\
+\quad 3.1. \textbf{Se} $u$ e $v$ pertencem a conjuntos \textbf{diferentes}:\\
+\quad\quad Adicionar $(u, v)$ à MST e unir os conjuntos de $u$ e $v$.\\
+\quad 3.2. \textbf{Senão}: Rejeitar $(u, v)$ (formaria ciclo).\\
+4. Parar quando a MST tiver $n - 1$ arestas.
+\end{tcolorbox}
+
+\textbf{Resultado:} A MST sempre terá exatamente $n - 1$ arestas para $n$ vértices.
+
+\vspace{0.4cm}
+\hrule
+\vspace{0.4cm}
+
+% --- 3. Representações de Grafos ---
+\noindent\textbf{3. Representações de Grafos — Exemplo com o grafo:}
+
+\begin{center}
+\begin{tikzpicture}[
+    vertex/.style={circle, draw=black, thick, minimum size=0.7cm},
+    edge/.style={thick}
+]
+    \node[vertex] (1) at (0,0) {1};
+    \node[vertex] (2) at (2,1) {2};
+    \node[vertex] (3) at (2,-1) {3};
+    \node[vertex] (4) at (4,0) {4};
+
+    \draw[edge] (1) -- (2);
+    \draw[edge] (1) -- (3);
+    \draw[edge] (2) -- (3);
+    \draw[edge] (2) -- (4);
+    \draw[edge] (3) -- (4);
+\end{tikzpicture}
+\end{center}
+
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{3a. Matriz de Adjacência}
+
+$$M = \begin{pmatrix}
+ 0 & 1 & 1 & 0 \\
+ 1 & 0 & 1 & 1 \\
+ 1 & 1 & 0 & 1 \\
+ 0 & 1 & 1 & 0
+\end{pmatrix}$$
+
+$M[i][j] = 1$ se existe aresta entre $i$ e $j$.\\
+Propriedade: a matriz é \textbf{simétrica} em grafos não direcionados.
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\textbf{3b. Lista de Adjacência}
+
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c|l}
+    \textbf{Vértice} & \textbf{Vizinhos} \\ \hline
+    1 & $\to$ 2 $\to$ 3 \\
+    2 & $\to$ 1 $\to$ 3 $\to$ 4 \\
+    3 & $\to$ 1 $\to$ 2 $\to$ 4 \\
+    4 & $\to$ 2 $\to$ 3 \\
+\end{tabular}
+
+\vspace{0.2cm}
+Cada vértice armazena a lista dos seus vizinhos diretos.
+\end{minipage}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.4cm}
+
+\noindent\textbf{4. Fórmulas Úteis}
+
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{ll}
+    Arestas de um grafo completo $K_n$: & $|E| = \dfrac{n(n-1)}{2}$ \\[0.2cm]
+    Nós máximos no nível $k$ de árvore binária: & $2^k$ \\[0.2cm]
+    Total de nós em árvore binária perfeita de altura $h$: & $N = 2^{h+1} - 1$ \\[0.2cm]
+    Arestas em uma árvore com $n$ vértices: & $|E| = n - 1$ \\[0.2cm]
+    Ciclos Hamiltonianos distintos em $K_n$: & $\dfrac{(n-1)!}{2}$ \\
+\end{tabular}
+
+\vspace{0.5cm}
+\hrule
+\vspace{0.4cm}
+
+\noindent\textbf{5. Comparativo Visual das Complexidades}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=14cm, height=9cm,
+        axis lines = left,
+        xlabel = {$n$ (Tamanho da Entrada)},
+        ylabel = {$T(n)$ (Operações)},
+        ymin=0, ymax=260, xmin=0, xmax=18,
+        grid=both,
+        grid style={line width=.1pt, draw=black!10},
+        legend pos=outer north east,
+        legend style={font=\small},
+        every axis plot/.append style={thick},
+    ]
+        % O(1)
+        \addplot[black, dashed, mark=-, mark size=3pt, domain=1:17, samples=10] {10};
+        \addlegendentry{Constante}
+
+        % O(log n)
+        \addplot[blue, mark=*, mark size=2pt, domain=1:17, samples=10] {10*(ln(x)/ln(2))};
+        \addlegendentry{Logarítmica}
+
+        % O(sqrt n)
+        \addplot[cyan, mark=diamond*, mark size=2.5pt, domain=1:17, samples=10] {10*sqrt(x)};
+        \addlegendentry{Raiz Quadrada}
+
+        % O(n)
+        \addplot[green!60!black, mark=square*, mark size=2pt, domain=1:17, samples=10] {10*x};
+        \addlegendentry{Linear}
+
+        % O(n log n)
+        \addplot[orange, mark=triangle*, mark size=2.5pt, domain=1:17, samples=10] {10*x*(ln(x)/ln(2))};
+        \addlegendentry{Linearítmica}
+
+        % O(n^2)
+        \addplot[red, mark=pentagon*, mark size=2.5pt, domain=1:17, samples=10] {x^2};
+        \addlegendentry{Quadrática}
+
+        % O(2^n)
+        \addplot[purple, mark=star, mark size=3pt, domain=1:8, samples=8] {2^x};
+        \addlegendentry{Exponencial}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.3cm}
+
+\noindent\textbf{5b. Comparação: $O(\sqrt{N})$ vs. $O((\log N)^3)$}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=14cm, height=7cm,
+        axis lines = left,
+        xlabel = {$N$ (Tamanho da Entrada)},
+        ylabel = {$T(N)$ (Operações)},
+        ymin=0, ymax=120, xmin=0, xmax=1100,
+        xtick={0,100,200,300,400,500,600,700,800,900,1000},
+        grid=both,
+        grid style={line width=.1pt, draw=black!10},
+        legend pos=north west,
+        legend style={font=\small},
+        every axis plot/.append style={thick},
+    ]
+        % O((log N)^3)
+        \addplot[blue, mark=*, mark size=2.5pt, domain=2:1000, samples=20] {(ln(x)/ln(2))^3 / 10};
+        \addlegendentry{$O((\log N)^3)$}
+
+        % O(sqrt N)
+        \addplot[cyan, mark=diamond*, mark size=3pt, domain=1:1000, samples=20] {sqrt(x)};
+        \addlegendentry{$O(\sqrt{N})$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+
+\end{document}

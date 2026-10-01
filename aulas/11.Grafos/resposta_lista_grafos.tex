@@ -1,0 +1,358 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,arrows.meta,decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt} 
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Gabarito --- Introdução à Teoria dos Grafos}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=green!5, colframe=forestgreen, boxrule=0.5pt, arc=0pt] \textbf{Resposta:} #1 \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=0.8cm]
+
+% -------------------------------------------------------
+% Questão 1
+% -------------------------------------------------------
+\item Considere o seguinte conjunto de vértices e arestas:
+\[
+    V = \{A, B, C, D, E\}, \qquad E = \{(A,B),\ (A,C),\ (B,D),\ (C,D),\ (D,E)\}
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Quantos vértices e quantas arestas possui o grafo $G = (V, E)$?
+    \item Desenhe o grafo correspondente nos eixos abaixo.
+    \item O grafo é direcionado ou não direcionado? Justifique.
+\end{enumerate}
+
+\quadro{
+\textbf{a)} 5 vértices e 5 arestas. \\
+\textbf{b)} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (A) at (0,2) {A};
+    \node[node] (B) at (2,2) {B};
+    \node[node] (C) at (1,0) {C};
+    \node[node] (D) at (3,0) {D};
+    \node[node] (E) at (5,0) {E};
+    \draw[-{Latex[length=3mm]}, thick] (A) -- (B);
+    \draw[-{Latex[length=3mm]}, thick] (A) -- (C);
+    \draw[-{Latex[length=3mm]}, thick] (B) -- (D);
+    \draw[-{Latex[length=3mm]}, thick] (C) -- (D);
+    \draw[-{Latex[length=3mm]}, thick] (D) -- (E);
+\end{tikzpicture}
+\end{center}
+\textbf{c)} Formalmente, a notação em pares com parênteses, $(u,v)$, indica um par ordenado, o que representaria um grafo direcionado. No entanto, em materiais introdutórios, isso muitas vezes é usado informalmente para grafos não direcionados. A resposta esperada seria que, rigorosamente, é \textbf{direcionado} devido à notação de par ordenado. Caso considerado não direcionado, os pares representam apenas as ligações.
+}
+
+% -------------------------------------------------------
+% Questão 2
+% -------------------------------------------------------
+\item Observe o grafo abaixo:
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm}
+    ]
+        \node[vertex] (A) at (0,2)  {A};
+        \node[vertex] (B) at (2,4)  {B};
+        \node[vertex] (C) at (4,2)  {C};
+        \node[vertex] (D) at (2,0)  {D};
+        \node[vertex] (E) at (2,2)  {E};
+
+        \draw[thick] (A) -- (B);
+        \draw[thick] (A) -- (D);
+        \draw[thick] (A) -- (E);
+        \draw[thick] (B) -- (C);
+        \draw[thick] (B) -- (E);
+        \draw[thick] (C) -- (D);
+        \draw[thick] (D) -- (E);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Calcule o grau de cada vértice: $deg(A)$, $deg(B)$, $deg(C)$, $deg(D)$ e $deg(E)$.
+    \item Calcule a soma de todos os graus: $\sum_{v \in V} deg(v)$.
+    \item Quantas arestas possui o grafo? Use o Teorema do Aperto de Mãos para verificar: $\sum deg(v) = 2|E|$.
+    \item O número de vértices com grau ímpar é par? Isso está de acordo com o Corolário do Teorema?
+\end{enumerate}
+\quadro{
+\textbf{a)} $deg(A)=3$, $deg(B)=3$, $deg(C)=2$, $deg(D)=3$, $deg(E)=3$. \\
+\textbf{b)} A soma é $3+3+2+3+3 = 14$. \\
+\textbf{c)} O grafo possui 7 arestas. Pelo Teorema do Aperto de Mãos: $14 = 2 \times 7$. Verificado. \\
+\textbf{d)} Os vértices com grau ímpar são A, B, D e E. Portanto, há 4 vértices (um número par), o que concorda perfeitamente com o Corolário do Teorema do Aperto de Mãos (em qualquer grafo, a quantidade de vértices de grau ímpar é sempre par).
+}
+
+% -------------------------------------------------------
+% Questão 3
+% -------------------------------------------------------
+\item Em uma reunião de empresa, 9 funcionários participaram de uma dinâmica onde todos deveriam cumprimentar exatamente outros 3 funcionários.
+
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um problema de grafos: o que representam os vértices, as arestas e o grau?
+    \item É matematicamente possível que todos os 9 funcionários cumprimentem exatamente 3 pessoas? Use o Corolário do Teorema do Aperto de Mãos para justificar.
+    \item Se o número de funcionários fosse 6, a situação seria possível? Calcule quantos cumprimentos ocorreriam no total.
+\end{enumerate}
+\quadro{
+\textbf{a)} \textbf{Vértices} = Funcionários; \textbf{Arestas} = Cumprimentos mútuos; \textbf{Grau} = Número de cumprimentos dados por cada funcionário (3). \\
+\textbf{b)} \textbf{Não é possível}. Isso criaria um grafo com 9 vértices (ímpar), todos com grau 3 (ímpar). O número total de vértices com grau ímpar seria 9, o que contraria o Corolário do Teorema do Aperto de Mãos (o número de vértices com grau ímpar deve ser sempre par). Além disso, a soma dos graus seria $9 \times 3 = 27$ (ímpar), mas toda soma de graus deve ser par (pois é igual a $2|E|$). \\
+\textbf{c)} \textbf{Sim, seria possível}. Teríamos 6 vértices (par), todos com grau 3. O número de vértices de grau ímpar é 6 (que é um número par), cumprindo o corolário. O total de cumprimentos (arestas) seria $(6 \times 3) / 2 = 18 / 2 = 9$ cumprimentos.
+}
+
+% -------------------------------------------------------
+% Questão 4
+% -------------------------------------------------------
+\item Considere um sistema de ruas de mão única em um bairro com 5 cruzamentos: C1, C2, C3, C4 e C5. As ruas permitidas são:
+\[
+    E = \{(C1 \to C2),\ (C2 \to C3),\ (C3 \to C1),\ (C2 \to C4),\ (C4 \to C5),\ (C5 \to C3)\}
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o digrafo correspondente, usando setas para indicar o sentido.
+    \item É possível sair do cruzamento C1 e chegar ao C5? Se sim, descreva um caminho.
+    \item É possível sair do C5 e chegar ao C1? Se sim, descreva um caminho. Se não, justifique.
+    \item O par $(C2, C4)$ pertence a $E$? E o par $(C4, C2)$? O que isso demonstra sobre digrafos?
+\end{enumerate}
+\quadro{
+\textbf{a)} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (C1) at (0,2) {C1};
+    \node[node] (C2) at (2,2) {C2};
+    \node[node] (C3) at (1,0) {C3};
+    \node[node] (C4) at (4,2) {C4};
+    \node[node] (C5) at (3,0) {C5};
+    \draw[-{Latex[length=3mm]}, thick] (C1) -- (C2);
+    \draw[-{Latex[length=3mm]}, thick] (C2) -- (C3);
+    \draw[-{Latex[length=3mm]}, thick] (C3) -- (C1);
+    \draw[-{Latex[length=3mm]}, thick] (C2) -- (C4);
+    \draw[-{Latex[length=3mm]}, thick] (C4) -- (C5);
+    \draw[-{Latex[length=3mm]}, thick] (C5) -- (C3);
+\end{tikzpicture}
+\end{center}
+\textbf{b)} \textbf{Sim}. Um caminho válido é: C1 $\to$ C2 $\to$ C4 $\to$ C5. \\
+\textbf{c)} \textbf{Sim}. Um caminho válido é: C5 $\to$ C3 $\to$ C1. \\
+\textbf{d)} O par $(C2, C4)$ pertence a E. O par $(C4, C2)$ não pertence. Isso demonstra que as arestas em dígrafos possuem direção e que a relação de adjacência \textbf{não é simétrica} necessariamente.
+}
+
+% -------------------------------------------------------
+% Questão 5
+% -------------------------------------------------------
+\item Converta o grafo não direcionado abaixo para o formato de Lista de Adjacência.
+\begin{enumerate}[label=\alph*)]
+    \item Preencha a lista de adjacência abaixo para cada vértice.
+    \item Qual é a vantagem da lista de adjacência em relação à matriz para este grafo?
+\end{enumerate}
+\quadro{
+\textbf{a)} \\
+1 $\to$ 2 $\to$ 5 \\
+2 $\to$ 1 $\to$ 3 $\to$ 5 \\
+3 $\to$ 2 $\to$ 4 \\
+4 $\to$ 3 $\to$ 5 \\
+5 $\to$ 1 $\to$ 2 $\to$ 4 \\
+\textbf{b)} A principal vantagem é a economia de memória em grafos esparsos, armazenando apenas as arestas que realmente existem.
+}
+
+% -------------------------------------------------------
+% Questão 6
+% -------------------------------------------------------
+\item Considere o grafo não direcionado com $V = \{P, Q, R, S\}$ e $E = \{(P,Q),\ (P,R),\ (Q,S),\ (R,S),\ (P,S)\}$.
+\begin{enumerate}[label=\alph*)]
+    \item Construa a matriz de adjacência $4 \times 4$ para este grafo.
+    \item A matriz é simétrica? Por quê?
+    \item Quantas células da matriz contêm o valor 1? Como isso se relaciona com o número de arestas?
+    \item Se o grafo tivesse 1000 vértices mas apenas 1200 arestas, a matriz seria eficiente? Justifique calculando quantas células haveria na matriz.
+\end{enumerate}
+\quadro{
+\textbf{a)} \\
+P: [0, 1, 1, 1] \\
+Q: [1, 0, 0, 1] \\
+R: [1, 0, 0, 1] \\
+S: [1, 1, 1, 0] \\
+\textbf{b)} \textbf{Sim, é simétrica}, porque é um grafo não direcionado. Se há uma aresta de $u$ para $v$, obrigatoriamente há uma aresta de $v$ para $u$. \\
+\textbf{c)} A matriz possui 10 células com valor 1. Isso corresponde exatamente ao dobro do número de arestas ($2 \times 5 = 10$). \\
+\textbf{d)} \textbf{Não}. Uma matriz para 1000 vértices ocuparia $1000 \times 1000 = 1.000.000$ de células, independentemente do número de arestas, resultando em extremo desperdício de memória para apenas 1200 arestas.
+}
+
+% -------------------------------------------------------
+% Questão 7
+% -------------------------------------------------------
+\item Um técnico de TI precisa conectar 5 servidores (S1 a S5) por cabos de rede...
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um grafo ponderado $G = (V, E, W)$ e desenhe-o.
+    \item Construa a matriz de adjacência ponderada (usando $\infty$ onde não há ligação direta).
+\end{enumerate}
+\quadro{
+\textbf{a)} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (S1) at (0,2) {S1};
+    \node[node] (S2) at (3,4) {S2};
+    \node[node] (S3) at (3,0) {S3};
+    \node[node] (S4) at (6,4) {S4};
+    \node[node] (S5) at (6,0) {S5};
+    \draw[thick] (S1) -- node[above left, font=\scriptsize] {150} (S2);
+    \draw[thick] (S1) -- node[below left, font=\scriptsize] {200} (S3);
+    \draw[thick] (S2) -- node[above, font=\scriptsize] {100} (S4);
+    \draw[thick] (S3) -- node[right, font=\scriptsize, near start] {80} (S4);
+    \draw[thick] (S3) -- node[below, font=\scriptsize] {120} (S5);
+    \draw[thick] (S4) -- node[right, font=\scriptsize] {90} (S5);
+\end{tikzpicture}
+\end{center}
+\textbf{b) Matriz de Adjacência Ponderada:} (simétrica) \\
+S1: [0, 150, 200, $\infty$, $\infty$] \\
+S2: [150, 0, $\infty$, 100, $\infty$] \\
+S3: [200, $\infty$, 0, 80, 120] \\
+S4: [$\infty$, 100, 80, 0, 90] \\
+S5: [$\infty$, $\infty$, 120, 90, 0]
+}
+
+% -------------------------------------------------------
+% Questão 8
+% -------------------------------------------------------
+\item A figura abaixo representa o esquema de uma resistência de chuveiro...
+\begin{enumerate}[label=\alph*)]
+    \item Considere o grafo $G = (V, E)$ formado pelos 13 nós (S e $P_1 \dots P_{12}$). ... liste os elementos que compõem o conjunto de vértices $V$ e determine o número total de arestas $|E|$.
+    \item Qual é o grau do vértice S ($deg(S)$)? O que esse valor significa no contexto do chuveiro?
+    \item Se removermos o vértice S e suas arestas do grafo, qual tipo de grafo restará formado pelos nós $P_1$ a $P_{12}$ (Caminho, Ciclo ou Estrela)? Justifique.
+    \item O uso do Teorema do Aperto de Mãos é válido para este grafo? Verifique calculando $\sum deg(v)$.
+\end{enumerate}
+\quadro{
+\textbf{a)} V = $\{S, P_1, P_2, \dots, P_{12}\}$ (13 vértices). Arestas fixas: 11 arestas entre os nós do resistor. Arestas móveis: 12 possíveis contatos de S. Total de arestas $|E| = 11 + 12 = 23$. \\
+\textbf{b)} $deg(S) = 12$. Significa que a chave seletora possui 12 posições físicas distintas para fazer contato elétrico com a resistência. \\
+\textbf{c)} \textbf{Caminho}. Se removermos S, os vértices de $P_1$ a $P_{12}$ ficarão dispostos sequencialmente com ligações simples (nós das pontas com grau 1 e demais nós com grau 2). \\
+\textbf{d)} \textbf{Sim, é válido}. $deg(S) = 12$. $deg(P_1) = 2$ e $deg(P_{12}) = 2$. Os demais 10 nós $P_i$ têm grau 3 (2 da resistência + 1 do seletor). $\sum deg(v) = 12 + 2(2) + 10(3) = 12 + 4 + 30 = 46$. O teorema indica que $\sum deg(v) = 2|E| \Rightarrow 46 = 2 \times 23$. Válido.
+}
+
+% -------------------------------------------------------
+% Questão 9
+% -------------------------------------------------------
+\item A matriz de adjacência de um grafo direcionado é dada abaixo:
+\begin{enumerate}[label=\alph*)]
+    \item A matriz é simétrica? O grafo é direcionado ou não direcionado? Justifique.
+    \item Liste o conjunto de arestas $E$ com base na matriz.
+    \item Converta para a Lista de Adjacência (estilo Cormen).
+    \item Desenhe o digrafo. Existe algum ciclo no grafo? Se sim, descreva-o.
+    \item Qual vértice tem grau de saída (\textit{out-degree}) zero? O que isso significa?
+\end{enumerate}
+\quadro{
+\textbf{a)} \textbf{Não simétrica}. Logo, trata-se de um \textbf{grafo direcionado} (digrafo). Exemplo: a célula (1,2) possui 1, mas a (2,1) possui 0. \\
+\textbf{b)} $E = \{(1,2), (1,4), (2,3), (3,1), (3,4)\}$. \\
+\textbf{c) Lista:} \\
+1 $\to$ 2 $\to$ 4 \\
+2 $\to$ 3 \\
+3 $\to$ 1 $\to$ 4 \\
+4 $\to$ $\emptyset$ \\
+\textbf{d) Desenho:} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (1) at (0,2) {1};
+    \node[node] (2) at (3,2) {2};
+    \node[node] (3) at (1.5,0) {3};
+    \node[node] (4) at (5,1) {4};
+    \draw[-{Latex[length=3mm]}, thick] (1) -- (2);
+    \draw[-{Latex[length=3mm]}, thick] (2) -- (3);
+    \draw[-{Latex[length=3mm]}, thick] (3) -- (1);
+    \draw[-{Latex[length=3mm]}, thick, bend left=20] (1) to (4);
+    \draw[-{Latex[length=3mm]}, thick, bend right=20] (3) to (4);
+\end{tikzpicture}
+\end{center}
+\textbf{Sim, há um ciclo:} 1 $\to$ 2 $\to$ 3 $\to$ 1. \\
+\textbf{e)} O vértice \textbf{4}. Significa que é um nó do tipo "sumidouro", ou seja, é possível chegar até ele, mas não é possível sair dele para nenhum outro vértice.
+}
+
+% -------------------------------------------------------
+% Questão 10
+% -------------------------------------------------------
+\item Uma startup está modelando sua rede de usuários como um grafo...
+\begin{enumerate}[label=\alph*)]
+    \item Defina formalmente o grafo como $G = (V, E)$. Liste todos os elementos de $V$ e $E$.
+    \item Desenhe o digrafo.
+    \item Calcule o grau de saída (\textit{out-degree}) e de entrada (\textit{in-degree}) de cada usuário.
+    \item Construa a lista de adjacência no estilo Cormen para este digrafo.
+    \item Qual usuário tem maior \textit{in-degree}? O que isso significa no contexto da rede social?
+    \item Existe um caminho de Carlos até Bia? Se sim, descreva-o.
+\end{enumerate} 
+\quadro{
+\textbf{a)} $V = \{Ana, Bia, Carlos, Dani, Edu\}$. \\ 
+
+E = \{(Ana,Bia), (Ana,Carlos), (Ana,Dani), (Bia,Ana), 
+(Bia,Edu), (Carlos,Dani), (Dani,Ana), (Dani,Edu), (Edu,Carlos), (Edu,Bia)\}. \\
+\textbf{b)} \\
+\begin{center}
+\begin{tikzpicture}[node/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}]
+    \node[node] (A) at (2,4) {Ana};
+    \node[node] (B) at (0,2) {Bia};
+    \node[node] (C) at (4,2) {Carlos};
+    \node[node] (D) at (1.5,0) {Dani};
+    \node[node] (E) at (4,-1) {Edu};
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (A) to (B);
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (B) to (A);
+    \draw[-{Latex[length=3mm]}, thick] (A) -- (C);
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (A) to (D);
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (D) to (A);
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (B) to (E);
+    \draw[-{Latex[length=3mm]}, thick, bend left=15] (E) to (B);
+    \draw[-{Latex[length=3mm]}, thick] (C) -- (D);
+    \draw[-{Latex[length=3mm]}, thick] (D) -- (E);
+    \draw[-{Latex[length=3mm]}, thick] (E) -- (C);
+\end{tikzpicture}
+\end{center}
+\textbf{c) Out-degree (quem a pessoa segue):} Ana=3, Bia=2, Carlos=1, Dani=2, Edu=2. \\
+\textbf{In-degree (quem segue a pessoa):} Ana=2, Bia=2, Carlos=2, Dani=2, Edu=2. \\
+\textbf{d) Lista:} \\
+Ana $\to$ Bia $\to$ Carlos $\to$ Dani \\
+Bia $\to$ Ana $\to$ Edu \\
+Carlos $\to$ Dani \\
+Dani $\to$ Ana $\to$ Edu \\
+Edu $\to$ Carlos $\to$ Bia \\
+\textbf{e)} Todos os usuários possuem exatamente o mesmo \textit{in-degree} (2). No contexto da rede, significa que todos são igualmente populares (todos possuem exatamente 2 seguidores). \\
+\textbf{f) Sim}. Um caminho válido é Carlos $\to$ Dani $\to$ Edu $\to$ Bia.
+}
+
+\end{enumerate}
+
+\end{document}

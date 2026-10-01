@@ -1,0 +1,358 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,arrows.meta,decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt} 
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Lista de Exercícios --- Introdução à Teoria dos Grafos}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=white, colframe=black, height=#1, boxrule=0.5pt, arc=0pt] \textit{Resposta:} \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=0.8cm]
+
+% -------------------------------------------------------
+% Questão 1: Definição formal G=(V,E)
+% -------------------------------------------------------
+\item Considere o seguinte conjunto de vértices e arestas:
+\[
+    V = \{A, B, C, D, E\}, \qquad E = \{(A,B),\ (A,C),\ (B,D),\ (C,D),\ (D,E)\}
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Quantos vértices e quantas arestas possui o grafo $G = (V, E)$?
+    \item Desenhe o grafo correspondente nos eixos abaixo.
+    \item O grafo é direcionado ou não direcionado? Justifique.
+\end{enumerate}
+\begin{center}
+    \begin{tikzpicture}
+        \draw[dotted, gray!50] (0,0) grid (8,4);
+    \end{tikzpicture}
+\end{center}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 2: Grau de vértices e Teorema do Aperto de Mãos
+% -------------------------------------------------------
+\item Observe o grafo abaixo:
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm}
+    ]
+        \node[vertex] (A) at (0,2)  {A};
+        \node[vertex] (B) at (2,4)  {B};
+        \node[vertex] (C) at (4,2)  {C};
+        \node[vertex] (D) at (2,0)  {D};
+        \node[vertex] (E) at (2,2)  {E};
+
+        \draw[thick] (A) -- (B);
+        \draw[thick] (A) -- (D);
+        \draw[thick] (A) -- (E);
+        \draw[thick] (B) -- (C);
+        \draw[thick] (B) -- (E);
+        \draw[thick] (C) -- (D);
+        \draw[thick] (D) -- (E);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Calcule o grau de cada vértice: $deg(A)$, $deg(B)$, $deg(C)$, $deg(D)$ e $deg(E)$.
+    \item Calcule a soma de todos os graus: $\sum_{v \in V} deg(v)$.
+    \item Quantas arestas possui o grafo? Use o Teorema do Aperto de Mãos para verificar: $\sum deg(v) = 2|E|$.
+    \item O número de vértices com grau ímpar é par? Isso está de acordo com o Corolário do Teorema?
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 3: Corolário do Aperto de Mãos
+% -------------------------------------------------------
+\item Em uma reunião de empresa, 9 funcionários participaram de uma dinâmica onde todos deveriam cumprimentar exatamente outros 3 funcionários.
+
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um problema de grafos: o que representam os vértices, as arestas e o grau?
+    \item É matematicamente possível que todos os 9 funcionários cumprimentem exatamente 3 pessoas? Use o Corolário do Teorema do Aperto de Mãos para justificar.
+    \item Se o número de funcionários fosse 6, a situação seria possível? Calcule quantos cumprimentos ocorreriam no total.
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 4: Grafos Direcionados
+% -------------------------------------------------------
+\item Considere um sistema de ruas de mão única em um bairro com 5 cruzamentos: C1, C2, C3, C4 e C5. As ruas permitidas são:
+\[
+    E = \{(C1 \to C2),\ (C2 \to C3),\ (C3 \to C1),\ (C2 \to C4),\ (C4 \to C5),\ (C5 \to C3)\}
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o digrafo correspondente, usando setas para indicar o sentido.
+    \item É possível sair do cruzamento C1 e chegar ao C5? Se sim, descreva um caminho.
+    \item É possível sair do C5 e chegar ao C1? Se sim, descreva um caminho. Se não, justifique.
+    \item O par $(C2, C4)$ pertence a $E$? E o par $(C4, C2)$? O que isso demonstra sobre digrafos?
+\end{enumerate}
+\begin{center}
+    \begin{tikzpicture}
+        \draw[dotted, gray!50] (0,0) grid (8,4);
+    \end{tikzpicture}
+\end{center}
+\quadro{12cm}
+
+% -------------------------------------------------------
+% Questão 5: Lista de Adjacência
+% -------------------------------------------------------
+\item Converta o grafo não direcionado abaixo para o formato de Lista de Adjacência, nos moldes do livro Cormen (array com listas encadeadas).
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm}
+    ]
+        \node[vertex] (1) at (0,2) {1};
+        \node[vertex] (2) at (2,4) {2};
+        \node[vertex] (3) at (4,4) {3};
+        \node[vertex] (4) at (4,0) {4};
+        \node[vertex] (5) at (2,0) {5};
+
+        \draw[thick] (1) -- (2);
+        \draw[thick] (1) -- (5);
+        \draw[thick] (2) -- (3);
+        \draw[thick] (2) -- (5);
+        \draw[thick] (3) -- (4);
+        \draw[thick] (4) -- (5);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Preencha a lista de adjacência abaixo para cada vértice.
+    \item Qual é a vantagem da lista de adjacência em relação à matriz para este grafo?
+\end{enumerate}
+
+\begin{center}
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.5\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{c|l}
+        \textbf{Vértice} & \textbf{Lista} \\ \hline
+        1 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        2 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        3 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        4 & $\to$ \underline{\hspace{5cm}} \\ \hline
+        5 & $\to$ \underline{\hspace{5cm}} \\
+    \end{tabular}
+    \end{tcolorbox}
+\end{center}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 6: Matriz de Adjacência
+% -------------------------------------------------------
+\item Considere o grafo não direcionado com\\
+ $V = \{P, Q, R, S\}$ e $E = \{(P,Q),\ (P,R),\ (Q,S),\ (R,S),\ (P,S)\}$.
+
+\begin{enumerate}[label=\alph*)]
+    \item Construa a matriz de adjacência $4 \times 4$ para este grafo.
+    \item A matriz é simétrica? Por quê?
+    \item Quantas células da matriz contêm o valor 1? Como isso se relaciona com o número de arestas?
+    \item Se o grafo tivesse 1000 vértices mas apenas 1200 arestas, a matriz seria eficiente? Justifique calculando quantas células haveria na matriz.
+\end{enumerate}
+
+\begin{center}
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.5\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{c|cccc}
+        & \textbf{P} & \textbf{Q} & \textbf{R} & \textbf{S} \\ \hline
+        \textbf{P} & & & & \\ \hline
+        \textbf{Q} & & & & \\ \hline
+        \textbf{R} & & & & \\ \hline
+        \textbf{S} & & & & \\
+    \end{tabular}
+    \end{tcolorbox}
+\end{center}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 7: Grafo Ponderado – Modelagem
+% -------------------------------------------------------
+\item Um técnico de TI precisa conectar 5 servidores (S1 a S5) por cabos de rede. Os custos (em R\$) para instalar cada cabo direto entre dois servidores são:
+
+\begin{center}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{De} & \textbf{Para} & \textbf{Custo (R\$)} \\ \hline
+        S1 & S2 & 150 \\ \hline
+        S1 & S3 & 200 \\ \hline
+        S2 & S4 & 100 \\ \hline
+        S3 & S4 & 80  \\ \hline
+        S3 & S5 & 120 \\ \hline
+        S4 & S5 & 90  \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Modele essa situação como um grafo ponderado $G = (V, E, W)$ e desenhe-o.
+    \item Construa a matriz de adjacência ponderada (usando $\infty$ onde não há ligação direta).
+\end{enumerate}
+\begin{center}
+    \begin{tikzpicture}
+        \draw[dotted, gray!50] (0,0) grid (10,4);
+    \end{tikzpicture}
+\end{center}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 8: Modelagem de circuito como grafo
+% -------------------------------------------------------
+\item A figura abaixo representa o esquema de uma resistência de chuveiro elétrico multitemperaturas. A resistência em forma de arco possui 12 nós de contato ($P_1$ a $P_{12}$) e é dividida pelo seletor móvel (nó S), que pode se conectar a qualquer um desses pontos. A fonte de tensão é representada por V.
+
+\begin{center}
+    \begin{tikzpicture}[
+        decoration={zigzag, segment length=4mm, amplitude=1.5mm},
+        vertex/.style={circle, fill=black, inner sep=2pt}
+    ]
+        % Source V
+        \draw[thick] (-1.2,-1.5) rectangle (1.2,-0.5) node[midway] {V};
+        
+        % Center S
+        \coordinate (S) at (0,2);
+        \node[vertex, label=below:S] at (S) {};
+        
+        % Right wire to S
+        \draw[thick] (0.6,-0.5) -- (0.6,1) -- (0,1) -- (S);
+        
+        % Resistor arc from 180 to 0
+        \draw[decorate, thick] (S) ++(180:3) arc (180:0:3);
+        
+        % 12 contact points
+        \foreach \i in {1,...,12} {
+            \pgfmathsetmacro{\angle}{180 - (\i-1)*(180/11)}
+            \node[vertex] (P\i) at ($(S) + (\angle:3)$) {};
+        }
+        
+        % Labels for extremes
+        \node[above left] at (P1) {$P_1$};
+        \node[above right] at (P12) {$P_{12}$};
+        
+        % Left wire from V to P1
+        \draw[thick] (-0.6,-0.5) -- (-0.6,1) -- (-3,1) -- (P1);
+        
+        % Arrow from S
+        \pgfmathsetmacro{\selAngle}{180 - 7*(180/11)}
+        \draw[-{Latex[length=3mm]}, thick] (S) -- ($(S) + (\selAngle:2.7)$);
+        
+        % Labels R1 and R2
+        \node at ($(S) + (135:3.8)$) {$R_1$};
+        \node at ($(S) + (45:3.8)$) {$R_2$};
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Considere o grafo $G = (V, E)$ formado pelos 13 nós (S e $P_1 \dots P_{12}$). Se as arestas em $E$ representarem \textbf{todas as conexões fixas} da resistência e \textbf{todas as conexões possíveis} do seletor S, liste os elementos que compõem o conjunto de vértices $V$ e determine o número total de arestas $|E|$.
+    \item Qual é o grau do vértice S ($deg(S)$)? O que esse valor significa no contexto do chuveiro?
+    \item Se removermos o vértice S e suas arestas do grafo, qual tipo de grafo restará formado pelos nós $P_1$ a $P_{12}$ (Caminho, Ciclo ou Estrela)? Justifique.
+    \item O uso do Teorema do Aperto de Mãos é válido para este grafo? Verifique calculando $\sum deg(v)$.
+\end{enumerate}
+\quadro{12cm}
+
+% -------------------------------------------------------
+% Questão 9: Conversão entre representações
+% -------------------------------------------------------
+\item A matriz de adjacência de um grafo direcionado é dada abaixo:
+
+\begin{center}
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.5\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.6}
+    \begin{tabular}{c|cccc}
+        & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\ \hline
+        \textbf{1} & 0 & 1 & 0 & 1 \\
+        \textbf{2} & 0 & 0 & 1 & 0 \\
+        \textbf{3} & 1 & 0 & 0 & 1 \\
+        \textbf{4} & 0 & 0 & 0 & 0 \\
+    \end{tabular}
+    \end{tcolorbox}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item A matriz é simétrica? O grafo é direcionado ou não direcionado? Justifique.
+    \item Liste o conjunto de arestas $E$ com base na matriz.
+    \item Converta para a Lista de Adjacência (estilo Cormen).
+    \item Desenhe o digrafo. Existe algum ciclo no grafo? Se sim, descreva-o.
+    \item Qual vértice tem grau de saída (\textit{out-degree}) zero? O que isso significa?
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 10: Problema integrador
+% -------------------------------------------------------
+\item Uma startup está modelando sua rede de usuários como um grafo. Cada usuário é representado por um vértice e cada seguimento (``Usuário X segue Usuário Y'') por uma aresta direcionada. Os dados coletados são:
+
+\begin{center}
+    \begin{tabular}{|c|l|}
+        \hline
+        \textbf{Usuário} & \textbf{Segue} \\ \hline
+        Ana   & Bia, Carlos, Dani \\ \hline
+        Bia   & Ana, Edu          \\ \hline
+        Carlos & Dani              \\ \hline
+        Dani  & Ana, Edu          \\ \hline
+        Edu   & Carlos, Bia       \\ \hline
+    \end{tabular}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Defina formalmente o grafo como $G = (V, E)$. Liste todos os elementos de $V$ e $E$.
+    \item Desenhe o digrafo.
+    \item Calcule o grau de saída (\textit{out-degree}) e de entrada (\textit{in-degree}) de cada usuário.
+    \item Construa a lista de adjacência no estilo Cormen para este digrafo.
+    \item Qual usuário tem maior \textit{in-degree}? O que isso significa no contexto da rede social?
+    \item Existe um caminho de Carlos até Bia? Se sim, descreva-o.
+\end{enumerate} 
+\begin{center}
+    \begin{tikzpicture}
+        \draw[dotted, gray!50] (0,0) grid (10,5);
+    \end{tikzpicture}
+\end{center}
+\quadro{10cm}
+
+\end{enumerate}
+
+\end{document}

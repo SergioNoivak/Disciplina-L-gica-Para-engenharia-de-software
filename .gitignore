@@ -1,0 +1,26 @@
+# Diretório de notas e planilhas de alunos (Privacidade/LGPD)
+notas/
+*.xlsx
+
+# Dependências Node.js
+node_modules/
+package-lock.json
+
+# Arquivos temporários e auxiliares de compilação LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.listing
+__latexindent_temp_*
+_minted-*/
+
+# Arquivos do Sistema Operacional e Editores
+.DS_Store
+Thumbs.db
+.~lock.*

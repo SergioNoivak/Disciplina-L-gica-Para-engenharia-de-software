@@ -1,0 +1,248 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+ 
+\lstset{
+  language=JavaScript,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!50!black},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Respostas - Atividade de Programação.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Soluções em JavaScript — Relações Binárias}
+
+\begin{block}{Estrutura Comum de Entrada}
+Para todos os exercícios, utilizaremos a biblioteca \texttt{readline-sync} para simplificar a leitura do teclado no Node.js. A função \texttt{readSet} abaixo será utilizada para capturar os conjuntos conforme as instruções.
+\end{block}
+
+\vspace{0.4cm}
+
+\begin{enumerate}
+
+\item \textbf{Produto Cartesiano}
+\begin{lstlisting}
+const readline = require('readline-sync');
+
+function readSet(name) {
+    let set = [];
+    console.log(`Digite os elementos do conjunto ${name} (negativo para parar):`);
+    while (true) {
+        let val = readline.questionInt('> ');
+        if (val < 0) break;
+        if (!set.includes(val)) set.push(val);
+    }
+    return set;
+}
+
+const A = readSet('A');
+const B = readSet('B');
+
+let product = [];
+for (let a of A) {
+    for (let b of B) {
+        product.push(`(${a}, ${b})`);
+    }
+}
+
+console.log(`A x B = {${product.join(', ')}}`);
+\end{lstlisting}
+
+\vspace{0.4cm}
+
+\item \textbf{União de Produtos Cartesianos}
+\begin{lstlisting}
+const readline = require('readline-sync');
+
+function readSet(name) {
+    let set = [];
+    console.log(`Digite os elementos do conjunto ${name}:`);
+    while (true) {
+        let val = readline.questionInt('> ');
+        if (val < 0) break;
+        if (!set.includes(val)) set.push(val);
+    }
+    return set;
+}
+
+const A = readSet('A');
+const B = readSet('B');
+
+let union = new Set(); 
+
+// A x B
+for (let a of A) {
+    for (let b of B) {
+        union.add(`(${a}, ${b})`);
+    }
+}
+
+// B x A
+for (let b of B) {
+    for (let a of A) {
+        union.add(`(${b}, ${a})`);
+    }
+}
+
+console.log(`(A x B) U (B x A) = {${Array.from(union).join(', ')}}`);
+\end{lstlisting}
+
+\vspace{0.4cm}
+
+\item \textbf{Propriedades de uma Relação}
+\begin{lstlisting}
+const readline = require('readline-sync');
+
+function readSet(name) {
+    let set = [];
+    console.log(`Conjunto ${name} (negativo p/ fim):`);
+    while (true) {
+        let v = readline.questionInt('> ');
+        if (v < 0) break;
+        if (!set.includes(v)) set.push(v);
+    }
+    return set;
+}
+
+const A = readSet('A');
+console.log('Informe os pares da relação R (ex: 1 2). Use -1 para terminar.');
+let R = [];
+while (true) {
+    let x = readline.questionInt('x: ');
+    if (x < 0) break;
+    let y = readline.questionInt('y: ');
+    R.push([x, y]);
+}
+
+const hasPair = (x, y) => R.some(p => p[0] === x && p[1] === y);
+
+// Reflexividade: para todo a em A, (a, a) em R
+let reflexiva = A.every(a => hasPair(a, a));
+
+// Simetria: para todo (x, y) em R, (y, x) em R
+let simetrica = R.every(p => hasPair(p[1], p[0]));
+
+// Antissimetria: se (x, y) e (y, x) em R, entao x = y
+let antissimetrica = R.every(p => {
+    if (hasPair(p[1], p[0])) return p[0] === p[1];
+    return true;
+});
+
+// Assimetria: se (x, y) em R, entao (y, x) nao esta em R
+let assimetrica = R.every(p => !hasPair(p[1], p[0]));
+
+console.log(`Reflexiva: ${reflexiva ? 'Sim' : 'Nao'}`);
+console.log(`Simetrica: ${simetrica ? 'Sim' : 'Nao'}`);
+console.log(`Antissimetrica: ${antissimetrica ? 'Sim' : 'Nao'}`);
+console.log(`Assimetrica: ${assimetrica ? 'Sim' : 'Nao'}`);
+\end{lstlisting}
+
+\vspace{0.4cm}
+
+\item \textbf{Matriz de Relação}
+\begin{lstlisting}
+const readline = require('readline-sync');
+
+function readSet(name) {
+    let set = [];
+    console.log(`Conjunto ${name}:`);
+    while (true) {
+        let v = readline.questionInt('> ');
+        if (v < 0) break;
+        if (!set.includes(v)) set.push(v);
+    }
+    return set;
+}
+
+const A = readSet('A');
+const B = readSet('B');
+console.log('Informe os pares de R. -1 p/ fim.');
+let R = [];
+while (true) {
+    let x = readline.questionInt('x: ');
+    if (x < 0) break;
+    let y = readline.questionInt('y: ');
+    R.push([x, y]);
+}
+
+const hasPair = (x, y) => R.some(p => p[0] === x && p[1] === y);
+
+console.log('Matriz de Relacao:');
+for (let a of A) {
+    let row = [];
+    for (let b of B) {
+        row.push(hasPair(a, b) ? 1 : 0);
+    }
+    console.log(`| ${row.join(' ')} |`);
+}
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{document}

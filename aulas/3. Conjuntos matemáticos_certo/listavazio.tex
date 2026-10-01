@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Provas com Conjuntos}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+
+\section*{Instruções}
+
+\begin{block}{Utilize definições formais de conjuntos}
+Utilize rigorosamente as definições:
+
+\[
+A \subseteq B \iff \forall x (x \in A \Rightarrow x \in B)
+\]
+
+\[
+x \in A \cap B \iff (x \in A \land x \in B)
+\]
+
+\[
+x \in A \cup B \iff (x \in A \lor x \in B)
+\]
+
+e o fato fundamental:
+
+\[
+\forall x,\; x \notin \varnothing.
+\]
+\end{block}
+
+Justifique formalmente todas as demonstrações.
+
+\section*{Exercícios}
+
+\begin{enumerate}
+
+\item Prove que não existe elemento pertencente ao conjunto vazio.
+
+\item Demonstre que não existe conjunto $A$ tal que
+\[
+A \subseteq \varnothing
+\]
+e $A$ possua elementos.
+
+\item Prove que, se
+\[
+x \in A \cap \varnothing,
+\]
+então ocorre uma contradição.
+
+\item Demonstre que, para qualquer conjunto $A$,
+não existe elemento comum entre $A$ e o conjunto vazio.
+
+\item Prove que toda proposição da forma
+\[
+x \in \varnothing \Rightarrow P(x)
+\]
+é verdadeira para qualquer proposição $P(x)$.
+
+\item Suponha que $A \subseteq \varnothing$. Prove que $A=\varnothing$.
+
+\item Se $A \cap B=\varnothing$, prove que
+\[
+x \in A \Rightarrow x \notin B.
+\]
+
+\item Prove que
+\[
+(A \cap \varnothing)\subseteq B
+\]
+para qualquer conjunto $B$.
+
+\item Demonstre que
+\[
+A \cup (A \cap \varnothing)=A.
+\]
+
+\item Prove a unicidade do conjunto vazio.
+
+\end{enumerate}
+
+\end{document}

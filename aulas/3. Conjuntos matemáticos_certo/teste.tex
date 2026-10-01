@@ -1,0 +1,254 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios — Teoria dos Conjuntos}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+
+\section*{Instruções}
+
+\begin{block}{Utilize definições formais}
+Sempre que necessário, utilize as definições:
+
+\[
+A \subseteq B \iff \forall x (x \in A \Rightarrow x \in B)
+\]
+
+\[
+x \in A \cap B \iff (x \in A \land x \in B)
+\]
+
+\[
+x \in A \cup B \iff (x \in A \lor x \in B)
+\]
+
+\[
+A = B \iff \forall x (x \in A \Leftrightarrow x \in B)
+\]
+
+e o fato fundamental:
+
+\[
+\forall x,\; x \notin \varnothing.
+\]
+\end{block}
+
+Justifique formalmente todas as respostas.
+
+\section*{Exercícios}
+
+\begin{enumerate}
+
+\item Escreva por compreensão o conjunto
+\[
+A=\{2,4,6,8,10\}.
+\]
+
+\item Escreva por extensão o conjunto
+\[
+B=\{x\in\mathbb{N}\mid x<6\}.
+\]
+
+\item Determine quais afirmações são verdadeiras:
+
+\begin{itemize}
+\item[(a)] $3 \in \{1,3,5,7\}$
+\item[(b)] $5 \in \{x\in\mathbb{Z}\mid x^2=25\}$
+\item[(c)] $-1 \in \mathbb{N}$
+\end{itemize}
+
+\item Verifique quais conjuntos são vazios e justifique:
+
+\[
+A=\{x\in\mathbb{R}\mid x^2<0\}
+\]
+\[
+B=\{x\in\mathbb{N}\mid x<0\}
+\]
+\[
+C=\{x\mid x\neq x\}
+\]
+
+\item Determine a cardinalidade dos conjuntos:
+
+\begin{itemize}
+\item[(a)] $\varnothing$
+\item[(b)] $\{0\}$
+\item[(c)] $\{1,2,3,4\}$
+\end{itemize}
+
+\item Considere
+\[
+A=\{1,2,3\}, \quad B=\{1,2,3,4,5\}.
+\]
+Verifique:
+
+\begin{itemize}
+\item[(a)] $2\in A$
+\item[(b)] $A\subseteq B$
+\item[(c)] $4\in A$
+\item[(d)] $B\subseteq A$
+\end{itemize}
+
+\item Explique a diferença entre as expressões
+\[
+x\in A
+\quad \text{e} \quad
+A\subseteq B.
+\]
+
+\item Verifique se os conjuntos são iguais:
+
+\[
+A=\{1,2,3\}, \quad B=\{3,2,1\}
+\]
+
+\[
+C=\{x\in\mathbb{Z}\mid x^2=4\}, \quad D=\{-2,2\}
+\]
+
+\item Considere
+\[
+A=\{1,2,3,4\}, \quad B=\{3,4,5,6\}.
+\]
+Determine:
+
+\begin{itemize}
+\item[(a)] $A\cap B$
+\item[(b)] $A\cup B$
+\end{itemize}
+
+\item Sejam
+\[
+C=\{x\in\mathbb{N}\mid x \text{ é par}\}
+\]
+\[
+D=\{x\in\mathbb{N}\mid x>6\}.
+\]
+Determine:
+
+\begin{itemize}
+\item[(a)] $C\cap D$
+\item[(b)] $C\cup D$
+\end{itemize}
+
+\item Prove que
+\[
+\varnothing \subseteq A
+\]
+para qualquer conjunto $A$.
+
+\item Demonstre que
+\[
+A\cap\varnothing=\varnothing.
+\]
+
+\item Prove que
+\[
+A\cup\varnothing=A.
+\]
+
+\item Mostre que, se
+\[
+A\subseteq\varnothing,
+\]
+então
+\[
+A=\varnothing.
+\]
+
+\item Se
+\[
+A\cap B=\varnothing,
+\]
+prove que
+\[
+x\in A \Rightarrow x\notin B.
+\]
+
+\item Prove que
+\[
+A\cap B \subseteq A.
+\]
+
+\item Demonstre que
+\[
+A \subseteq A\cup B.
+\]
+
+\item Prove que
+\[
+A\cap A=A.
+\]
+
+\item Demonstre que
+\[
+A\cup A=A.
+\]
+
+\item Prove que a igualdade de conjuntos pode ser demonstrada por dupla inclusão:
+\[
+A=B \iff (A\subseteq B \land B\subseteq A).
+\]
+
+\end{enumerate}
+
+\end{document}

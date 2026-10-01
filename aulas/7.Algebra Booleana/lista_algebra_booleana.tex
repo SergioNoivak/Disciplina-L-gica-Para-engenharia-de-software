@@ -1,0 +1,499 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.gates.logic.US, positioning}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\newtcolorbox{codeblock}{%
+  colback=black!2,
+  colframe=gray!30,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  fontupper=\small
+}
+
+\geometry{margin=2.5cm, headheight=53pt, top=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \footnotesize 
+    \textbf{Lista de Exercícios — Álgebra Booleana}
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+
+\begin{block}{Instruções}
+  RESPONDA EXCLUSIVAMENTE A CANETA, RESPOSTAS DIGITADAS NÃO SERÃO ACEITAS, TIRE FOTO DAS RESPOSTAS ESCRITAS AO PRÓPRIO PUNHO E CONFECCIONE UM PDF COM AS RESPOSTAS.
+Aplique as propriedades da Álgebra Booleana (Identidade, Nulidade, Idempotência, Complemento, Absorção e De Morgan) para simplificar as expressões abaixo. Para as questões de programação, apresente o código final refatorado. Para os circuitos, apresente a expressão simplificada e o diagrama reduzido.
+\end{block}
+
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+% Ex 1
+\item Simplifique o seguinte bloco condicional, eliminando redundâncias óbvias:
+\begin{codeblock}
+\begin{verbatim}
+if (usuarioAtivo == true && processamentoConcluido == true) {
+    gerarRelatorio();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+% Ex 2
+\item Aplique a \textbf{Lei da Absorção} para simplificar a lógica abaixo:
+\begin{codeblock}
+\begin{verbatim}
+if (isAdmin || (isAdmin && temPermissaoEspecial)) {
+    acessoTotal();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+% Ex 3
+\item Utilize o \textbf{Teorema de De Morgan} para simplificar a consulta SQL:
+
+\begin{codeblock}
+\begin{verbatim}
+SELECT * 
+FROM itens
+WHERE NOT (itemValido = 1 AND itemExpirado = 0);
+\end{verbatim}
+\end{codeblock}
+
+
+\vspace{0.1cm}
+
+
+% Ex 4
+\item Refatore o código abaixo aplicando a \textbf{Idempotência}:
+\begin{codeblock}
+\begin{verbatim}
+if ((logado && ativo) || (logado && ativo)) {
+    dashboard();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+% Ex 5
+\item Simplifique a expressão abaixo que utiliza variáveis complementares:
+\begin{codeblock}
+\begin{verbatim}
+if ((podeEditar && usuarioDono) || (podeEditar && !usuarioDono)) {
+    salvarAlteracoes();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+
+% Ex 6
+\item Reduza a complexidade aplicando \textbf{Dupla Negação} e \textbf{De Morgan}:
+\begin{codeblock}
+\begin{verbatim}
+if (!(!conexaoEstavel || !servidorOnline)) {
+    iniciarSincronizacao();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+% Ex 7
+\item Identifique a redundância na verificação de limites:
+\begin{codeblock}
+\begin{verbatim}
+if (estoque > 0 && (estoque >= 0 || pedidoUrgente)) {
+    separarParaEnvio();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+% Ex 8
+\item Simplifique a função em C abaixo:
+
+\begin{codeblock}
+\begin{verbatim}
+int deveProcessar(int A, int B) {
+    if ((A && B) || (A && !B) || (!A && B)) {
+        return 1;
+    }
+    return 0;
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.2cm}
+
+\vspace{0.1cm}
+
+
+% Ex 9
+\item Aplique a simplificação para o caso de "Identidade" em negações:
+\begin{codeblock}
+\begin{verbatim}
+if (!(estaChovendo || estaNublado) || (estaChovendo && !estaNublado)) {
+    abrirJanelas();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+
+% Ex 10
+\item Refatore a condição abaixo fatorando os termos comuns:
+\begin{codeblock}
+\begin{verbatim}
+if ((sensorA > 50 && sensorB < 20) || (sensorA > 50 && !(sensorB < 20))) {
+    atuaControle();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+% Ex 11
+\item Em uma universidade, uma \textbf{catraca eletrônica} libera a entrada de um aluno com base em duas condições:
+\begin{itemize}
+\item \texttt{bloqueado}: indica se o aluno está com acesso bloqueado
+\item \texttt{conectado}: indica se o sistema conseguiu validar os dados do aluno
+\end{itemize}
+
+A lógica atual está definida da seguinte forma:
+
+\begin{codeblock}
+\begin{verbatim}
+if (!(!bloqueado || !conectado) || !(bloqueado || !conectado)) {
+    liberarEntrada();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.2cm}
+
+\textbf{Simplifique a expressão lógica acima.}
+
+\vspace{0.1cm}
+
+% Ex 12
+\item Reduza a expressão de 3 variáveis para a sua forma mínima:
+\begin{codeblock}
+\begin{verbatim}
+if ((A && B && C) || (A && B && !C) || (A && !B)) {
+    executarTarefa();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+% Ex 13
+\item Aplique as propriedades de simplificação para remover a redundância:
+\begin{codeblock}
+\begin{verbatim}
+if ((isAdmin && canEdit) || (!isAdmin && isOwner) || (canEdit && isOwner)) {
+    modificarArquivo();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+
+% Ex 14
+\item Simplifique e identifique o comportamento lógico desta condição:
+\begin{codeblock}
+\begin{verbatim}
+if (!(permiteAcesso || !(permiteAcesso && temToken))) {
+    loginError();
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.1cm}
+% Ex 15
+\item Em uma aplicação \textbf{Qt (C++)}, um botão executa uma ação ao ser clicado com base nas seguintes condições:
+\begin{itemize}
+\item \texttt{isValid}: dados válidos
+\item \texttt{isCached}: resultado em cache
+\item \texttt{hasNetwork}: conexão com a rede disponível
+\item \texttt{isAuthorized}: usuário autenticado
+\end{itemize}
+
+O código do slot é dado por:
+
+\begin{codeblock}
+\begin{verbatim}
+void MainWindow::on_pushButton_clicked() {
+    if ( ((isValid && hasNetwork) || isCached) &&
+         ((!isValid || isCached) && (isAuthorized || isCached)) ) {
+        exibirResultado();
+    }
+}
+\end{verbatim}
+\end{codeblock}
+
+\vspace{0.2cm}
+
+\textbf{Simplifique a lógica condicional acima.}
+
+\vspace{0.3cm}
+
+% Ex 16
+\item Imagine o sistema de controle de resfriamento de uma \textbf{usina nuclear}, onde o alarme só deve ser ignorado (\texttt{false}) se as condições de segurança forem perfeitas. Caso contrário, o alarme dispara (\texttt{true}).
+
+As variáveis são:
+\begin{itemize}
+\item \texttt{A}: temperatura acima do limite
+\item \texttt{B}: pressão interna estável (OK)
+\item \texttt{C}: bomba de resfriamento ligada
+\item \texttt{D}: sensor de radiação normal (OK)
+\end{itemize}
+
+O sistema utiliza a seguinte lógica para decidir se o alarme dispara:
+\begin{codeblock}
+\begin{verbatim}
+bool alarme = !( (A && !B) || (C && !D) ) && ( (A || C) && !(B && D) );
+\end{verbatim}
+\end{codeblock}
+
+\textbf{Simplifique a expressão lógica acima para encontrar a condição mínima de disparo do alarme.}
+
+\vspace{0.5cm}
+
+
+% Ex 17
+\item Simplifique o circuito de identidade $F = A \cdot A$ e desenhe o equivalente reduzido.
+
+\vspace{0.1cm}
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[and gate US, draw, thick] (and) at (0,0) {};
+  \draw (and.input 1) -- ++(-1,0) node(pt){};
+  \draw (pt.center) node[circle,fill,inner sep=1pt] {} |- (and.input 2);
+  \draw (pt.center) -- ++(-0.5,0) node[left] {$A$};
+  \draw (and.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 18
+\item Analise o circuito $F = A + \overline{A}$ e determine seu valor constante.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[or gate US, draw, thick] (or) at (2,0) {};
+  \node[not gate US, draw, thick] (not) at (0,-0.25) {};
+  \draw (or.input 1) -- ++(-2,0) node(pt){};
+  \draw (pt.center) -- ++(-0.5,0) node[left] {$A$};
+  \draw (pt.center) node[circle,fill,inner sep=1pt] {} |- (not.input);
+  \draw (not.output) |- (or.input 2);
+  \draw (or.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 19
+\item Aplique a \textbf{Lei da Absorção} no circuito $F = AB + A$.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[and gate US, draw, thick] (and) at (0,0) {};
+  \node[or gate US, draw, thick] (or) at (2,0.5) {};
+  \draw (and.input 1) -- ++(-1.5,0) node(pt){};
+  \draw (pt.center) -- ++(-0.5,0) node[left] {$A$};
+  \draw (and.input 2) -- ++(-1,0) node[left] {$B$};
+  \draw (pt.center) node[circle,fill,inner sep=1pt] {} |- (or.input 1);
+  \draw (and.output) |- (or.input 2);
+  \draw (or.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 20
+\item Simplifique a expressão do circuito: $F = (A+B)(A+C)$.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[or gate US, draw, thick] (or1) at (0,0.8) {};
+  \node[or gate US, draw, thick] (or2) at (0,-0.8) {};
+  \node[and gate US, draw, thick] (and) at (3,0) {};
+  \draw (or1.input 1) -- ++(-1.5,0) node(ptA){};
+  \node[left] at (ptA) {$A$};
+  \draw (or1.input 2) -- ++(-1,0) node[left] {$B$};
+  \draw (or2.input 2) -- ++(-1,0) node[left] {$C$};
+  \draw (ptA.center) node[circle,fill,inner sep=1pt] {} |- (or2.input 1);
+  \draw (or1.output) |- (and.input 1);
+  \draw (or2.output) |- (and.input 2);
+  \draw (and.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+
+% Ex 21
+\item Demonstre a equivalência de De Morgan para a porta NAND: $F = \overline{A \cdot B}$.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[nand gate US, draw, thick] (nand) at (0,0) {};
+  \draw (nand.input 1) -- ++(-1,0) node[left] {$A$};
+  \draw (nand.input 2) -- ++(-1,0) node[left] {$B$};
+  \draw (nand.output) -- ++(1,0) node[right] {$F = \overline{A \cdot B}$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 22
+\item Reduza o circuito $F = AB + \overline{A}B$ fatorando o termo comum.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[and gate US, draw, thick] (and1) at (0,1) {};
+  \node[and gate US, draw, thick] (and2) at (0,-0.5) {};
+  \node[not gate US, draw, thick] (not) at (-1.5, -0.25) {};
+  \node[or gate US, draw, thick] (or) at (2.5, 0.25) {};
+  \draw (and1.input 1) -- ++(-2.5,0) node(ptA){}; \node[left] at (ptA) {$A$};
+  \draw (and1.input 2) -- ++(-1.5,0) node(ptB){}; \node[left] at (ptB) {$B$};
+  \draw (ptA.center) node[circle,fill,inner sep=1pt] {} |- (not.input);
+  \draw (ptB.center) node[circle,fill,inner sep=1pt] {} |- (and2.input 2);
+  \draw (not.output) |- (and2.input 1);
+  \draw (and1.output) |- (or.input 1);
+  \draw (and2.output) |- (or.input 2);
+  \draw (or.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 23
+\item Simplifique o circuito de absorção complexa: $F = A(\overline{A} + B)$.
+
+
+
+
+% Ex 24
+\item Utilize De Morgan para simplificar: $F = \overline{\overline{A} + \overline{B}}$.
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \node[not gate US, draw, thick] (not1) at (0, 1) {};
+  \node[not gate US, draw, thick] (not2) at (0, -1) {};
+  \node[nor gate US, draw, thick] (nor) at (2, 0) {};
+  \draw (not1.input) -- ++(-0.5,0) node[left] {$A$};
+  \draw (not2.input) -- ++(-0.5,0) node[left] {$B$};
+  \draw (not1.output) |- (nor.input 1);
+  \draw (not2.output) |- (nor.input 2);
+  \draw (nor.output) -- ++(1,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 25
+\item Fatore a expressão do circuito de 3 variáveis: $F = ABC + AB\overline{C}$.
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+  \node[and gate US, draw, thick, logic gate inputs=nnn] (and1) at (0, 2) {};
+  \node[and gate US, draw, thick, logic gate inputs=nnn] (and2) at (0, 0) {};
+  \node[not gate US, draw, thick] (not) at (-1.5, -0.2) {};
+  \node[or gate US, draw, thick] (or) at (3, 1) {};
+  \draw (and1.input 1) -- ++(-3,0) node(ptA){}; \node[left] at (ptA) {$A$};
+  \draw (and1.input 2) -- ++(-2.5,0) node(ptB){}; \node[left] at (ptB) {$B$};
+  \draw (and1.input 3) -- ++(-2,0) node(ptC){}; \node[left] at (ptC) {$C$};
+  \draw (ptA.center) node[circle,fill,inner sep=1pt] {} |- (and2.input 1);
+  \draw (ptB.center) node[circle,fill,inner sep=1pt] {} |- (and2.input 2);
+  \draw (ptC.center) node[circle,fill,inner sep=1pt] {} |- (not.input);
+  \draw (not.output) |- (and2.input 3);
+  \draw (and1.output) |- (or.input 1);
+  \draw (and2.output) |- (or.input 2);
+  \draw (or.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+
+% Ex 26 (Desafio Consenso)
+\item \textbf{Desafio:} Simplifique o circuito $F = AB + \overline{A}C + BC$ (Teorema do Consenso) e desenhe sua forma reduzida.
+\begin{center}
+\begin{tikzpicture}[scale=0.6]
+  \node[and gate US, draw, thick] (and1) at (0, 2) {};
+  \node[and gate US, draw, thick] (and2) at (0, 0.5) {};
+  \node[and gate US, draw, thick] (and3) at (0, -1) {};
+  \node[not gate US, draw, thick] (not) at (-1.5, 0.75) {};
+  \node[or gate US, draw, thick, logic gate inputs=nnn] (or) at (3.5, 0.5) {};
+  \draw (and1.input 1) -- ++(-3.5,0) node(ptA){}; \node[left] at (ptA) {$A$};
+  \draw (and1.input 2) -- ++(-1.5,0) node(ptB){}; \node[left] at (ptB) {$B$};
+  \draw (and2.input 2) -- ++(-4.5,0) node(ptC){}; \node[left] at (ptC) {$C$};
+  \draw (ptA.center) node[circle,fill,inner sep=1pt] {} |- (not.input);
+  \draw (not.output) |- (and2.input 1);
+  \draw (ptB.center) node[circle,fill,inner sep=1pt] {} |- (and3.input 1);
+  \draw (ptC.center) node[circle,fill,inner sep=1pt] {} |- (and3.input 2);
+  \draw (and1.output) -- (or.input 1);
+  \draw (and2.output) -- (or.input 2);
+  \draw (and3.output) -- (or.input 3);
+  \draw (or.output) -- ++(0.5,0) node[right] {$F$};
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+\end{document}

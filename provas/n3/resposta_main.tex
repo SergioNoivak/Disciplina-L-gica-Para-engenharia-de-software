@@ -1,0 +1,159 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}
+\usepackage{amsfonts}
+\usepackage{amsmath} 
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\definecolor{maincolor}{RGB}{0,100,50} 
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multicol}
+
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt 
+}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Large GABARITO - AVALIAÇÃO 3} \\
+    \textit{Lógica para Engenharia de Software}
+\end{center}
+
+\vspace{0.5cm} 
+
+\begin{enumerate}
+
+\item \textbf{Resposta: (B) Somente I, II e III.}
+\begin{itemize}
+    \item I. Correta. A pesquisa binária requer ordenação.
+    \item II e III. Corretas. Na média, o custo é logarítmico para buscas com e sem sucesso.
+    \item IV. Incorreta. O pior caso de busca linear é $O(n)$.
+\end{itemize}
+
+\item \textbf{Resposta:}
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \begin{tcolorbox}[colback=white, colframe=black, width=0.5\textwidth, boxrule=0.5pt, arc=0pt]
+    \renewcommand{\arraystretch}{1.8}
+    \begin{tabular}{c|l}
+        \textbf{Vértice} & \textbf{Lista} \\ \hline
+        1 & $\to$ 2 $\to$ 3 \\ \hline
+        2 & $\to$ 4 $\to$ 5 \\ \hline
+        3 & $\to$ 5 \\ \hline
+        4 & $\to$ 5 $\to$ 7 \\ \hline
+        5 & $\to$ 1 $\to$ 6 \\ \hline
+        6 & $\to$ 3 $\to$ 7 \\ \hline
+        7 & $\to$ 5 \\
+    \end{tabular}
+    \end{tcolorbox}
+    \item A vantagem principal da lista de adjacência para este grafo (que é relativamente esparso) é a economia de memória, utilizando um espaço de $O(V + E)$ em vez de $O(V^2)$ da matriz de adjacência. Além disso, iterar sobre os vizinhos de um vértice é mais rápido do que verificar uma linha inteira na matriz.
+\end{enumerate}
+
+\item \textbf{Resposta: (C) Azul: $O(\log n)$; Vermelho: $O(n)$; Verde: $O(n \log n)$.}
+Os pontos azuis formam uma curva logarítmica; os vermelhos crescem linearmente (forma uma reta); os verdes crescem ligeiramente acima do linear.
+
+\item \textbf{Resposta:}
+\begin{enumerate}[label=\alph*)]
+    \item 
+    \begin{tabular}{llcc}
+        \hline
+        & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+        \hline
+        1 & $soma \leftarrow 0$ & $c_1$ & 1 \\
+        2 & $qtd \leftarrow 0$ & $c_2$ & 1 \\
+        3 & \textbf{para} $i = 1$ \textbf{até} $n$: & $c_3$ & $n+1$ \\
+        4 & \quad \textbf{para} $j = i+1$ \textbf{até} $n$: & $c_4$ & $\frac{n(n+1)}{2}$ \\
+        5 & \quad \quad $soma \leftarrow soma + W[i,j]$ & $c_5$ & $\frac{n(n-1)}{2}$ \\
+        6 & \quad \quad $qtd \leftarrow qtd + 1$ & $c_6$ & $\frac{n(n-1)}{2}$ \\
+        7 & $media \leftarrow soma / qtd$ & $c_7$ & 1 \\
+        8 & \textbf{retornar} $media$ & $c_8$ & 1 \\
+        \hline
+    \end{tabular}
+    \item A complexidade assintótica no pior caso é \textbf{$O(n^2)$}, dominada pelos dois laços aninhados.
+\end{enumerate}
+
+\item \textbf{Resposta:}
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Arestas ordenadas:} \\
+    (D, E) - 2 \\
+    (A, B) - 3 \\
+    (A, F) - 4 \\
+    (B, F) - 5 \\
+    (C, D) - 6 \\
+    (B, C) - 7 \\
+    (E, F) - 8 \\
+    (A, E) - 9 \\
+    (B, D) - 10
+    
+    \item \textbf{Passo a passo Kruskal:} \\
+    (D, E) - 2: \textbf{Adicionada}. Conjuntos: \{D, E\} \\
+    (A, B) - 3: \textbf{Adicionada}. Conjuntos: \{A, B\}, \{D, E\} \\
+    (A, F) - 4: \textbf{Adicionada}. Conjuntos: \{A, B, F\}, \{D, E\} \\
+    (B, F) - 5: \textbf{Rejeitada}. Forma ciclo A-B-F. \\
+    (C, D) - 6: \textbf{Adicionada}. Conjuntos: \{A, B, F\}, \{C, D, E\} \\
+    (B, C) - 7: \textbf{Adicionada}. Conjuntos: \{A, B, C, D, E, F\} \\
+    Arestas restantes: (E, F)-8, (A, E)-9, (B, D)-10 são \textbf{Rejeitadas} pois a árvore já está completa.
+    
+    \item \textbf{Desenho da MST:}
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={thick}
+    ]
+        \node[vertex] (A) at (0,2) {A};
+        \node[vertex] (B) at (3,3) {B};
+        \node[vertex] (C) at (6,2) {C};
+        \node[vertex] (D) at (6,0) {D};
+        \node[vertex] (E) at (3,-1) {E};
+        \node[vertex] (F) at (0,0) {F};
+
+        \draw[edge] (A) -- node[above left] {3} (B);
+        \draw[edge] (A) -- node[left] {4} (F);
+        \draw[edge] (C) -- node[right] {6} (D);
+        \draw[edge] (B) -- node[above right] {7} (C);
+        \draw[edge] (D) -- node[below right] {2} (E);
+    \end{tikzpicture}
+\end{center}
+
+    \item Custo total mínimo: $2 + 3 + 4 + 6 + 7 = \textbf{22}$ (milhões de reais).
+\end{enumerate}
+
+\item \textbf{Resposta: (B) 30 cabos.}
+Pelo Teorema do Aperto de Mãos, temos $V = 15$ e grau $d = 4$ para todos os vértices.
+$2|E| = \sum \text{graus} \Rightarrow 2|E| = 15 \times 4 \Rightarrow 2|E| = 60 \Rightarrow |E| = 30$.
+
+\item \textbf{Resposta: (C) $O(n!) > O(N) > O(\sqrt{N}) > O((\log N)^3)$}
+O fatorial $O(n!)$ é a maior, seguida do linear $O(N)$, depois a raiz quadrada $O(\sqrt{N})$, e por último o logaritmo polinomial $O((\log N)^3)$.
+
+\item \textbf{Resposta:}
+\begin{enumerate}[label=\alph*)]
+    \item Fórmula: $2^k$. Para $k=66$, o número máximo de nós é \textbf{$2^{66}$}.
+    \item Fórmula: $2^{h+1} - 1$. Para $h=312$, o número total de nós é \textbf{$2^{313} - 1$}.
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

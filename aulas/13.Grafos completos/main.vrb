@@ -1,0 +1,76 @@
+\frametitle{Exemplo: Lista de Adjacência}
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{center}
+                \begin{tikzpicture}[
+                    vertex/.style={circle, draw=black, fill=structure!30, thick, minimum size=0.8cm}
+                ]
+                    \node[vertex] (A) at (0, 1.5) {A};
+                    \node[vertex] (B) at (2, 1.5) {B};
+                    \node[vertex] (C) at (0, -0.5) {C};
+                    \node[vertex] (D) at (2, -0.5) {D};
+
+                    \draw[thick] (A) -- (B);
+                    \draw[thick] (A) -- (C);
+                    \draw[thick] (B) -- (D);
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            \textbf{Representação (Estilo Cormen):}
+            \vspace{0.3cm}
+            \begin{center}
+                \begin{tikzpicture}[
+                    head/.style={rectangle, draw=black, thick, minimum width=0.6cm, minimum height=0.6cm, align=center, fill=structure!20},
+                    val/.style={rectangle, draw=black, thick, minimum width=0.6cm, minimum height=0.6cm, align=center, inner sep=0pt},
+                    ptr/.style={rectangle, draw=black, thick, minimum width=0.4cm, minimum height=0.6cm, align=center, inner sep=0pt}
+                ]
+
+                % Array
+                \node[head] (A) at (0, 1.5) {A};
+                \node[head] (B) at (0, 0.5) {B};
+                \node[head] (C) at (0, -0.5) {C};
+                \node[head] (D) at (0, -1.5) {D};
+
+                % List A
+                \node[val, anchor=west] (A1v) at (1.0, 1.5) {B};
+                \node[ptr, anchor=west] (A1p) at (A1v.east) {};
+                \filldraw (A1p.center) circle (1.5pt);
+
+                \node[val, anchor=west] (A2v) at (2.5, 1.5) {C};
+                \node[ptr, anchor=west] (A2p) at (A2v.east) {};
+                \draw[thick] (A2p.north west) -- (A2p.south east); % null
+
+                \draw[thick, -stealth] (A.east) -- (A1v.west);
+                \draw[thick, -stealth] (A1p.center) -- (A2v.west);
+
+                % List B
+                \node[val, anchor=west] (B1v) at (1.0, 0.5) {A};
+                \node[ptr, anchor=west] (B1p) at (B1v.east) {};
+                \filldraw (B1p.center) circle (1.5pt);
+
+                \node[val, anchor=west] (B2v) at (2.5, 0.5) {D};
+                \node[ptr, anchor=west] (B2p) at (B2v.east) {};
+                \draw[thick] (B2p.north west) -- (B2p.south east);
+
+                \draw[thick, -stealth] (B.east) -- (B1v.west);
+                \draw[thick, -stealth] (B1p.center) -- (B2v.west);
+
+                % List C
+                \node[val, anchor=west] (C1v) at (1.0, -0.5) {A};
+                \node[ptr, anchor=west] (C1p) at (C1v.east) {};
+                \draw[thick] (C1p.north west) -- (C1p.south east);
+
+                \draw[thick, -stealth] (C.east) -- (C1v.west);
+
+                % List D
+                \node[val, anchor=west] (D1v) at (1.0, -1.5) {B};
+                \node[ptr, anchor=west] (D1p) at (D1v.east) {};
+                \draw[thick] (D1p.north west) -- (D1p.south east);
+
+                \draw[thick, -stealth] (D.east) -- (D1v.west);
+
+                \end{tikzpicture}
+            \end{center}
+        \end{column}
+    \end{columns}

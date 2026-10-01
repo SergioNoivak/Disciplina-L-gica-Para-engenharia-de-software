@@ -1,0 +1,186 @@
+ \documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white,
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt 
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Respostas da Lista de Exercícios 2.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Resolução dos Exercícios}
+
+\begin{block}{Exercício 1 — Identificação de proposições}
+Indique quais das sentenças abaixo são proposições. Caso sejam proposições, classifique-as como verdadeiras (V) ou falsas (F).
+\begin{itemize}
+    \item \textbf{(a) $4$ é um número primo.} \\ Proposição, Falsa (F). Justificativa: 4 é divisível por 1, 2 e 4.
+    \item \textbf{(b) Todo algoritmo correto termina.} \\ Proposição, Falsa (F). Justificativa: O problema da parada demonstra que a corretude e a terminação são propriedades distintas; além disso, algoritmos de sistemas operacionais são "corretos" e projetados para não terminar.
+    \item \textbf{(c) Qual é o valor de $x$?} \\ Não é proposição. Justificativa: Sentenças interrogativas não possuem valor lógico.
+    \item \textbf{(d) $2^5 = 32$.} \\ Proposição, Verdadeira (V). Justificativa: $2 \times 2 \times 2 \times 2 \times 2 = 32$.
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercício 2 — Identificação de hipótese e conclusão}
+Considere a implicação: ``Se um número é múltiplo de 4, então é par.''
+\begin{itemize}
+    \item \textbf{Hipótese ($P$):} ``Um número é múltiplo de 4''.
+    \item \textbf{Conclusão ($Q$):} ``O número é par''.
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercício 3 — Tabela-verdade de $P \Rightarrow Q$}
+\[
+\begin{array}{c c | c}
+P & Q & P \Rightarrow Q \\
+\hline
+V & V & V \\
+V & F & F \\
+F & V & V \\
+F & F & V
+\end{array}
+\]
+A implicação $P \Rightarrow Q$ é falsa \textbf{apenas} quando a hipótese ($P$) é verdadeira e a conclusão ($Q$) é falsa.
+\end{block}
+
+\begin{block}{Exercício 4 — Implicação sobre programa com erro}
+Afirmação: ``Se um programa possui erro, então ele não funciona corretamente.''
+\begin{itemize}
+    \item \textbf{Proposições:}
+    \begin{itemize}
+        \item $P$: O programa possui erro.
+        \item $Q$: O programa não funciona corretamente.
+    \end{itemize}
+    \item \textbf{Análise:} A implicação $P \Rightarrow Q$ é considerada logicamente válida no contexto de definições de falhas, onde a presença de um erro (causa) implica em um comportamento incorreto (efeito). Pela tabela-verdade:
+    \[
+    \begin{array}{c c | c}
+    P & Q & P \Rightarrow Q \\
+    \hline
+    V & V & V \\
+    V & F & F \\
+    F & V & V \\
+    F & F & V
+    \end{array}
+    \]
+    O caso $P=V$ e $Q=F$ (programa com erro que funciona corretamente) tornaria a afirmação falsa.
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercício 5 — Volta da implicação}
+Para a implicação $P \Rightarrow Q$:
+\begin{enumerate}
+    \item \textbf{Volta da implicação:} $Q \Rightarrow P$.
+    \item \textbf{Justificativa:} Ela não é equivalente à original porque a tabela-verdade de $Q \Rightarrow P$ difere da de $P \Rightarrow Q$ nos casos $(V,F)$ e $(F,V)$. \textit{Exemplo:} ``Se um número é múltiplo de 4 ($P$), então é par ($Q$)'' é verdadeiro, mas a volta ``Se um número é par ($Q$), então é múltiplo de 4 ($P$)'' é falsa (ex: o número 6).
+\end{enumerate}
+\end{block}
+
+\begin{block}{Exercício 6 — Bicondicional paridade e quadrado}
+Verifique se $(x \text{ é par}) \Leftrightarrow (x^2 \text{ é par})$ é verdadeira.
+\begin{itemize}
+    \item \textbf{Direta ($P \Rightarrow Q$):} Se $x$ é par, então $x = 2k$. Logo, $x^2 = (2k)^2 = 4k^2 = 2(2k^2)$, que é par. (Verdadeira)
+    \item \textbf{Volta ($Q \Rightarrow P$):} Se $x^2$ é par, então $x$ deve ser par. Se $x$ fosse ímpar, $x = 2k+1$, então $x^2 = (2k+1)^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, que é ímpar. Pela contrapositiva, se $x^2$ é par, $x$ é par. (Verdadeira)
+\end{itemize}
+Como ambas as direções são verdadeiras, a bicondicional é \textbf{Verdadeira}.
+\end{block}
+
+\begin{block}{Exercício 7 — Implicação com $P$ falsa}
+Pela definição de tabela-verdade, a implicação $P \Rightarrow Q$ só é falsa no caso $(V,F)$. Se o antecedente ($P$) é falso, não entramos na única condição que gera falsidade, independentemente do valor de $Q$. Portanto, a proposição é dita "vacuamente verdadeira".
+\end{block}
+
+\begin{block}{Exercício 8 — Paridade e não-ímpar}
+Proposição: ($x$ é par) $\Rightarrow$ ($x$ não é ímpar).
+\begin{itemize}
+    \item \textbf{Tabela-verdade:}
+    \[
+    \begin{array}{c c | c}
+    P & Q & P \Rightarrow Q \\
+    \hline
+    V & V & V \\
+    V & F & F \\
+    F & V & V \\
+    F & F & V
+    \end{array}
+    \]
+    Onde $P: x \text{ é par}$ e $Q: x \text{ não é ímpar}$.
+    \item \textbf{Explicação:} Nos números inteiros, ser par é equivalente a não ser ímpar. Assim, $P$ e $Q$ têm sempre o mesmo valor lógico ($V,V$ ou $F,F$), recaindo nos casos onde a implicação é verdadeira.
+\end{itemize}
+\end{block}
+
+\begin{block}{Exercício 9 — Implicação ímpar $\Rightarrow$ par}
+($x$ é ímpar) $\Rightarrow$ ($x$ é par).
+\textbf{Explicação:} Pela definição formal, se escolhermos um valor de $x$ que \textbf{não é ímpar} (por exemplo, $x=4$), a hipótese será falsa ($P=F$). Como vimos no Exercício 7, se a hipótese é falsa, a implicação $P \Rightarrow Q$ é \textbf{verdadeira} pelo princípio da vacuidade.
+\end{block}
+
+\begin{block}{Exercício 10 — Produto de ímpares}
+$P: x, y \text{ ímpares}$, $Q: x \cdot y \text{ ímpar}$.
+\begin{enumerate}
+    \item \textbf{Tabela-verdade:}
+    \[
+    \begin{array}{c c | c | c | c}
+    P & Q & P \Rightarrow Q & Q \Rightarrow P & P \Leftrightarrow Q \\
+    \hline
+    V & V & V & V & V \\
+    V & F & F & V & F \\
+    F & V & V & F & F \\
+    F & F & V & V & V
+    \end{array}
+    \]
+    \item \textbf{Análise:} $P \Rightarrow Q$ é verdadeira (produto de ímpares é sempre ímpar). $Q \Rightarrow P$ é verdadeira (se o produto é ímpar, ambos os fatores devem ser ímpares).
+    \item \textbf{Conclusão:} A bicondicional $P \Leftrightarrow Q$ é \textbf{Verdadeira}, pois $P$ e $Q$ são logicamente equivalentes no domínio dos inteiros.
+\end{enumerate}
+\end{block}
+
+\end{document}

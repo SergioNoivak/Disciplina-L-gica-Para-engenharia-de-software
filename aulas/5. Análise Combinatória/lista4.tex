@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  % Certifique-se de que o arquivo de imagem esteja na mesma pasta
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Lista de Exercícios 4.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Exercícios — Provas Matemáticas sobre Relações}
+
+Esta lista exige \textbf{demonstrações formais}. Para cada questão, escreva provas matemáticas rigorosas baseadas estritamente nas definições das propriedades de relações binárias.
+
+\vspace{0.4cm}
+\begin{enumerate}
+
+\item \textbf{(Interseção de Relações de Equivalência)}\\
+Sejam $R$ e $S$ duas relações de equivalência sobre um mesmo conjunto $A$. Defina a relação interseção $R \cap S$ por:
+\[
+a\,(R \cap S)\,b \;\Longleftrightarrow\; a\,R\,b \;\text{ e }\; a\,S\,b.
+\]
+Prove formalmente que $R \cap S$ também é uma relação de equivalência sobre $A$. 
+\textit{(Dica: prove a reflexividade, simetria e transitividade separadamente para $R \cap S$).}
+
+\vspace{0.3cm}
+\item \textbf{(União de Relações de Equivalência)}\\
+Ainda considerando $R$ e $S$ como relações de equivalência sobre $A$, é verdade que a relação união $R \cup S$ (onde $a\,(R \cup S)\,b \Leftrightarrow a\,R\,b$ ou $a\,S\,b$) \textbf{sempre} será uma relação de equivalência? 
+\begin{enumerate}[label=\alph*)]
+    \item Se sim, prove formalmente.
+    \item Se não, mostre um \textbf{contraexemplo} explicitando a(s) propriedade(s) que falha(m).
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Relação Inversa)}\\
+Seja $R$ uma relação binária sobre $A$. Define-se a relação inversa $R^{-1}$ por:
+\[
+a\,R^{-1}\,b \;\Longleftrightarrow\; b\,R\,a.
+\]
+Prove os seguintes teoremas:
+\begin{enumerate}[label=\alph*)]
+    \item Se $R$ é reflexiva, então $R^{-1}$ também é reflexiva.
+    \item Se $R$ é simétrica, então $R^{-1}$ também é simétrica (logo $R = R^{-1}$).
+    \item Se $R$ é transitiva, então $R^{-1}$ também é transitiva.
+    \item Conclua que a inversa de uma relação de equivalência é, ela mesma, uma relação de equivalência.
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Composição de Relações)}\\
+Sejam $R$ e $S$ duas relações em um conjunto $A$. A composição $S \circ R$ é a relação definida por:
+\[
+a\,(S \circ R)\,c \;\Longleftrightarrow\; \exists b \in A \text{ tal que } a\,R\,b \text{ e } b\,S\,c.
+\]
+Prove que, se $R$ e $S$ são transitivas, a composição $S \circ R$ \textbf{não} é necessariamente transitiva (forneça um contraexemplo).
+
+\vspace{0.3cm}
+\item \textbf{(Igualdade de Classes de Equivalência)}\\
+Seja $R$ uma relação de equivalência em $A$. Prove detalhadamente, usando dupla inclusão de conjuntos, a seguinte propriedade central das classes de equivalência:
+\[
+\text{Para todo } a, b \in A, \quad a\,R\,b \;\Longleftrightarrow\; [a] = [b].
+\]
+
+\vspace{0.3cm}
+\item \textbf{(Antissimetria e Classes)}\\
+Seja $R$ uma relação em $A$ que seja simultaneamente \textbf{simétrica} e \textbf{antissimétrica}. 
+\begin{enumerate}[label=\alph*)]
+    \item Prove que, dadas essas duas propriedades juntas, para quaisquer $x,y \in A$: 
+    \[ x\,R\,y \implies x = y. \]
+    \item Se $R$ também for reflexiva (ou seja, uma relação de equivalência que é também antissimétrica), conclua o que o conjunto $R$ e as partições induzidas por $R$ representam na igualdade.
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Partição induzida por uma função)}\\
+Sejam $A$ e $B$ conjuntos não vazios e $f: A \to B$ uma função. Definimos a relação $R_f$ em $A$ da seguinte maneira:
+\[
+x\,R_f\,y \;\Longleftrightarrow\; f(x) = f(y).
+\]
+\begin{enumerate}[label=\alph*)]
+    \item Prove formalmente que $R_f$ é uma relação de equivalência.
+    \item Se $A = \{-2, -1, 0, 1, 2\}$, $B = \mathbb{N}$ e $f(x) = x^2$, determine a partição de $A$ induzida por $R_f$ (ou seja, determine o conjunto quociente $A / R_f$).
+\end{enumerate}
+
+\vspace{0.3cm}
+\item \textbf{(Provas sobre Partições)}\\
+Seja $A = \mathbb{Z}$ o conjunto dos inteiros e seja $\mathcal{P} = \{A_0, A_1, A_2\}$, onde:
+\begin{itemize}
+    \item $A_0 = \{\,3k \mid k \in \mathbb{Z}\,\}$
+    \item $A_1 = \{\,3k + 1 \mid k \in \mathbb{Z}\,\}$
+    \item $A_2 = \{\,3k + 2 \mid k \in \mathbb{Z}\,\}$
+\end{itemize}
+Prove matematicamente que a família de subconjuntos $\mathcal{P}$ cumpre rigorosamente as 3 condições para ser uma \textbf{partição} de $\mathbb{Z}$: 
+(P1) Os elementos de $\mathcal{P}$ não são vazios; (P2) São dois a dois disjuntos; (P3) A união de todos eles resulta em $\mathbb{Z}$.
+
+\end{enumerate}
+
+\end{document}

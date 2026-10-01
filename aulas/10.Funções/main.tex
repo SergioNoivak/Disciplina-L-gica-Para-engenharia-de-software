@@ -1,0 +1,980 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova} 
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox} 
+\usepackage{lmodern}
+
+% TikZ e CircuiTikZ
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{arrows.meta, positioning, circuits.logic.US, calc}
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Funções, Definição, domínio, imagem e composição de funções.
+}}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Introdução}
+
+\section{Fundamentos de Funções}
+
+\begin{frame}
+\frametitle{Relações e Funções}
+\begin{itemize}
+    \item Uma \textbf{relação} de $A$ em $B$ é qualquer subconjunto do produto cartesiano $A \times B$.
+    \item Uma \textbf{função} é um tipo especial de relação que possui regras mais rígidas de associação.
+\end{itemize}
+
+\begin{block}{Conceito Chave}
+Toda função é uma relação, mas nem toda relação é uma função.
+\end{block}
+
+\centering
+\begin{tikzpicture}[scale=0.8]
+    \draw[thick, fill=green!5] (0,0) circle (1.5cm);
+    \node at (0,1) {\textbf{Relações}};
+    \draw[thick, fill=green!20] (0,-0.3) circle (0.8cm);
+    \node at (0,-0.3) {\textbf{Funções}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Definição Formal e Notação}
+Uma função $f$ do conjunto $A$ no conjunto $B$ é uma regra que associa \textbf{cada} elemento $x \in A$ a um \textbf{único} elemento $y \in B$.
+
+\begin{block}{Notação}
+\begin{itemize}
+    \item $f: A \to B$ (Lê-se: $f$ de $A$ em $B$)
+    \item $y = f(x)$ (O valor de $y$ depende de $x$)
+    \item $x$ é a variável \textbf{independente}.
+    \item $y$ é a variável \textbf{dependente}.
+\end{itemize}
+\end{block}
+
+\centering
+\Large $x \xmapsto{f} f(x)$
+\end{frame}
+
+\begin{frame}
+\frametitle{Ideia Intuitiva: A Máquina}
+Podemos pensar em uma função como uma "máquina" de processamento de dados:
+
+\vspace{1cm}
+\centering
+\begin{tikzpicture}[node distance=2cm, auto, >=stealth]
+    % Input
+    \node (in) at (0,0) {\begin{tabular}{c} \textbf{Entrada} \\ $x$ \end{tabular}};
+    
+    % Machine
+    \draw[ultra thick, fill=green!15] (2,-1) rectangle (5,1);
+    \node at (3.5,0) {\Large \textbf{Função $f$}};
+    \draw[fill=gray!20] (3.2,1) -- (3.5,1.5) -- (3.8,1) -- cycle; % Chaminé
+    
+    % Output
+    \node (out) at (7,0) {\begin{tabular}{c} \textbf{Saída} \\ $f(x)$ \end{tabular}};
+    
+    % Arrows
+    \draw[->, line width=2pt, color=structure] (in) -- (2,0);
+    \draw[->, line width=2pt, color=structure] (5,0) -- (out);
+\end{tikzpicture}
+
+\vspace{0.5cm}
+\begin{quote}
+Para cada input $x$ que entra na máquina, ela deve produzir \textbf{exatamente um} output $f(x)$.
+\end{quote}
+\end{frame}
+
+\begin{frame}
+\frametitle{Diferenciar: Função vs. Relação}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centering
+\textbf{É Função} \\
+\begin{tikzpicture}[scale=0.6]
+    \draw[thick] (0,0) ellipse (0.8cm and 1.5cm);
+    \draw[thick] (2.5,0) ellipse (0.8cm and 1.5cm);
+    \fill (0,0.8) circle (3pt) node (a1) {};
+    \fill (0,0) circle (3pt) node (a2) {};
+    \fill (0,-0.8) circle (3pt) node (a3) {};
+    \fill (2.5,0.4) circle (3pt) node (b1) {};
+    \fill (2.5,-0.4) circle (3pt) node (b2) {};
+    \draw[->, thick] (a1) -- (b1);
+    \draw[->, thick] (a2) -- (b2);
+    \draw[->, thick] (a3) -- (b2);
+\end{tikzpicture}
+\begin{itemize}
+    \scriptsize
+    \item Todos em $A$ têm saída.
+    \item Cada um tem \textbf{uma só} seta.
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\centering
+\textbf{NÃO é Função} \\
+\begin{tikzpicture}[scale=0.6]
+    \draw[thick, red] (0,0) ellipse (0.8cm and 1.5cm);
+    \draw[thick] (2.5,0) ellipse (0.8cm and 1.5cm);
+    \fill (0,0.8) circle (3pt) node (na1) {};
+    \fill (0,0) circle (3pt) node (na2) {};
+    \fill (0,-0.8) circle (3pt) node (na3) {};
+    \fill (2.5,0.4) circle (3pt) node (nb1) {};
+    \fill (2.5,-0.4) circle (3pt) node (nb2) {};
+    \draw[->, thick, red] (na1) -- (nb1);
+    \draw[->, thick, red] (na1) -- (nb2); % Duas saídas
+    \draw[->, thick] (na2) -- (nb2);
+\end{tikzpicture}
+\begin{itemize}
+    \scriptsize
+    \item Elemento com duas saídas.
+    \item Elemento (inferior) sem saída.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Teste da Reta Vertical}
+Graficamente, uma curva representa uma função se e somente se nenhuma reta vertical intersecta a curva em mais de um ponto.
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-3,0) -- (3,0) node[right] {$x$};
+    \draw[->] (0,-1) -- (0,4) node[above] {$y$};
+    \draw[domain=-2:2, smooth, variable=\x, blue, ultra thick] plot ({\x}, {\x*\x});
+    \draw[dashed, red, thick] (1.2,-1) -- (1.2,4);
+    \fill[red] (1.2, 1.44) circle (4pt);
+    \node[below, red] at (1.2,-1) {\tiny Toca 1 vez};
+\end{tikzpicture}
+\\ \textbf{É Função}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-1,0) -- (4,0) node[right] {$x$};
+    \draw[->] (0,-3) -- (0,3) node[above] {$y$};
+    \draw[domain=-2.2:2.2, smooth, variable=\y, red, ultra thick] plot ({\y*\y/2}, {\y});
+    \draw[dashed, gray, thick] (1.5,-3) -- (1.5,3);
+    \fill[black] (1.5, 1.73) circle (4pt);
+    \fill[black] (1.5, -1.73) circle (4pt);
+    \node[below, red] at (1.5,-3) {\tiny Toca 2 vezes};
+\end{tikzpicture}
+\\ \textbf{NÃO é Função}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplos de Verificação}
+Como identificar se é uma função na prática?
+
+\begin{enumerate}
+    \item \textbf{Equação:} $y = x^2 + 1$ \\
+    Para cada $x$, existe apenas um valor de $x^2 + 1$. (\textit{Função})
+    
+    \item \textbf{Equação:} $x^2 + y^2 = 9$ \\
+    Se $x=0$, então $y^2=9 \implies y=3$ ou $y=-3$. (\textit{Não é função})
+    
+    \item \textbf{Conjuntos:} $\{(1,2), (2,3), (1,4)\}$ \\
+    O número $1$ está associado a $2$ e $4$. (\textit{Não é função})
+\end{enumerate}
+
+\begin{block}{Dica}
+Sempre verifique se a variável dependente ($y$) está "bem definida" para cada valor de $x$.
+\end{block}
+\end{frame}
+
+\section{Domínio, Contradomínio e Imagem}
+
+\begin{frame}
+\frametitle{Domínio, Contradomínio e Imagem}
+Para definir completamente uma função, precisamos de três componentes:
+
+\begin{itemize}
+    \item \textbf{Domínio ($D$):} O conjunto de todos os valores de entrada possíveis e válidos.
+    \item \textbf{Contradomínio ($CD$):} O conjunto onde os valores de saída podem "cair".
+    \item \textbf{Imagem ($Im$):} O subconjunto do contradomínio que realmente contém as respostas da função.
+\end{itemize}
+
+\begin{block}{Analogia do Alvo}
+O \textbf{Contradomínio} é o alvo inteiro. A \textbf{Imagem} são os pontos onde as flechas realmente acertaram.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Mapeamento Visual}
+\centering
+\begin{tikzpicture}[scale=0.8]
+    % Conjunto A (Domínio)
+    \draw[thick, fill=blue!10] (-2,0) ellipse (1.2cm and 2cm);
+    \node at (-2,2.3) {\textbf{Domínio ($D$)}};
+    
+    % Conjunto B (Contradomínio)
+    \draw[thick, fill=red!5] (3,0) ellipse (1.5cm and 2.5cm);
+    \node at (3,2.8) {\textbf{Contradomínio ($CD$)}};
+    
+    % Subconjunto Imagem
+    \draw[dashed, ultra thick, fill=red!20] (2.8,-0.5) ellipse (0.8cm and 1.2cm);
+    \node[red] at (2.8,0.3) {\textbf{Imagem ($Im$)}};
+
+    % Pontos e Setas
+    \fill (-2,0.8) circle (2pt) node (d1) {};
+    \fill (-2,0) circle (2pt) node (d2) {};
+    \fill (-2,-0.8) circle (2pt) node (d3) {};
+    
+    \fill (2.8,0) circle (2pt) node (im1) {};
+    \fill (2.8,-0.8) circle (2pt) node (im2) {};
+    
+    \draw[->, >=stealth] (d1) -- (im1);
+    \draw[->, >=stealth] (d2) -- (im1);
+    \draw[->, >=stealth] (d3) -- (im2);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{O Domínio (D)}
+O Domínio é o conjunto de valores de $x$ para os quais a função está definida.
+
+\begin{itemize}
+    \item Em muitos problemas, o domínio é dado: $f: \mathbb{R} \to \mathbb{R}$.
+    \item Quando não é dado, assumimos o \textbf{Domínio de Definição} (o maior conjunto de números reais para o qual a fórmula faz sentido).
+\end{itemize}
+
+\begin{exampleblock}{Exemplo Contextual}
+Se $f(x)$ representa a altura de uma planta em função do tempo $x$, o domínio não pode incluir valores negativos ($x < 0$), pois o tempo não retrocede no crescimento.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Contradomínio ($CD$) vs. Imagem ($Im$)}
+\begin{alertblock}{A confusão comum}
+Muitos alunos acham que Contradomínio e Imagem são a mesma coisa. \textbf{Não são!}
+\end{alertblock}
+
+\begin{itemize}
+    \item \textbf{Contradomínio:} É o conjunto de "chegada" declarado. É o universo onde os resultados vivem.
+    \item \textbf{Imagem:} É o conjunto de valores que a função \textbf{realmente assume}.
+\end{itemize}
+
+\centering
+\fbox{$\text{Imagem} \subseteq \text{Contradomínio}$}
+\end{frame}
+
+\begin{frame}
+\frametitle{Restrições de Domínio}
+Na matemática real, existem operações que são "proibidas". Essas operações ditam as regras do domínio:
+
+\begin{enumerate}
+    \item Não existe divisão por \textbf{zero}.
+    \item Não existe raiz quadrada (ou de índice par) de número \textbf{negativo} (no conjunto dos Reais).
+    \item Não existe logaritmo de número \textbf{menor ou igual a zero}.
+\end{enumerate}
+
+\begin{center}
+\textbf{Se a função tenta fazer uma dessas coisas, o valor de $x$ está fora do domínio!}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Regra 1: O Perigo da Divisão por Zero}
+\begin{columns}
+\begin{column}{0.6\textwidth}
+Sempre que houver uma variável no \textbf{denominador}, ele deve ser diferente de zero.
+
+\begin{block}{Condição}
+Se $f(x) = \frac{g(x)}{h(x)}$, então devemos ter:
+\Large \centering $h(x) \neq 0$
+\end{block}
+
+\textbf{Exemplo:} $f(x) = \frac{5}{x - 3}$ \\
+$\implies x - 3 \neq 0 \implies x \neq 3$ \\
+\textbf{Domínio:} $D = \mathbb{R} \setminus \{3\}$
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-1,0) -- (6,0) node[right] {$x$};
+    \draw[->] (0,-3) -- (0,3) node[above] {$y$};
+    \draw[dashed, red, thick] (3,-3) -- (3,3) node[above] {\tiny $x=3$};
+    \draw[domain=3.4:5.5, smooth, variable=\x, blue, ultra thick] plot ({\x}, {1/(\x-3)});
+    \draw[domain=-0.5:2.6, smooth, variable=\x, blue, ultra thick] plot ({\x}, {1/(\x-3)});
+    \node[blue] at (5,1.5) {\tiny $f(x)$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Regra 2: Raízes de Índice Par}
+\begin{columns}
+\begin{column}{0.6\textwidth}
+Raízes quadradas, quartas, sextas, etc., exigem que o conteúdo (radicando) seja não-negativo.
+
+\begin{block}{Condição}
+Se $f(x) = \sqrt[n]{g(x)}$ e $n$ é par, então:
+\Large \centering $g(x) \ge 0$
+\end{block}
+
+\textbf{Exemplo:} $f(x) = \sqrt{x - 4}$ \\
+$\implies x - 4 \ge 0 \implies x \ge 4$ \\
+\textbf{Domínio:} $D = [4, +\infty)$
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-1,0) -- (7,0) node[right] {$x$};
+    \draw[->] (0,-1) -- (0,3) node[above] {$y$};
+    \fill[red] (4,0) circle (4pt);
+    \draw[domain=4:7, smooth, variable=\x, blue, ultra thick] plot ({\x}, {sqrt(\x-4)});
+    \node[below, red] at (4,0) {\tiny Início ($x=4$)};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Regra 3: Logaritmos}
+\begin{columns}
+\begin{column}{0.6\textwidth}
+A definição de logaritmo exige que o logaritmando seja estritamente positivo ($> 0$).
+
+\begin{block}{Condição}
+Se $f(x) = \log_b(g(x))$, então:
+\Large \centering $g(x) > 0$
+\end{block}
+
+\textbf{Exemplo:} $f(x) = \ln(x + 1)$ \\
+$\implies x + 1 > 0 \implies x > -1$ \\
+\textbf{Domínio:} $D = \{x \in \mathbb{R} \mid x > -1\}$
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-2,0) -- (4,0) node[right] {$x$};
+    \draw[->] (0,-3) -- (0,3) node[above] {$y$};
+    \draw[dashed, red, thick] (-1,-3) -- (-1,3) node[above] {\tiny $x=-1$};
+    \draw[domain=-0.8:4, smooth, variable=\x, blue, ultra thick] plot ({\x}, {ln(\x+1)});
+    \node[blue] at (3,2) {\tiny $\ln(x+1)$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo Resolvido 1}
+Encontre o domínio da função $f(x) = \frac{1}{x - 2}$
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+    \item \textbf{Problema:} Divisão por zero.
+    \item \textbf{Restrição:} $x - 2 \neq 0 \implies x \neq 2$.
+    \item \textbf{Resposta:} Todo $\mathbb{R}$ exceto o 2.
+\end{itemize}
+
+\begin{block}{Notação Final}
+$D = \mathbb{R} \setminus \{2\}$ \\
+$D = (-\infty, 2) \cup (2, +\infty)$
+\end{block}
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-1,0) -- (5,0) node[right] {$x$};
+    \draw[->] (0,-3) -- (0,3) node[above] {$y$};
+    \draw[dashed, red, thick] (2,-3) -- (2,3);
+    \draw[domain=2.3:4.5, smooth, variable=\x, blue, thick] plot ({\x}, {1/(\x-2)});
+    \draw[domain=-0.5:1.7, smooth, variable=\x, blue, thick] plot ({\x}, {1/(\x-2)});
+    \node[red, rotate=90] at (2,2) {\tiny Assíntota em $x=2$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo Resolvido 2}
+Encontre o domínio da função $f(x) = \sqrt{x + 5}$
+
+\begin{columns}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+    \item \textbf{Problema:} Raiz de índice par.
+    \item \textbf{Restrição:} $x + 5 \ge 0 \implies x \ge -5$.
+    \item \textbf{Conclusão:} Valores como $-6$ resultariam em raízes negativas.
+\end{itemize}
+
+\begin{block}{Notação Final}
+$D = \{x \in \mathbb{R} \mid x \ge -5\}$ \\
+$D = [-5, +\infty)$
+\end{block}
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.4]
+    \draw[->] (-6,0) -- (2,0) node[right] {$x$};
+    \draw[->] (0,-1) -- (0,4) node[above] {$y$};
+    \fill[red] (-5,0) circle (5pt);
+    \draw[domain=-5:1.5, smooth, variable=\x, blue, ultra thick] plot ({\x}, {sqrt(\x+5)});
+    \node[below, red] at (-5,0) {\tiny $x=-5$};
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Composição de Funções}
+
+\begin{frame}
+\frametitle{Composição de Funções}
+A composição de funções é o processo de combinar duas ou mais funções para criar uma nova.
+
+\begin{block}{Conceito}
+É como aplicar uma regra sobre o resultado de outra regra. A saída de uma função torna-se a entrada da próxima.
+\end{block}
+
+\centering
+\Large $f(g(x))$
+\end{frame}
+
+\begin{frame}
+\frametitle{Definição Formal}
+Dadas duas funções $f$ e $g$, a \textbf{função composta} $f \circ g$ (lê-se "$f$ bola $g$" ou "$f$ composta com $g$") é definida por:
+
+\begin{block}{Fórmula}
+\Large \centering $(f \circ g)(x) = f(g(x))$
+\end{block}
+
+\begin{itemize}
+    \item $g$ é a função \textbf{interna}.
+    \item $f$ é a função \textbf{externa}.
+\end{itemize}
+
+\textbf{Importante:} Resolvemos primeiro o que está "dentro" dos parênteses.
+\end{frame}
+
+\begin{frame}
+\frametitle{A Cadeia de Processamento}
+Visualmente, a composição é uma série de máquinas conectadas:
+
+\vspace{0.8cm}
+\centering
+\begin{tikzpicture}[node distance=1.5cm, auto, >=stealth]
+    \node (in) at (-1,0) {$x$};
+    
+    % Máquina G
+    \draw[thick, fill=blue!10] (0,-0.6) rectangle (1.5,0.6);
+    \node at (0.75,0) {\textbf{$g$}};
+    
+    \node (mid) at (2.5,0) {$g(x)$};
+    
+    % Máquina F
+    \draw[thick, fill=green!10] (3.5,-0.6) rectangle (5,0.6);
+    \node at (4.25,0) {\textbf{$f$}};
+    
+    \node (out) at (6.5,0) {$f(g(x))$};
+    
+    % Setas
+    \draw[->, thick] (in) -- (0,0);
+    \draw[->, thick] (1.5,0) -- (mid);
+    \draw[->, thick] (mid) -- (3.5,0);
+    \draw[->, thick] (5,0) -- (out);
+\end{tikzpicture}
+
+\vspace{0.5cm}
+\begin{itemize}
+    \item $x$ entra em $g$.
+    \item O resultado $g(x)$ entra em $f$.
+    \item O resultado final é $f(g(x))$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Interpretação: Quem vem primeiro?}
+Embora a notação seja $f \circ g$, a função que age \textbf{primeiro} sobre o valor de $x$ é a $g$.
+
+\begin{exampleblock}{Analogia da Vida Real}
+Imagine as funções:
+\begin{itemize}
+    \item $g(x)$: Vestir as meias.
+    \item $f(x)$: Vestir os sapatos.
+\end{itemize}
+\textbf{Composição $f(g(x))$:} Você veste as meias primeiro ($g$) e depois os sapatos por cima ($f$). Isso faz sentido!
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{A Ordem Importa!}
+Diferente da multiplicação de números, a composição de funções \textbf{não é comutativa}.
+
+\begin{alertblock}{Propriedade}
+Em geral: \Large \centering $f \circ g \neq g \circ f$
+\end{alertblock}
+
+\begin{itemize}
+    \item $(f \circ g)(x)$: $g$ é aplicada primeiro.
+    \item $(g \circ f)(x)$: $f$ é aplicada primeiro.
+\end{itemize}
+
+\textit{Trocar a ordem muda completamente o "processamento" e, quase sempre, o resultado final.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo Passo a Passo 1 ($f \circ g$)}
+Sejam $f(x) = 2x + 1$ e $g(x) = x^2$. Vamos calcular $(f \circ g)(x)$:
+
+\begin{itemize}
+    \item \textbf{Passo 1:} Comece com a definição: $f(g(x))$.
+    \item \textbf{Passo 2:} Substitua a função interna $g(x)$ pela sua fórmula:
+    \[ f(x^2) \]
+    \item \textbf{Passo 3:} Aplique a regra de $f$. Onde houver "$x$" em $f$, coloque "$x^2$":
+    \[ 2(x^2) + 1 \]
+\end{itemize}
+
+\begin{block}{Resultado}
+$(f \circ g)(x) = 2x^2 + 1$
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo Passo a Passo 2 ($g \circ f$)}
+Usando as mesmas $f(x) = 2x + 1$ e $g(x) = x^2$, vamos calcular $(g \circ f)(x)$:
+
+\begin{itemize}
+    \item \textbf{Passo 1:} Comece com a definição: $g(f(x))$.
+    \item \textbf{Passo 2:} Substitua a função interna $f(x)$:
+    \[ g(2x + 1) \]
+    \item \textbf{Passo 3:} Aplique a regra de $g$. Eleva \textbf{tudo} o que entrou ao quadrado:
+    \[ (2x + 1)^2 \]
+\end{itemize}
+
+\begin{block}{Resultado}
+$(g \circ f)(x) = 4x^2 + 4x + 1$
+\end{block}
+\centering \scriptsize Note que $2x^2+1 \neq 4x^2+4x+1$. A ordem mudou o resultado!
+\end{frame}
+
+\begin{frame}
+\frametitle{Domínio da Função Composta}
+Nem todo valor de $x$ pode ser usado na composição.
+
+\begin{block}{Requisitos para existir $f(g(x))$}
+\begin{enumerate}
+    \item $x$ deve pertencer ao domínio de $g$.
+    \item O resultado $g(x)$ deve pertencer ao domínio de $f$.
+\end{enumerate}
+\end{block}
+
+\centering
+\begin{tikzpicture}[scale=0.8]
+    \node (A) at (0,0) {$D_g$};
+    \node (B) at (3,0) {$Im_g \subseteq D_f$};
+    \node (C) at (6,0) {$Im_f$};
+    \draw[->] (A) -- (B) node[midway,above] {$g$};
+    \draw[->] (B) -- (C) node[midway,above] {$f$};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Diagrama de Venn (3 Conjuntos)}
+A composição pode ser vista como um salto entre três conjuntos:
+
+\centering
+\begin{tikzpicture}[scale=0.7]
+    \draw[thick] (0,0) circle (1cm) node[below=1.1cm] {$A$};
+    \draw[thick] (4,0) circle (1cm) node[below=1.1cm] {$B$};
+    \draw[thick] (8,0) circle (1cm) node[below=1.1cm] {$C$};
+    
+    \fill (0,0) circle (2pt) node (x) {};
+    \fill (4,0) circle (2pt) node (gx) {};
+    \fill (8,0) circle (2pt) node (fgx) {};
+    
+    \draw[->, bend left] (x) to node[above] {$g$} (gx);
+    \draw[->, bend left] (gx) to node[above] {$f$} (fgx);
+    \draw[->, bend right=40, color=structure, ultra thick] (x) to node[below] {$f \circ g$} (fgx);
+    
+    \node[left] at (x) {$x$};
+    \node[above] at (gx) {$g(x)$};
+    \node[right] at (fgx) {$f(g(x))$};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Resumo e Dicas}
+\begin{itemize}
+    \item \textbf{Substituição Total:} Quando for calcular $f(g(x))$, troque TODOS os $x$ da função $f$ pela expressão inteira de $g$.
+    \item \textbf{Use Parênteses:} Sempre envolva $g(x)$ em parênteses antes de aplicar $f$. Isso evita erros de sinal e de potências.
+    \item \textbf{Identidade:} Se $I(x) = x$, então $f \circ I = f$ e $I \circ f = f$.
+\end{itemize}
+
+\begin{exampleblock}{Exercício Rápido}
+Se $f(x) = \sqrt{x}$ e $g(x) = x - 5$, qual é $(f \circ g)(x)$? \\
+\textbf{Resposta:} $f(x-5) = \sqrt{x-5}$.
+\end{exampleblock}
+\end{frame}
+
+\section{Classificação de Funções}
+
+\begin{frame}
+\frametitle{Classificação de Funções}
+Dependendo de como os elementos do Domínio se relacionam com os do Contradomínio, as funções podem ser classificadas em três tipos principais:
+
+\begin{itemize}
+    \item \textbf{Injetora:} Preserva a distinção.
+    \item \textbf{Sobrejetora:} Cobre todo o contradomínio.
+    \item \textbf{Bijetora:} Faz os dois ao mesmo tempo.
+\end{itemize}
+
+\begin{block}{Por que classificar?}
+Saber o tipo de função nos diz se ela pode ser invertida e como ela se comporta ao mapear dados.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Função Injetora (ou Injeção)}
+Uma função é \textbf{injetora} se elementos diferentes do domínio sempre resultam em imagens diferentes.
+
+\begin{block}{Definição Formal}
+$\forall x_1, x_2 \in A, \quad x_1 \neq x_2 \implies f(x_1) \neq f(x_2)$
+\end{block}
+
+\begin{itemize}
+    \item Em outras palavras: "Não há dois caminhos levando ao mesmo lugar".
+    \item Cada $y$ na imagem é atingido por \textbf{no máximo um} $x$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Injetora: Visualização em Diagramas}
+\centering
+\begin{tikzpicture}[scale=0.8]
+    \node at (0,2) {\textbf{Injetora}};
+    \draw[thick] (0,0) ellipse (0.8cm and 1.5cm);
+    \draw[thick] (3,0) ellipse (0.8cm and 1.5cm);
+    
+    \fill (0,0.8) circle (2pt) node (a1) {};
+    \fill (0,0) circle (2pt) node (a2) {};
+    \fill (0,-0.8) circle (2pt) node (a3) {};
+    
+    \fill (3,0.8) circle (2pt) node (b1) {};
+    \fill (3,0.3) circle (2pt) node (b2) {};
+    \fill (3,-0.2) circle (2pt) node (b3) {};
+    \fill (3,-0.7) circle (2pt) node (b4) {};
+    
+    \draw[->, >=stealth] (a1) -- (b1);
+    \draw[->, >=stealth] (a2) -- (b3);
+    \draw[->, >=stealth] (a3) -- (b2);
+    
+    \node[right=0.2cm, green!60!black] at (b4) {\tiny (Pode sobrar elementos em $B$)};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Injetora: Teste da Reta Horizontal}
+Graficamente, uma função é injetora se qualquer reta horizontal intersecta o gráfico em, no máximo, um ponto.
+
+\centering
+\begin{tikzpicture}[scale=0.6]
+    \draw[->] (-3,0) -- (3,0) node[right] {$x$};
+    \draw[->] (0,-1) -- (0,4) node[above] {$y$};
+    \draw[domain=-0.5:2.5, smooth, variable=\x, blue, ultra thick] plot ({\x}, {exp(\x-1)});
+    \draw[dashed, red, thick] (-2,1.5) -- (3,1.5);
+    \fill[red] (1.4, 1.5) circle (4pt);
+    \node[below right] at (1.4,1.5) {\tiny Toca apenas 1 vez};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo de Injetora}
+Considere $f(x) = 2x$. 
+
+\begin{itemize}
+    \item Se escolhermos $x_1 = 3$ e $x_2 = 5$ ($x_1 \neq x_2$):
+    \item $f(3) = 6$
+    \item $f(5) = 10$
+    \item As imagens são diferentes!
+\end{itemize}
+
+\begin{block}{Conclusão}
+Funções de primeiro grau (retas não horizontais) são sempre injetoras em todo o seu domínio real.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Função Sobrejetora (ou Sobrejeção)}
+Uma função é \textbf{sobrejetora} quando o conjunto Imagem é igual ao Contradomínio.
+
+\begin{block}{Definição Formal}
+$Im(f) = CD(f)$
+\end{block}
+
+\begin{itemize}
+    \item "Ninguém sobra no contradomínio".
+    \item Todo elemento $y \in B$ possui \textbf{pelo menos um} correspondente $x \in A$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sobrejetora: Visualização em Diagramas}
+\centering
+\begin{tikzpicture}[scale=0.8]
+    \node at (0,2) {\textbf{Sobrejetora}};
+    \draw[thick] (0,0) ellipse (0.8cm and 1.5cm);
+    \draw[thick] (3,0) ellipse (0.8cm and 1.5cm);
+    
+    \fill (0,1) circle (2pt) node (a1) {};
+    \fill (0,0.3) circle (2pt) node (a2) {};
+    \fill (0,-0.3) circle (2pt) node (a3) {};
+    \fill (0,-1) circle (2pt) node (a4) {};
+    
+    \fill (3,0.6) circle (2pt) node (b1) {};
+    \fill (3,0) circle (2pt) node (b2) {};
+    \fill (3,-0.6) circle (2pt) node (b3) {};
+    
+    \draw[->, >=stealth] (a1) -- (b1);
+    \draw[->, >=stealth] (a2) -- (b1);
+    \draw[->, >=stealth] (a3) -- (b2);
+    \draw[->, >=stealth] (a4) -- (b3);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sobrejetora: Como Identificar?}
+Para saber se uma função é sobrejetora, olhamos para o contradomínio que foi definido e comparamos com o alcance da função.
+
+\begin{exampleblock}{Exemplo}
+Seja $f: \mathbb{R} \to \mathbb{R}$ definida por $f(x) = x^2$.
+\begin{itemize}
+    \item Contradomínio declarado: $\mathbb{R}$ (todos os números).
+    \item Imagem real: $[0, +\infty)$ (apenas positivos e zero).
+    \item \textbf{Resultado:} NÃO é sobrejetora, pois os números negativos do contradomínio não são atingidos.
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplo de Sobrejetora}
+Considere $f: \mathbb{R} \to \mathbb{R}$ definida por $f(x) = x^3$.
+
+\begin{itemize}
+    \item Números negativos ao cubo continuam negativos.
+    \item Números positivos ao cubo continuam positivos.
+    \item A função "varre" todos os números reais de $-\infty$ até $+\infty$.
+\end{itemize}
+
+\begin{block}{Conclusão}
+Como a Imagem $[-\infty, +\infty]$ é exatamente igual ao Contradomínio $\mathbb{R}$, a função é \textbf{sobrejetora}.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Função Bijetora (ou Bijeção)}
+Uma função é \textbf{bijetora} quando é injetora e sobrejetora ao mesmo tempo.
+
+\begin{block}{Resumo}
+\begin{enumerate}
+    \item \textbf{Injetora:} Cada $x$ tem um $y$ exclusivo.
+    \item \textbf{Sobrejetora:} Não sobra ninguém em $B$.
+\end{enumerate}
+\end{block}
+
+\textbf{Resultado:} Existe um emparelhamento perfeito (um-para-um) entre todos os elementos de $A$ e $B$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Bijetora: O "Mapeamento Perfeito"}
+\centering
+\begin{tikzpicture}[scale=0.8]
+    \node at (0,2) {\textbf{Bijetora}};
+    \draw[thick] (0,0) ellipse (0.8cm and 1.5cm);
+    \draw[thick] (3,0) ellipse (0.8cm and 1.5cm);
+    
+    \fill (0,0.8) circle (2pt) node (a1) {};
+    \fill (0,0) circle (2pt) node (a2) {};
+    \fill (0,-0.8) circle (2pt) node (a3) {};
+    
+    \fill (3,0.8) circle (2pt) node (b1) {};
+    \fill (3,0) circle (2pt) node (b2) {};
+    \fill (3,-0.8) circle (2pt) node (b3) {};
+    
+    \draw[->, >=stealth] (a1) -- (b1);
+    \draw[->, >=stealth] (a2) -- (b2);
+    \draw[->, >=stealth] (a3) -- (b3);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bijetora: Condição para Função Inversa}
+Esta é a propriedade mais importante das bijeções:
+
+\begin{alertblock}{Teorema}
+Uma função $f$ admite uma função inversa $f^{-1}$ se, e somente se, $f$ for \textbf{bijetora}.
+\end{alertblock}
+
+\begin{itemize}
+    \item Se não fosse injetora, a volta seria confusa (um $y$ voltaria para dois $x$).
+    \item Se não fosse sobrejetora, alguns $y$ não teriam para onde voltar.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quadro Comparativo}
+\centering
+\begin{table}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Tipo} & \textbf{Cada $y$ recebe...} & \textbf{Sobra em $B$?} \\ \hline
+Injetora & No máximo 1 seta & Sim / Não \\ \hline
+Sobrejetora & Pelo menos 1 seta & Não \\ \hline
+Bijetora & Exatamente 1 seta & Não \\ \hline
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+\textit{Lembre-se: Bijeção é o "casamento" perfeito entre conjuntos.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exemplos de Não-Injetoras / Não-Sobrejetoras}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centering
+$f: \mathbb{R} \to \mathbb{R}, f(x) = x^2$
+\begin{tikzpicture}[scale=0.5]
+    \draw[->] (-2.5,0) -- (2.5,0);
+    \draw[->] (0,-1) -- (0,3);
+    \draw[domain=-1.6:1.6, blue, thick] plot ({\x}, {\x*\x});
+    \draw[red, dashed] (-2,1) -- (2,1);
+    \fill[red] (1,1) circle (3pt);
+    \fill[red] (-1,1) circle (3pt);
+\end{tikzpicture}
+\\ \tiny \textbf{Não Injetora:} Reta horizontal toca 2 vezes. \\
+\tiny \textbf{Não Sobrejetora:} Não atinge $y < 0$.
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\centering
+$f: \mathbb{R} \to \mathbb{R}^+, f(x) = x^2$
+\begin{itemize}
+    \item Mudamos o contradomínio para $\mathbb{R}^+$ (apenas positivos).
+    \item Agora é \textbf{Sobrejetora}!
+    \item Mas continua \textbf{Não Injetora}.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercício de Fixação}
+Identifique o tipo de função nos diagramas abaixo:
+
+\begin{columns}
+\begin{column}{0.33\textwidth}
+\centering
+A \\
+\begin{tikzpicture}[scale=0.4]
+    \draw (0,0) circle (1); \draw (2,0) circle (1);
+    \fill (0,0.5) circle (3pt); \fill (0,-0.5) circle (3pt);
+    \fill (2,0) circle (3pt);
+    \draw[->] (0,0.5) -- (2,0); \draw[->] (0,-0.5) -- (2,0);
+\end{tikzpicture}
+\\ \tiny \textbf{Sobrejetora} (apenas)
+\end{column}
+
+\begin{column}{0.33\textwidth}
+\centering
+B \\
+\begin{tikzpicture}[scale=0.4]
+    \draw (0,0) circle (1); \draw (2,0) circle (1);
+    \fill (0,0) circle (3pt);
+    \fill (2,0.5) circle (3pt); \fill (2,-0.5) circle (3pt);
+    \draw[->] (0,0) -- (2,0.5);
+\end{tikzpicture}
+\\ \tiny \textbf{Injetora} (apenas)
+\end{column}
+
+\begin{column}{0.33\textwidth}
+\centering
+C \\
+\begin{tikzpicture}[scale=0.4]
+    \draw (0,0) circle (1); \draw (2,0) circle (1);
+    \fill (0,0) circle (3pt);
+    \fill (2,0) circle (3pt);
+    \draw[->] (0,0) -- (2,0);
+\end{tikzpicture}
+\\ \tiny \textbf{Bijetora}
+\end{column}
+\end{columns}
+\end{frame}
+
+\section{Terminologia}
+
+
+\end{document}

@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage[most]{tcolorbox}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\definecolor{forestgreen}{RGB}{0,100,50}
+
+\geometry{margin=2.5cm, headheight=53pt, top=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \footnotesize
+    \textbf{Propriedades da Álgebra Booleana}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\begin{center}
+  {\Large \textbf{\textcolor{maincolor}{Propriedades da Álgebra Booleana}}}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{
+  >{\centering\arraybackslash}m{0.5cm}
+  >{\centering\arraybackslash}m{4.2cm}
+  >{\centering\arraybackslash}m{4.2cm}
+  >{\centering\arraybackslash}m{4.5cm}
+}
+\toprule
+\textbf{N°} & \textbf{Forma AND (·)} & \textbf{Forma OR (+)} & \textbf{Nome da Propriedade} \\
+\midrule
+
+1 & $A \cdot 0 = 0$ & $A + 1 = 1$ & Elemento Nulo \\
+\midrule
+
+2 & $A \cdot 1 = A$ & $A + 0 = A$ & Elemento Neutro (Identidade) \\
+\midrule
+
+3 & $A \cdot A = A$ & $A + A = A$ & Idempotência \\
+\midrule
+
+4 & $A \cdot \overline{A} = 0$ & $A + \overline{A} = 1$ & Complemento \\
+\midrule
+
+5 & $A \cdot B = B \cdot A$ & $A + B = B + A$ & Comutatividade \\
+\midrule
+
+6 & $A \cdot (B \cdot C) = (A \cdot B) \cdot C$ & $A + (B + C) = (A + B) + C$ & Associatividade \\
+\midrule
+
+7 & $\overline{A \cdot B \cdot C} = \overline{A} + \overline{B} + \overline{C}$ & $\overline{A + B + C} = \overline{A} \cdot \overline{B} \cdot \overline{C}$ & Teorema de De Morgan \\
+\midrule
+
+8 & $A \cdot (B + C) = A \cdot B + A \cdot C$ & $(A+B)\cdot(A+C) = A + B \cdot C$ & Distributividade \\
+\midrule
+
+9 & $A + A \cdot B = A$ & $A \cdot (A + B) = A$ & Absorção \\
+\midrule
+
+10 & $A + \overline{A} \cdot B = A + B$ & $A \cdot (\overline{A} + B) = A \cdot B$ & Cobertura (Absorção Complementar) \\
+\midrule
+
+11 & $\overline{\overline{A}} = A$ & $\overline{\overline{A}} = A$ & Dupla Negação (Involução) \\
+\midrule
+
+12 & $A \cdot B + \overline{A} \cdot C + B \cdot C = A \cdot B + \overline{A} \cdot C$ & $(A+B) \cdot (\overline{A}+C) \cdot (B+C) = (A+B) \cdot (\overline{A}+C)$ & Teorema do Consenso \\
+\midrule
+
+13 & $C \cdot A + C \cdot \overline{A} \cdot B = C \cdot A + C \cdot B$ & $(C+A)(C+\overline{A}+B) = (C+A)(C+B)$ & Simplificação por Complemento \\
+
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1cm}
+
+\noindent\textbf{Observações:}
+\begin{itemize}
+  \item O símbolo $\cdot$ representa a operação AND (conjunção lógica).
+  \item O símbolo $+$ representa a operação OR (disjunção lógica).
+  \item O símbolo $\overline{X}$ representa a negação (NOT) da variável $X$.
+  \item As propriedades valem para qualquer valor binário ($0$ ou $1$) das variáveis.
+\end{itemize}
+
+\end{document}

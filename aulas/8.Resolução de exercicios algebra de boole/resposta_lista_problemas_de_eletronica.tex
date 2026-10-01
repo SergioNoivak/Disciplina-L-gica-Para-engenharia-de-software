@@ -1,0 +1,222 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{listings}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Gabarito: Problemas de Eletrônica — Álgebra Booleana}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  } 
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\newtcolorbox{solucao}{%
+  colback=green!5,
+  colframe=forestgreen,
+  title=Resolução,
+  fonttitle=\bfseries,
+  arc=2mm,
+  boxrule=1pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  breakable
+}
+
+\begin{document}
+
+\section*{Resolução da Lista de Exercícios}
+
+Nesta lista, as simplificações são realizadas exclusivamente através da \textbf{Álgebra Booleana}, utilizando as propriedades fundamentais como Distributividade, Complemento, Elemento Neutro e Absorção.
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection*{Exercício 1 — Sistema Inteligente de Liberação para Ordenha}
+
+\begin{solucao}
+\textbf{a) Soma de Produtos (SOP) Canônica:}
+Identificamos os mintermos onde $Y = 1$ na tabela verdade:
+\begin{itemize}
+    \item $A=0, B=0, C=0, D=1 \implies \overline{A}\overline{B}\overline{C}D$
+    \item $A=0, B=1, C=0, D=0 \implies \overline{A}B\overline{C}\overline{D}$
+    \item $A=1, B=0, C=1, D=0 \implies A\overline{B}C\overline{D}$
+    \item $A=1, B=1, C=1, D=1 \implies ABCD$
+\end{itemize}
+\[ Y = \overline{A}\overline{B}\overline{C}D + \overline{A}B\overline{C}\overline{D} + A\overline{B}C\overline{D} + ABCD \]
+
+\textbf{b) Simplificação:}
+Nesta expressão, os mintermos possuem distância de Hamming maior ou igual a 2 (não há dois mintermos que difiram por apenas uma variável). Portanto, não há simplificação direta por adjacência lógica ($XY + X\overline{Y} = X$). No entanto, podemos fatorar termos comuns:
+\begin{itemize}
+    \item $Y = \overline{A}\overline{C}(\overline{B}D + B\overline{D}) + AC(\overline{B}\overline{D} + BD)$
+    \item Utilizando a definição de XOR ($\oplus$) e XNOR ($\odot$):
+    \item $Y = \overline{A}\overline{C}(B \oplus D) + AC(B \odot D)$
+\end{itemize}
+
+\textbf{c) Circuito Lógico:}
+O circuito consiste em portas NOT para as entradas $A$ e $C$, portas XOR e XNOR para $B$ e $D$, seguidas de portas AND para os produtos e uma porta OR final.
+\end{solucao}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection*{Exercício 2 — Controle de Irrigação}
+
+\begin{solucao}
+\textbf{a) SOP Canônica:}
+\begin{itemize}
+    \item \textbf{Bomba (P):} $P = \sum m(2, 4, 6, 8, 10, 12, 14)$ com $R=0$.
+    \item \textbf{Válvula A:} $A = m(4, 8, 12)$
+    \item \textbf{Válvula B:} $B = m(2)$
+    \item \textbf{Válvula C:} $C = m(6, 10)$
+    \item \textbf{Válvula D:} $D = m(14)$
+\end{itemize}
+
+\textbf{b) Simplificação:}
+\textbf{Para a Bomba (P):}
+\begin{align*}
+    P &= \overline{R}(\overline{T}\overline{U}S + \overline{T}U\overline{S} + \overline{T}US + T\overline{U}\overline{S} + T\overline{U}S + TU\overline{S} + TUS) \\
+    P &= \overline{R} [\overline{T}\overline{U}S + \overline{T}U(\overline{S} + S) + T\overline{U}(\overline{S} + S) + TU(\overline{S} + S)] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + \overline{T}U(1) + T\overline{U}(1) + TU(1)] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + \overline{T}U + T\overline{U} + TU] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + U(\overline{T} + T) + T\overline{U}] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + U(1) + T\overline{U}] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + U + T\overline{U}] \\
+    P &= \overline{R} [\overline{T}\overline{U}S + (U + T)] \quad \text{(Cobertura)} \\
+    P &= \overline{R} [U + (T + \overline{T}\overline{U}S)] \quad \text{(Associativa)} \\
+    P &= \overline{R} [U + T + \overline{U}S] \quad \text{(Cobertura)} \\
+    P &= \overline{R} [T + (U + \overline{U}S)] \quad \text{(Associativa)} \\
+    P &= \overline{R} [T + U + S] \quad \text{(Cobertura)}
+\end{align*}
+\[ \mathbf{P = \overline{R} \cdot (T + U + S)} \]
+
+\textbf{Para as Válvulas:}
+\begin{itemize}
+    \item \textbf{A:} $A = \overline{S}\overline{R}(\overline{T}U + T\overline{U} + TU) = \overline{S}\overline{R}(U + T\overline{U} + TU) = \overline{S}\overline{R}(U + T)$. $\mathbf{A = \overline{S}\overline{R}(T + U)}$
+    \item \textbf{B:} $\mathbf{B = \overline{T}\overline{U}S\overline{R}}$
+    \item \textbf{C:} $C = S\overline{R}(\overline{T}U + T\overline{U}) = S\overline{R}(T \oplus U)$. $\mathbf{C = S\overline{R}(T \oplus U)}$
+    \item \textbf{D:} $\mathbf{D = TUS\overline{R}}$
+\end{itemize}
+
+\textbf{c) Código ESP32:}
+\begin{lstlisting}[language=C++]
+void processarControle() {
+    int P = (!R) && (T || U || S);
+    int A = (!S) && (!R) && (T || U);
+    int B = (!T) && (!U) && S && (!R);
+    int C = S && (!R) && (T ^ U);
+    int D = T && U && S && (!R);
+    
+    // Acionamento dos pinos...
+}
+\end{lstlisting}
+\end{solucao}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection*{Exercício 3 — Piscina Olímpica}
+
+\begin{solucao}
+\textbf{a) SOP Canônica:}
+$Y = \sum m(1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15)$
+
+\textbf{b) Simplificação:}
+Simplificar 13 mintermos é exaustivo. Vamos simplificar o \textbf{complemento} $\overline{Y}$:
+\begin{itemize}
+    \item $\overline{Y} = m(0, 5, 10) = \overline{A}\overline{B}\overline{C}\overline{D} + \overline{A}B\overline{C}D + A\overline{B}C\overline{D}$
+    \item Não há adjacência entre estes termos. Aplicando De Morgan para obter $Y$:
+    \item $Y = \overline{\overline{A}\overline{B}\overline{C}\overline{D} + \overline{A}B\overline{C}D + A\overline{B}C\overline{D}}$
+    \item $Y = (A+B+C+D) \cdot (A+\overline{B}+C+\overline{D}) \cdot (\overline{A}+B+\overline{C}+D)$
+\end{itemize}
+
+Se desejarmos a forma SOP simplificada por agrupamentos:
+\begin{align*}
+    Y &= (m12+m13+m14+m15) + (m8+m9+m12+m13) + (m1+m3+m9+m11) \\
+    &\quad + (m2+m3+m6+m7+m14+m15) + (m4+m6+m12+m14) \\
+    Y &= AB + AD + \overline{B}D + BC + AC\overline{D}
+\end{align*}
+\end{solucao}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection*{Exercício 4 — Catraca Industrial}
+
+\begin{solucao}
+\textbf{a) SOP Canônica:}
+\begin{itemize}
+    \item $X = \overline{A}BC + A\overline{B}C + ABC$
+    \item $Y = \overline{A}\overline{B}C$
+\end{itemize}
+
+\textbf{b) Simplificação de X:}
+\begin{align*}
+    X &= (\overline{A}BC + ABC) + A\overline{B}C \quad \text{(Idempotência)} \\
+    X &= BC(\overline{A} + A) + A\overline{B}C \quad \text{(Distributiva)} \\
+    X &= BC(1) + A\overline{B}C \quad \text{(Complemento)} \\
+    X &= C(B + A\overline{B}) \quad \text{(Distributiva)} \\
+    X &= C(B + A) \quad \text{(Cobertura)} \\
+    \mathbf{X} &= \mathbf{C \cdot (A + B)}
+\end{align*}
+
+\textbf{Simplificação de Y:}
+$\mathbf{Y = \overline{A}\overline{B}C}$. Não há simplificação possível.
+\end{solucao}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection*{Exercício 5 — Tanque de Tilápia}
+
+\begin{solucao}
+\textbf{a) SOP Canônica:}
+$R = \overline{D}\overline{T}N + \overline{D}T\overline{N} + D\overline{T}\overline{N} + DT\overline{N} + DTN$
+
+\textbf{b) Simplificação:}
+Utilizando Idempotência ($DT\overline{N} = DT\overline{N} + DT\overline{N}$):
+\begin{align*}
+    R &= (DT\overline{N} + DTN) + (\overline{D}T\overline{N} + DT\overline{N}) + \overline{D}\overline{T}N + D\overline{T}\overline{N} \\
+    R &= DT(\overline{N} + N) + T\overline{N}(\overline{D} + D) + \overline{D}\overline{T}N + D\overline{T}\overline{N} \\
+    R &= DT(1) + T\overline{N}(1) + \overline{D}\overline{T}N + D\overline{T}\overline{N} \\
+    R &= DT + T\overline{N} + D\overline{T}\overline{N} + \overline{D}\overline{T}N \\
+    R &= DT + \overline{N}(T + D\overline{T}) + \overline{D}\overline{T}N \\
+    R &= DT + \overline{N}(T + D) + \overline{D}\overline{T}N \\
+    R &= DT + \overline{N}T + \overline{N}D + \overline{D}\overline{T}N \\
+    \mathbf{R} &= \mathbf{T(D + \overline{N}) + D\overline{N} + \overline{D}\overline{T}N}
+\end{align*}
+\end{solucao}
+
+\end{document}

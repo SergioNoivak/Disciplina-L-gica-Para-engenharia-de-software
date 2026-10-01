@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!50!black},
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+}
+
+\newtcolorbox{block}[1]{%
+  colback=green!5,
+  colframe=maincolor,
+  coltitle=white, 
+  title=#1,
+  fonttitle=\bfseries,
+  boxrule=1.5pt,
+  arc=3mm,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{forestgreen}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{32pt}
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{forestgreen}{%
+    \small
+    \textbf{Atividade de Programação.}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{forestgreen}{\thepage}
+}
+
+\begin{document}
+
+\vspace*{0.2cm}
+\section*{Exercícios de Programação — Relações Binárias}
+
+\begin{block}{Instruções Gerais}
+Para cada um dos exercícios abaixo, escolha uma das seguintes linguagens de programação: \textbf{JavaScript, Java, C/C++ ou Python}. 
+
+\textbf{Regras de Entrada:}
+\begin{itemize}
+    \item O programa deve ler dois conjuntos, $A$ e $B$, a partir do teclado.
+    \item Os elementos dos conjuntos devem ser \textbf{números naturais} ($0, 1, 2, \dots$).
+    \item A leitura de cada conjunto deve ser interrompida quando o usuário digitar um \textbf{número menor que zero} (ex: -1).
+\end{itemize}
+
+\textbf{Formato de Entrega:}
+\begin{itemize}
+    \item A entrega deve ser um arquivo \textbf{.zip}.
+    \item Dentro do arquivo .zip, deve haver \textbf{uma pasta para cada exercício} (Ex: Exercicio1, Exercicio2, etc.).
+    \item Dentro de cada pasta, devem estar contidos \textbf{todos os códigos e arquivos necessários} para compilar e executar a resposta.
+\end{itemize}
+\end{block}
+
+\vspace{0.4cm}
+\begin{enumerate}
+
+\item \textbf{Produto Cartesiano}\\
+Implemente um programa que receba os conjuntos $A$ e $B$ e apresente na tela o produto cartesiano $A \times B$. O resultado deve ser exibido como um conjunto de pares ordenados, por exemplo: $\{(a_1, b_1), (a_1, b_2), \dots\}$.
+
+\begin{block}{Exemplo}
+\textbf{Entrada:} \\
+Conjunto A: 1, 2, -1 (fim) \\
+Conjunto B: 3, 4, -1 (fim) \\
+\textbf{Saída:} \\
+$A \times B = \{(1, 3), (1, 4), (2, 3), (2, 4)\}$
+\end{block}
+
+\vspace{0.3cm}
+\item \textbf{União de Produtos Cartesianos}\\
+Implemente um programa que calcule e mostre a união dos produtos cartesianos $A \times B$ e $B \times A$. Ou seja, o conjunto:
+\[ (A \times B) \cup (B \times A) \]
+
+\begin{block}{Exemplo}
+\textbf{Entrada:} \\
+Conjunto A: 1, -1 \\
+Conjunto B: 2, -1 \\
+\textbf{Saída:} \\
+$(A \times B) \cup (B \times A) = \{(1, 2), (2, 1)\}$
+\end{block}
+
+\vspace{0.3cm}
+\item \textbf{Propriedades de uma Relação}\\
+Dada uma relação $R$ lida do teclado (onde os alunos devem definir como os pares $(x, y)$ da relação serão informados, utilizando os elementos dos conjuntos $A$ e $B$ previamente lidos), verifique as seguintes propriedades:
+\begin{enumerate}[label=\alph*)]
+    \item \textbf{Reflexividade:} Verifique se a relação é reflexiva em $A$.
+    \item \textbf{Simetria:} Verifique se a relação é simétrica.
+    \item \textbf{Antissimetria:} Verifique se a relação é antissimétrica.
+    \item \textbf{Assimétrica:} Verifique se a relação é assimétrica.
+\end{enumerate}
+
+\begin{block}{Exemplo}
+\textbf{Entrada:} \\
+Conjunto A: 1, 2, -1 \\
+Relação R: (1, 1), (2, 2), (1, 2), -1 (fim da relação) \\
+\textbf{Saída:} \\
+Reflexiva: Sim \\
+Simétrica: Não (falta (2, 1)) \\
+Antissimétrica: Sim \\
+Assimétrica: Não (contém (1, 1))
+\end{block}
+
+\vspace{0.3cm}
+\item \textbf{Matriz de Relação}\\
+Dada uma relação qualquer $R$ sobre os conjuntos lidos, implemente um código que gere e exiba a \textbf{Matriz de Relação} correspondente. A matriz deve ter as dimensões adequadas e exibir $1$ se existe a relação entre os elementos e $0$ caso contrário.
+
+\begin{block}{Exemplo}
+\textbf{Entrada:} \\
+Conjunto A: 1, 2, -1 \\
+Conjunto B: 1, 2, -1 \\
+Relação R: (1, 2), (2, 1), -1 \\
+\textbf{Saída:} \\
+$\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$
+\end{block}
+
+\end{enumerate}
+
+\end{document}

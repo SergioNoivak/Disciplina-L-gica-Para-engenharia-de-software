@@ -1,0 +1,367 @@
+\documentclass[12pt]{article}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,calc,matrix,arrows.meta,decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{float}
+
+\definecolor{maincolor}{RGB}{0,100,50}
+\usepackage{fancyhdr}
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage[most]{tcolorbox}
+
+\geometry{margin=2.5cm}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{2pt}
+\renewcommand{\footrulewidth}{2pt}
+
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \headrulewidth\hfill}}
+
+\renewcommand{\footrule}{\hbox to\headwidth{%
+  \color{black}\leaders\hrule height \footrulewidth\hfill}}
+
+\setlength{\headheight}{51pt} 
+
+\fancyhead[L]{%
+  \includegraphics[height=1.2cm]{Universidade_de_Rio_Verde.jpg}
+}
+
+\fancyhead[R]{%
+  \raggedleft
+  \textcolor{black}{%
+    \small
+    \textbf{Lista de Exercícios --- Subgrafos, Ciclos e Árvores Geradoras}\\
+    Me.~Sergio Souza Novak\\
+    \textit{Lógica para Engenharia de Software}
+  }
+}
+
+\fancyfoot[C]{%
+  \textcolor{black}{\thepage}
+}
+
+\newcommand{\quadro}[1]{\vspace{0.2cm}\begin{tcolorbox}[colback=white, colframe=black, height=#1, boxrule=0.5pt, arc=0pt] \textit{Resposta:} \end{tcolorbox}}
+
+\begin{document}
+
+\begin{enumerate}[label=\arabic*), leftmargin=1.5cm, itemsep=0.8cm]
+
+% -------------------------------------------------------
+% Questão 1: Subgrafos e Grafo Gerador
+% -------------------------------------------------------
+\item Um administrador de TI de uma universidade está mapeando os computadores de um laboratório para otimizar o fluxo de dados. A topologia atual da rede local é representada pelo grafo abaixo, onde os vértices são os computadores (1 a 5) e as arestas são os cabos de rede diretos que os conectam.
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm}
+    ]
+        \node[vertex] (1) at (0,2) {1};
+        \node[vertex] (2) at (2,4) {2};
+        \node[vertex] (3) at (4,2) {3};
+        \node[vertex] (4) at (2,0) {4};
+        \node[vertex] (5) at (2,2) {5};
+
+        \draw[thick] (1) -- (2);
+        \draw[thick] (1) -- (4);
+        \draw[thick] (1) -- (5);
+        \draw[thick] (2) -- (3);
+        \draw[thick] (2) -- (5);
+        \draw[thick] (3) -- (4);
+        \draw[thick] (4) -- (5);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Defina formalmente o que é um \textbf{subgrafo} e um \textbf{grafo gerador} (ou subgrafo gerador).
+    \item Desenhe um subgrafo de $G$ que contenha exatamente 3 vértices e 3 arestas. Ele forma um ciclo?
+    \item Desenhe um grafo gerador de $G$ que seja uma árvore (ou seja, sem ciclos).
+\end{enumerate}
+\quadro{8cm}
+
+% -------------------------------------------------------
+% Questão 2: Componentes Conexas
+% -------------------------------------------------------
+\item Durante uma epidemia, pesquisadores de saúde pública estão rastreando o contato entre pacientes para entender a propagação do vírus e isolar os grupos de risco. Eles modelaram a situação como um grafo, onde cada vértice representa um paciente ($A$ a $H$) e cada aresta representa um contato físico recente entre dois pacientes. O conjunto de contatos identificados foi: $E = \{(A,B), (B,C), (C,A), (D,E), (F,G), (G,H), (F,H)\}$.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o grafo $H$.
+    \item O grafo $H$ é conexo? Justifique.
+    \item Quantas componentes conexas o grafo $H$ possui? Liste os vértices que pertencem a cada componente.
+\end{enumerate}
+\quadro{7cm}
+
+% -------------------------------------------------------
+% Questão 3: Isomorfismo
+% -------------------------------------------------------
+\item Dois químicos de um laboratório farmacêutico estão desenvolvendo representações visuais para a estrutura molecular de um novo polímero. Eles desenharam os dois grafos abaixo, $G_1$ e $G_2$, que parecem diferentes à primeira vista. No entanto, a equipe suspeita que eles representem exatamente a mesma molécula desenhada de ângulos diferentes (ou seja, possuem a mesma estrutura topológica).
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.8cm}
+    ]
+        % Grafo 1
+        \node at (1, 3.5) {$G_1$};
+        \node[vertex] (u1) at (0,2) {$u_1$};
+        \node[vertex] (u2) at (2,2) {$u_2$};
+        \node[vertex] (u3) at (2,0) {$u_3$};
+        \node[vertex] (u4) at (0,0) {$u_4$};
+        \draw[thick] (u1) -- (u2) -- (u3) -- (u4) -- (u1);
+        \draw[thick] (u1) -- (u3);
+
+        % Grafo 2
+        \node at (7, 3.5) {$G_2$};
+        \node[vertex] (v1) at (6,2) {$v_1$};
+        \node[vertex] (v2) at (8,2) {$v_2$};
+        \node[vertex] (v3) at (8,0) {$v_3$};
+        \node[vertex] (v4) at (6,0) {$v_4$};
+        \draw[thick] (v1) -- (v2) -- (v4) -- (v3) -- (v1);
+        \draw[thick] (v2) -- (v3);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Compare o número de vértices, o número de arestas e a sequência de graus de $G_1$ e $G_2$.
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 4: Caminhos e Ciclos
+% -------------------------------------------------------
+\item Aplicativos de mobilidade urbana utilizam grafos para calcular as melhores rotas em uma cidade. Os cruzamentos são modelados como vértices e as ruas como arestas. Para que o algoritmo de GPS funcione corretamente e não confunda o motorista, os programadores precisam garantir que os veículos não fiquem rodando em círculos ou passem pelo mesmo local desnecessariamente. Responda com base nos conceitos matemáticos de teoria dos grafos.
+\begin{enumerate}[label=\alph*)]
+    \item Qual a diferença fundamental entre um \textbf{caminho} e um \textbf{caminho simples}?
+    \item O que caracteriza um \textbf{ciclo} em um grafo não direcionado?
+    \item É possível haver um ciclo em uma árvore? Justifique com base na definição de árvore livre.
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 5: Ciclos Hamiltonianos
+% -------------------------------------------------------
+\item Uma transportadora precisa realizar entregas em diversas cidades de um estado utilizando um único caminhão. Para economizar combustível e tempo, o gerente de logística deseja traçar uma rota contínua que saia do galpão principal, visite todas as cidades parceiras exatamente uma vez e retorne ao ponto de partida. Na Teoria dos Grafos, esse trajeto perfeito que resolve o ``Problema do Caixeiro Viajante'' é modelado através de um conceito específico.
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm}
+    ]
+        \node[vertex] (A) at (0,1.5) {A};
+        \node[vertex] (B) at (2,3) {B};
+        \node[vertex] (C) at (4,1.5) {C};
+        \node[vertex] (D) at (3,0) {D};
+        \node[vertex] (E) at (1,0) {E};
+
+        \draw[thick] (A) -- (B);
+        \draw[thick] (A) -- (C);
+        \draw[thick] (A) -- (E);
+        \draw[thick] (B) -- (C);
+        \draw[thick] (B) -- (D);
+        \draw[thick] (C) -- (D);
+        \draw[thick] (D) -- (E);
+    \end{tikzpicture}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item O que define um \textbf{Ciclo Hamiltoniano} em um grafo?
+    \item Verifique se o grafo acima possui um Ciclo Hamiltoniano. Se sim, descreva a sequência de vértices do ciclo.
+\end{enumerate}
+\quadro{5cm}
+
+% -------------------------------------------------------
+% Questão 6: Árvore Geradora Mínima (Kruskal)
+% -------------------------------------------------------
+\item O Programa Nacional de Banda Larga do governo federal abriu uma licitação para que uma empresa de telecomunicações conecte 6 cidades isoladas do interior ($A$ a $F$) com internet de fibra óptica de alta velocidade. O edital exige que todas as cidades fiquem interligadas (seja de forma direta ou indireta), mas o consórcio vencedor precisa realizar a obra com o menor orçamento possível. Os custos orçados (em milhões de reais) para o cabeamento entre cada par de cidades viável estão representados no projeto topológico abaixo.
+
+\begin{center}
+    \begin{tikzpicture}[
+        vertex/.style={circle, draw=black, fill=gray!20, thick, minimum size=0.9cm},
+        edge/.style={thick}
+    ]
+        \node[vertex] (A) at (0,2) {A};
+        \node[vertex] (B) at (3,4) {B};
+        \node[vertex] (C) at (6,2) {C};
+        \node[vertex] (D) at (6,-1) {D};
+        \node[vertex] (E) at (3,-1) {E};
+        \node[vertex] (F) at (0,-1) {F};
+
+        \draw[edge] (A) -- node[above left] {4} (B);
+        \draw[edge] (A) -- node[left] {8} (F);
+        \draw[edge] (A) -- node[above] {10} (E);
+        \draw[edge] (B) -- node[above right] {6} (C);
+        \draw[edge] (B) -- node[right, pos=0.2] {5} (E);
+        \draw[edge] (B) -- node[right, pos=0.8] {2} (F);
+        \draw[edge] (C) -- node[right] {3} (D);
+        \draw[edge] (C) -- node[above] {9} (E);
+        \draw[edge] (D) -- node[below] {7} (E);
+        \draw[edge] (E) -- node[below] {1} (F);
+    \end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=\alph*)]
+    \item Aplique o algoritmo de Kruskal para encontrar a Árvore Geradora Mínima (MST). Liste as arestas em ordem crescente de peso.
+    \item Para cada aresta analisada, indique se ela foi \textbf{adicionada} à MST ou \textbf{rejeitada} (por formar ciclo). Mostre a evolução dos conjuntos de vértices (simulando a estrutura Union-Find).
+    \item Desenhe a Árvore Geradora Mínima resultante.
+    \item Qual é o custo total mínimo para interligar as 6 cidades?
+\end{enumerate}
+\quadro{12cm}
+
+% -------------------------------------------------------
+% Questão 7: Árvore Geradora Mínima (Circuitos Elétricos)
+% -------------------------------------------------------
+\item Em um projeto de placa de circuito impresso (PCB), um engenheiro precisa interligar 5 componentes eletrônicos (C1 a C5) em uma mesma trilha de comunicação. O custo de fabricação das trilhas de cobre é proporcional à distância em milímetros entre os terminais de cada componente, conforme as conexões possíveis listadas na tabela abaixo:
+\begin{center}
+    \begin{tikzpicture}
+        \draw[fill=green!30!black, rounded corners=2mm] (0,0) rectangle (6,3);
+        \node[fill=black, text=white, minimum width=1cm, minimum height=0.6cm, font=\sffamily\tiny] at (1,2.2) {C1};
+        \node[fill=black, text=white, minimum width=1cm, minimum height=0.6cm, font=\sffamily\tiny] at (3,2.4) {C2};
+        \node[fill=black, text=white, minimum width=1cm, minimum height=0.6cm, font=\sffamily\tiny] at (5,1.8) {C3};
+        \node[fill=black, text=white, minimum width=1cm, minimum height=0.6cm, font=\sffamily\tiny] at (1.5,0.8) {C4};
+        \node[fill=black, text=white, minimum width=1cm, minimum height=0.6cm, font=\sffamily\tiny] at (4.5,0.6) {C5};
+        \node[white, font=\small, opacity=0.6] at (3,1.5) {Placa de Circuito Impresso};
+    \end{tikzpicture}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{Aresta} & (C1,C2) & (C1,C3) & (C2,C4) & (C3,C4) & (C3,C5) & (C4,C5) \\ \hline
+        \textbf{Custo (mm)} & 12 & 25 & 10 & 14 & 18 & 8 \\ \hline
+    \end{tabular}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Modele o problema desenhando o grafo ponderado correspondente.
+    \item Aplique o algoritmo de Kruskal para determinar o layout das trilhas que interliga todos os componentes sem fechar ciclos (Árvore Geradora Mínima).
+    \item Qual é o comprimento total mínimo de trilhas necessário para a placa?
+\end{enumerate}
+\quadro{6cm}
+
+% -------------------------------------------------------
+% Questão 8: Árvore Geradora Mínima (Infraestrutura Cisco)
+% -------------------------------------------------------
+\item Em uma topologia de rede corporativa construída com switches Cisco, foram adicionados links redundantes para evitar falhas físicas. No entanto, o protocolo STP (\textit{Spanning Tree Protocol}) desativa conexões redundantes de forma lógica para criar uma topologia em árvore (livre de loops de broadcast). Considere 6 switches (S1 a S6) e os custos dos links (baseados inversamente na largura de banda):
+\begin{center}
+    \begin{tikzpicture}
+        % Rack context
+        \draw[fill=gray!20, thick, rounded corners] (0,0) rectangle (4,4.5);
+        \node[font=\sffamily\footnotesize] at (2,4.2) {Rack de Telecom};
+        \draw[fill=gray!70, draw=black] (0.2, 3.4) rectangle (3.8, 3.9) node[midway, white, font=\sffamily\tiny] {S1 (Core)};
+        \draw[fill=gray!70, draw=black] (0.2, 2.8) rectangle (3.8, 3.3) node[midway, white, font=\sffamily\tiny] {S2 (Core)};
+        \draw[fill=gray!70, draw=black] (0.2, 2.2) rectangle (3.8, 2.7) node[midway, white, font=\sffamily\tiny] {S3 (Dist)};
+        \draw[fill=gray!70, draw=black] (0.2, 1.6) rectangle (3.8, 2.1) node[midway, white, font=\sffamily\tiny] {S4 (Dist)};
+        \draw[fill=gray!70, draw=black] (0.2, 1.0) rectangle (3.8, 1.5) node[midway, white, font=\sffamily\tiny] {S5 (Access)};
+        \draw[fill=gray!70, draw=black] (0.2, 0.4) rectangle (3.8, 0.9) node[midway, white, font=\sffamily\tiny] {S6 (Access)};
+    \end{tikzpicture}
+\end{center}
+
+Os custos dos links disponíveis entre os switches são:
+\begin{itemize}
+    \item (S1, S2): 19 \qquad (S1, S5): 100 \qquad (S1, S6): 4
+    \item (S2, S3): 19 \qquad (S2, S6): 4
+    \item (S3, S4): 100
+    \item (S4, S5): 19 \qquad (S4, S6): 4
+    \item (S5, S6): 19
+\end{itemize}
+\begin{enumerate}[label=\alph*)]
+    \item Simule o comportamento do STP (encontrando a MST) executando o algoritmo de Kruskal. Liste os links (arestas) que permanecerão ativos para tráfego.
+    \item Quais links serão logicamente bloqueados pelo protocolo (ou seja, as arestas rejeitadas na MST) para evitar loops?
+\end{enumerate}
+\quadro{7cm}
+
+% -------------------------------------------------------
+% Questão 9: Árvore Geradora Mínima (Malhas Logísticas)
+% -------------------------------------------------------
+\item Uma grande rede varejista planeja otimizar sua malha logística pavimentando trechos de estradas de terra que interligam 5 Centros de Distribuição (CD1 a CD5). A diretoria exige que haja pelo menos um caminho de asfalto conectando (direta ou indiretamente) qualquer par de CDs. Os custos orçados (em milhões de reais) para pavimentar cada trecho possível são:
+\begin{center}
+    \begin{tikzpicture}
+        \draw[fill=brown!20, rounded corners=5mm] (0,0) rectangle (8,3.5) node[midway, opacity=0.2, font=\LARGE\sffamily, rotate=15] {MALHA REGIONAL};
+        \node[draw, fill=white, thick, minimum width=1.2cm, minimum height=0.6cm, font=\sffamily\footnotesize] at (1,2.5) {CD1};
+        \node[draw, fill=white, thick, minimum width=1.2cm, minimum height=0.6cm, font=\sffamily\footnotesize] at (4,2.8) {CD2};
+        \node[draw, fill=white, thick, minimum width=1.2cm, minimum height=0.6cm, font=\sffamily\footnotesize] at (7,2) {CD3};
+        \node[draw, fill=white, thick, minimum width=1.2cm, minimum height=0.6cm, font=\sffamily\footnotesize] at (2.5,0.8) {CD4};
+        \node[draw, fill=white, thick, minimum width=1.2cm, minimum height=0.6cm, font=\sffamily\footnotesize] at (5.5,0.6) {CD5};
+    \end{tikzpicture}
+\end{center}
+
+Os custos orçados (em milhões de reais) para pavimentar cada trecho possível são:
+\begin{itemize}
+    \item (CD1, CD2): R\$ 5 mi \qquad (CD1, CD4): R\$ 9 mi \qquad (CD1, CD5): R\$ 1 mi
+    \item (CD2, CD3): R\$ 3 mi \qquad (CD2, CD5): R\$ 2 mi
+    \item (CD3, CD4): R\$ 6 mi \qquad (CD3, CD5): R\$ 4 mi
+    \item (CD4, CD5): R\$ 7 mi
+\end{itemize}
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o grafo ponderado correspondente a esta malha viária.
+    \item Utilizando o algoritmo de Kruskal, defina quais estradas devem ser asfaltadas para que todos os CDs fiquem interconectados com o \textbf{menor custo possível}.
+    \item Calcule o orçamento total mínimo da obra viária.
+\end{enumerate}
+\quadro{8cm}
+
+% -------------------------------------------------------
+% Questão 10: Árvore Geradora Mínima (Saneamento Básico)
+% -------------------------------------------------------
+\item Um problema clássico de MST envolve o planejamento urbano. Uma prefeitura está projetando a expansão da rede de abastecimento de água para 5 novos bairros ($B_1$ a $B_5$) a partir de uma Estação de Tratamento (ETA). O objetivo é conectar todos os pontos com tubos principais, utilizando a menor metragem possível de PVC. As distâncias (em km) permitidas para escavação estão representadas na matriz de adjacência abaixo ($\infty$ significa que o terreno é rochoso e não pode ser escavado):
+\begin{center}
+    \begin{tikzpicture}
+        \draw[fill=green!10, rounded corners=5mm] (0,0) rectangle (8,3.5);
+        \draw[fill=blue!30, draw=none] (0,0.8) to[out=20, in=160] (8,1.2) -- (8,0) -- (0,0) -- cycle;
+        \node[draw, circle, fill=blue!60, text=white, thick, font=\sffamily\footnotesize] at (1,2) {ETA};
+        \node[draw, rectangle, fill=white, font=\sffamily\footnotesize] at (3,2.8) {$B_1$};
+        \node[draw, rectangle, fill=white, font=\sffamily\footnotesize] at (5,3) {$B_2$};
+        \node[draw, rectangle, fill=white, font=\sffamily\footnotesize] at (7,2.2) {$B_3$};
+        \node[draw, rectangle, fill=white, font=\sffamily\footnotesize] at (4,1.5) {$B_4$};
+        \node[draw, rectangle, fill=white, font=\sffamily\footnotesize] at (6.5,0.6) {$B_5$};
+    \end{tikzpicture}
+\end{center}
+
+As distâncias (em km) permitidas para escavação estão representadas na matriz de adjacência abaixo ($\infty$ significa que o terreno é rochoso e não pode ser escavado):
+\begin{center}
+    \begin{tabular}{c|cccccc}
+        & \textbf{ETA} & \textbf{$B_1$} & \textbf{$B_2$} & \textbf{$B_3$} & \textbf{$B_4$} & \textbf{$B_5$} \\ \hline
+        \textbf{ETA}& 0 & 3 & $\infty$ & $\infty$ & 5 & 8 \\
+        \textbf{$B_1$} & 3 & 0 & 4 & $\infty$ & $\infty$ & 6 \\
+        \textbf{$B_2$} & $\infty$ & 4 & 0 & 2 & 7 & $\infty$ \\
+        \textbf{$B_3$} & $\infty$ & $\infty$ & 2 & 0 & 1 & 9 \\
+        \textbf{$B_4$} & 5 & $\infty$ & 7 & 1 & 0 & 3 \\
+        \textbf{$B_5$} & 8 & 6 & $\infty$ & 9 & 3 & 0 \\
+    \end{tabular}
+\end{center}
+\begin{enumerate}[label=\alph*)]
+    \item Liste todas as arestas válidas do grafo e seus respectivos pesos em ordem crescente.
+    \item Encontre a Árvore Geradora Mínima e desenhe-a.
+    \item Qual a metragem total (em km) de dutos PVC a ser adquirida pela prefeitura?
+\end{enumerate}
+\quadro{7cm}
+
+% -------------------------------------------------------
+% Questão 11: Árvore Geradora Mínima (Pontes em Arquipélago)
+% -------------------------------------------------------
+\item  O governo local de um arquipélago no Caribe deseja construir um sistema de pontes panorâmicas para carros, interligando 6 de suas paradisíacas ilhas turísticas ($I_1$ a $I_6$). O custo para construir uma ponte depende da profundidade e da distância marítima entre duas ilhas, resultando no seguinte conjunto de possíveis pontes com custos (em milhões de dólares):
+\begin{center}
+    \begin{tikzpicture}
+        \draw[fill=blue!20, rounded corners=5mm] (0,0) rectangle (8,3.5) node[midway, opacity=0.2, font=\LARGE\sffamily, rotate=15] {MAR DO CARIBE};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (1,2.5) circle (0.5) node[black, font=\sffamily\footnotesize] {$I_1$};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (3.5,2.7) circle (0.6) node[black, font=\sffamily\footnotesize] {$I_2$};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (6.5,2.4) circle (0.7) node[black, font=\sffamily\footnotesize] {$I_3$};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (2,1) circle (0.4) node[black, font=\sffamily\footnotesize] {$I_4$};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (4.5,0.8) circle (0.5) node[black, font=\sffamily\footnotesize] {$I_5$};
+        \draw[fill=yellow!60!green!50, thick, decorate, decoration={random steps,segment length=4pt,amplitude=1.5pt}] (7,0.9) circle (0.4) node[black, font=\sffamily\footnotesize] {$I_6$};
+    \end{tikzpicture}
+\end{center}
+
+O conjunto de possíveis pontes com custos (em milhões de dólares) é:
+\[ E = \{(I_1, I_2, 7), (I_1, I_3, 4), (I_2, I_3, 1), (I_2, I_4, 3), (I_2, I_5, 5), \]
+\[ (I_3, I_4, 8), (I_4, I_5, 2), (I_4, I_6, 6), (I_5, I_6, 9)\} \]
+\begin{enumerate}[label=\alph*)]
+    \item Modele o arquipélago desenhando o grafo.
+    \item Execute o algoritmo de Kruskal passo a passo. Descreva a ordem de avaliação e indique claramente se cada ponte foi \textbf{construída} (aceita) ou \textbf{descartada} (rejeitada por formar ciclo fechado no barco).
+    \item Indique o custo total do projeto de mobilidade para o arquipélago.
+\end{enumerate}
+\quadro{8cm}
+
+\end{enumerate}
+
+\end{document}

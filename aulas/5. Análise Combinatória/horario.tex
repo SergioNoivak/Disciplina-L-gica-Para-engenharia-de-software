@@ -1,0 +1,84 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{array}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\geometry{a4paper, landscape, margin=1.5cm}
+
+\definecolor{livre}{RGB}{198,239,206}
+\newcommand{\livre}{\cellcolor{livre}}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{2.8cm}}
+
+\begin{document}
+
+\begin{center}
+    {\Large\bfseries Quadro de Horários}\\[4pt]
+    {\large Sergio Souza Novak}
+\end{center}
+
+\vspace{0.5cm}
+
+\renewcommand{\arraystretch}{1.15}
+\footnotesize
+
+\begin{center}
+\begin{tabular}{|C{2.5cm}|C{2.8cm}|C{2.8cm}|C{2.8cm}|C{2.8cm}|C{2.8cm}|C{2.8cm}|}
+\hline
+\rowcolor{gray!30}
+\textbf{Horário} &
+\textbf{Segunda} &
+\textbf{Terça} &
+\textbf{Quarta} &
+\textbf{Quinta} &
+\textbf{Sexta} &
+\textbf{Sábado} \\
+\hline
+
+07:00--08:00 &  &  & Física de Solos (IF Goiano) & Seminários I (IF Goiano) &  & UNIRV \\ \hline
+08:00--09:00 & Deslocamento & \livre & Física de Solos (IF Goiano) & Seminários I (IF Goiano) & Deslocamento & UNIRV \\ \hline
+
+09:00--10:00 & Prefeitura & \livre & Física de Solos (IF Goiano) & Seminários I (IF Goiano) & Prefeitura & UNIRV \\ \hline
+
+10:00--11:00 & Prefeitura & \livre & Física de Solos (IF Goiano) & Seminários I (IF Goiano) & Prefeitura & Deslocamento \\ \hline
+
+11:00--12:00 & Deslocamento & \livre & Física de Solos (IF Goiano) & Seminários I (IF Goiano) & Deslocamento & \\ \hline
+
+12:00--13:00 & Almoço & Almoço & Almoço & Almoço & Almoço & Almoço \\ \hline
+
+13:00--14:00 & Prefeitura & \livre & Deslocamento & \livre & \livre & \\ \hline
+
+14:00--15:00 & Prefeitura & \livre & Prefeitura & \livre & \livre & \\ \hline
+
+15:00--16:00 & Deslocamento & \livre & \livre & \livre & \livre & \\ \hline
+
+16:00--17:00 & \livre & \livre & \livre & \livre & \livre & \\ \hline
+17:00--18:00 & \livre & \livre & \livre & \livre & \livre & \\ \hline
+
+18:00--19:00 & Deslocamento & Deslocamento & Deslocamento & Deslocamento & Deslocamento & \\ \hline
+
+19:00--20:00 & UNIRV & UNIRV & UNIRV & UNIRV & UNIRV & \\ \hline
+20:00--21:00 & UNIRV & UNIRV & UNIRV & UNIRV & UNIRV & \\ \hline
+
+21:00--22:00 & \livre & \livre & UNIRV & UNIRV & UNIRV & \\ \hline
+
+22:00--22:30 & \livre & \livre & UNIRV & UNIRV & UNIRV & \\ \hline
+
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline
+\cellcolor{livre}\hspace{0.8cm} & Horários vagos \\ \hline
+\end{tabular}
+\end{center}
+
+\end{document}

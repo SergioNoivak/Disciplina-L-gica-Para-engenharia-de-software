@@ -1,0 +1,500 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------------------------------------
+% Pacotes
+% ------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{mathptmx} % Times New Roman
+\usepackage{enumitem}\usepackage{amsfonts}
+\usepackage{amsmath} % Recomendado para o comando \text{}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\definecolor{maincolor}{RGB}{0,100,50} 
+\definecolor{forestgreen}{RGB}{0,100,50}
+\usepackage{booktabs}
+\usepackage{pdflscape}
+\usepackage{multicol}
+
+\newtcolorbox{codeblock}{%
+  colback=black!2,
+  colframe=gray!30,
+  arc=1mm,
+  boxrule=0.5pt,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  fontupper=\small
+}
+
+\lstset{
+    language=Java,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    frame=none,
+    numbers=none,
+    tabsize=2,
+    commentstyle=\itshape\color{gray},
+    morekeywords={this}
+}
+
+% TikZ Styles for ER Diagrams
+\tikzset{
+    block/.style={rectangle, draw, thick, minimum width=2cm, minimum height=1cm, fill=white},
+    diamond_node/.style={diamond, draw, thick, minimum width=2cm, minimum height=1cm, fill=white, aspect=2},
+    attribute/.style={ellipse, draw, thin, minimum width=1.5cm, minimum height=0.6cm, fill=white, font=\scriptsize},
+    line/.style={draw, thick}, 
+}
+% ------------------------------------------------ 
+% Configuração de página
+% ------------------------------------------------
+\geometry{
+    a4paper,
+    left=2cm,
+    right=2cm,
+    top=2cm,
+    bottom=2cm,
+    headheight=15pt % Adicione isso
+}% Caixa para resposta discursiva
+\newcommand{\resposta}[1]{
+\noindent
+\framebox[\textwidth]{
+\begin{minipage}{0.98\textwidth}
+\vspace{#1}
+\end{minipage}
+}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Comandos auxiliares
+% ------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ------------------------------------------------
+% Documento
+% ------------------------------------------------
+\begin{document}
+
+% ------------------------------------------------
+% Cabeçalho - Corrigido para evitar aninhamento problemático
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{@{} L{4cm} X @{}}
+    \raisebox{-0.5cm}{\includegraphics[width=4cm]{Universidade_de_Rio_Verde.jpg}} &
+    \hfill
+    \begin{tabular}{|>{\centering\arraybackslash}m{10cm}|>{\raggedright\arraybackslash}p{1.8cm}|}
+        \hline
+        \cellcolor{black}\color{white}\rule{0pt}{1.2cm}\textbf{AVALIAÇÃO 2} 
+        & 
+        \small Nota \tabularnewline
+        \hline
+    \end{tabular} 
+\end{tabularx}
+
+% ------------------------------------------------  
+% Tabela principal - Estrutura limpa
+% ------------------------------------------------
+\begin{tabularx}{\textwidth}{|X|L{2cm}|}
+\hline
+\textbf{Curso} & \textbf{Campus} \\
+\textit{Engenharia de Software} & \textit{Rio Verde} \\
+\hline
+\multicolumn{2}{|l|}{ \textit{Lógica para Engenharia de Software}} \\
+\hline
+\textbf{Nome do(a) acadêmico(a)} & \textbf{Valor} \\
+& 7,0 \\
+\hline
+\textbf{Professor} & \textbf{Turma} \\
+\textit{ Sergio Souza Novak} & \textit{A} \\
+\hline
+\textbf{Data da Avaliação} & \textbf{Código} \\
+\textit{ 11/05/2026} & \textit{ESW418} \\
+\hline
+\end{tabularx}
+ 
+% ------------------------------------------------
+% Barra de Atenção
+% ------------------------------------------------
+\vspace{0.2cm}
+
+\begin{tabularx}{\textwidth}{|X|}
+\hline
+\cellcolor{black}\color{white}
+\centering \textbf{ATENÇÃO:} Somente serão passíveis de \textbf{REVISÃO} avaliações resolvidas à \textbf{TINTA}. \tabularnewline
+\hline
+\end{tabularx}
+
+
+\textbf{ORIENTAÇÕES PARA A RESOLUÇÃO}  
+
+\begin{itemize}
+    \item A avaliação é individual, com consulta apenas ao material escrito a mão (à caneta);
+    \item A interpretação de texto faz parte da avaliação;
+\end{itemize}
+
+
+\begin{center}
+    \rule{\textwidth}{0.4pt}
+    \textbf{QUESTÕES}
+\end{center}
+
+\vspace{0.5cm} 
+
+\begin{enumerate}
+     \item Em uma aplicação \textbf{Qt (C++)}, um botão executa uma ação ao ser clicado com base nas seguintes condições:
+As condições consideradas são: \texttt{isValid} (dados válidos), \texttt{isCached} (resultado em cache), \texttt{hasNetwork} (conexão com a rede disponível) e \texttt{isAuthorized} (usuário autenticado).
+    
+    O código do slot é dado por:
+    
+    \begin{codeblock}
+    \begin{verbatim}
+    void MainWindow::on_pushButton_clicked() {
+        if ( ((isValid && hasNetwork) || isCached) &&
+             ((!isValid || isCached) && (isAuthorized || isCached)) ) {
+            exibirResultado();
+        }
+    }
+    \end{verbatim}
+    \end{codeblock}
+
+    \textbf{Simplifique a lógica condicional acima e apresente a expressão mínima resultante.}
+    
+    \resposta{4cm}
+       \item (IBFC - 2017) Analise as quatro afirmações abaixo sobre funções matemáticas:
+    
+    \begin{enumerate}[label=\Roman*.]
+        \item Uma função é injetora se cada elemento do domínio da função possui uma imagem diferente no contradomínio.
+        \item Uma função é sobrejetora se cada elemento do contradomínio for imagem de um elemento do domínio da função.
+        \item Uma função não pode ser injetora e sobrejetora simultaneamente.
+        \item O contradomínio de uma função numérica sempre será um conjunto numérico maior que o domínio da mesma: por exemplo, se o domínio de uma função for os números naturais, o contradomínio será, no mínimo, o conjunto dos números inteiros.
+    \end{enumerate}
+
+    Assinale a alternativa que indica quais destas afirmações estão corretas:
+
+    \begin{enumerate}[label=\Alph*)]
+        \item Apenas a afirmação I está correta
+        \item Apenas as afirmações I e II estão corretas
+        \item Apenas as afirmações I e III estão corretas
+        \item Apenas as afirmações II e IV estão corretas
+        \item Apenas as afirmações II e III estão corretas
+    \end{enumerate}
+        \item Estudos recentes, incluindo levantamentos da Embrapa em 2024, destacam o crescimento dos sistemas automáticos de ordenha (AMS) baseados em Internet das Coisas (IoT). Essas tecnologias utilizam sensores de identificação, atividade e saúde animal para automatizar o fluxo de tráfego em fazendas leiteiras, permitindo um manejo voluntário e preciso.
+    
+    Em um piquete de vacas leiteiras, um sistema automatizado decide se uma vaca pode entrar na área de ordenha com base em sensores IoT industriais. Os quatro sensores utilizados são:
+    
+    \begin{itemize}[leftmargin=1cm, label=\textbullet]
+      \item \textbf{A} — Sensor RFID de identificação animal (\textit{Allflex Livestock Intelligence}): $A = 1$ indica que a vaca foi identificada corretamente.
+      \item \textbf{B} — Sensor de atividade/ruminação (\textit{SCR Heatime HR Tag}): $B = 1$ indica atividade normal (vaca apta).
+      \item \textbf{C} — Sensor de presença no portão (\textit{sensor indutivo IFM Efector}): $C = 1$ indica que a vaca está posicionada corretamente no portão.
+      \item \textbf{D} — Sensor de saúde — temperatura corporal (\textit{CowManager Sensor}): $D = 1$ indica temperatura corporal normal.
+    \end{itemize}
+    
+    \textbf{Saída do sistema:} $Y = 1$ libera a entrada para a ordenha; $Y = 0$ não libera.
+    
+    
+    \noindent\textbf{Tabela Verdade e Tarefas:}
+    
+    \medskip
+    \begin{minipage}[c]{0.35\textwidth}
+        \centering
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{|c|c|c|c||c|}
+          \hline
+          \textbf{A} & \textbf{B} & \textbf{C} & \textbf{D} & \textbf{Y} \\
+          \hline
+          0 & 0 & 0 & 0 & 0 \\
+          0 & 0 & 0 & 1 & 1 \\
+          0 & 0 & 1 & 0 & 0 \\
+          0 & 0 & 1 & 1 & 0 \\
+          0 & 1 & 0 & 0 & 1 \\
+          0 & 1 & 0 & 1 & 0 \\
+          0 & 1 & 1 & 0 & 0 \\
+          0 & 1 & 1 & 1 & 0 \\
+          1 & 0 & 0 & 0 & 0 \\
+          1 & 0 & 0 & 1 & 0 \\
+          1 & 0 & 1 & 0 & 1 \\
+          1 & 0 & 1 & 1 & 0 \\
+          1 & 1 & 0 & 0 & 0 \\
+          1 & 1 & 0 & 1 & 0 \\
+          1 & 1 & 1 & 0 & 0 \\
+          1 & 1 & 1 & 1 & 1 \\
+          \hline
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.6\textwidth}
+        \textbf{O que você deve fazer:}
+        \begin{enumerate}[label=\textbf{\alph*)}, leftmargin=1cm]
+          \item Escreva a função booleana na forma \textbf{Soma de Produtos (SOP)} canônica, identificando os mintermos com saída $Y = 1$.
+          \item Simplifique a expressão obtida usando apenas \textbf{Álgebra Booleana} (sem utilizar mapa de Karnaugh), apresentando cada passo da simplificação com a propriedade ou lei aplicada.
+          \item Construa o circuito de portas lógicas para esse sistema.
+        \end{enumerate}
+    \end{minipage}
+    
+    \resposta{15cm}
+    \item (FUNDATEC - 2019) Domínio de uma função é o conjunto de todos os números que a incógnita pode assumir e que irá gerar imagens. De acordo com o conceito apresentado, análise a imagem abaixo e assinale a alternativa correta, tendo em vista que os elementos 5, 6, 7 e 8 são alcançados pelo processo de mapeamento, e que os elementos 9 e 10 não são alcançados por tal processo.  
+    
+    \begin{center}
+    \begin{minipage}[t]{0.42\textwidth}
+        \vspace{0pt}
+        \centering
+        \begin{tikzpicture}[>=stealth, thick, scale=0.8]
+            % Blobs (Conjuntos A e B)
+            \draw[fill=pink!20, draw=black] (0,0) ellipse (0.8 and 1.5);
+            \draw[fill=pink!20, draw=black] (4,0) ellipse (0.8 and 2);
+            
+            \node at (0,-1.8) {\textbf{A}};
+            \node at (4,-1.8) {\textbf{B}};
+    
+            % Elementos do Conjunto A
+            \node at (-0.3, 0.9) {1};
+            \node at (-0.3, 0.3) {2};
+            \node at (-0.3, -0.3) {3};
+            \node at (-0.3, -0.9) {4};
+            
+            \fill (0.1, 0.9) circle (1.5pt) node (p1) {};
+            \fill (0.1, 0.3) circle (1.5pt) node (p2) {};
+            \fill (0.1, -0.3) circle (1.5pt) node (p3) {};
+            \fill (0.1, -0.9) circle (1.5pt) node (p4) {};
+            
+            % Elementos do Conjunto B
+            \node at (3.7, 1.1) {5};
+            \node at (3.7, 0.5) {6};
+            \node at (3.7, -0.1) {7};
+            \node at (3.7, -0.7) {8};
+            \node at (4.3, 0.3) {9};
+            \node at (4.3, -0.3) {10};
+    
+            \fill (3.4, 1.1) circle (1.5pt) node (q5) {};
+            \fill (3.4, 0.5) circle (1.5pt) node (q6) {};
+            \fill (3.4, -0.1) circle (1.5pt) node (q7) {};
+            \fill (3.4, -0.7) circle (1.5pt) node (q8) {};
+            \fill (4, 0.3) circle (1.5pt) node (q9) {};
+            \fill (4, -0.3) circle (1.5pt) node (q10) {};
+    
+            % Setas (Mapeamento)
+            \draw[->, blue!70!black] (p1) -- (q5);
+            \draw[->, blue!70!black] (p2) -- (q6);
+            \draw[->, blue!70!black] (p3) -- (q7);
+            \draw[->, blue!70!black] (p4) -- (q8);
+        \end{tikzpicture}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.50\textwidth}
+        \vspace{0pt}
+        \begin{enumerate}[label=\Alph*), leftmargin=*]
+            \item Domínio é todo o conjunto B.
+            \item Imagem é todo o conjunto A.
+            \item Imagem é o conjunto formado por $\{5, 6, 7, 8\}$.
+            \item Domínio é o conjunto formado por $\{5, 6, 7, 8\}$.
+            \item Domínio e imagem são o conjunto formado por $\{9 \text{ e } 10\}$.
+        \end{enumerate}
+    \end{minipage}
+    \end{center}
+    \item Analise os gráficos abaixo e marque \textbf{V} para verdadeiro ou \textbf{F} para falso para as classificações de cada um deles:
+    
+    \begin{center}
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{ccc}
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-0.5) -- (0,2.5) node[above] {$y$};
+            \draw[thick, blue, domain=-1.5:1.5] plot (\x, {\x*\x});
+        \end{tikzpicture} & 
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[thick, blue, domain=-1.8:1.8] plot (\x, {\x});
+        \end{tikzpicture} & 
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-0.5,0) -- (2.5,0) node[right] {$x$};
+            \draw[->] (0,-1.8) -- (0,1.8) node[above] {$y$};
+            \draw[thick, blue, domain=-1.7:1.7, samples=100] plot ({\x*\x/2}, \x);
+        \end{tikzpicture} \\
+        \small I. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular} &
+        \small II. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular} &
+        \small III. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular} \\ [2em]
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-1.8) -- (0,1.8) node[above] {$y$};
+            \draw[thick, blue, domain=-1.6:1.6, samples=50] plot (\x, {\x*\x*\x - \x});
+        \end{tikzpicture} & 
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-0.5) -- (0,2.5) node[above] {$y$};
+            \draw[thick, blue, domain=-2.2:0.8] plot (\x, {exp(\x)});
+        \end{tikzpicture} & 
+        \begin{tikzpicture}[scale=1]
+            \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+            \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+            \draw[thick, blue, domain=0:360, samples=100] plot ({1.5*cos(\x)}, {1.5*sin(\x)});
+        \end{tikzpicture} \\
+        \small IV. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular} &
+        \small V. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular} &
+        \small VI. \begin{tabular}{ll} (\quad) & Não é função \\ (\quad) & Função Injetora \\ (\quad) & Função Sobrejetora \end{tabular}
+    \end{tabular}
+    \end{center}
+\item Expanda as expressões abaixo utilizando o Teorema do Binômio de Newton ou triângulo de Pascal e simplifique os coeficientes:
+\begin{enumerate}[label=\alph*)]
+    \item $\left(1 - \dfrac{x}{2}\right)^6$
+    \item $(\text{sen}(x) + \cos(x))^2$
+\end{enumerate}
+\textit{Dica: Utilize a relação fundamental da trigonometria $\text{sen}^2(x) + \cos^2(x) = 1$. Lembre-se que essa relação permite isolar um termo em função do outro, por exemplo: $\cos^2(x) = 1 - \text{sen}^2(x)$ ou $\text{sen}^2(x) = 1 - \cos^2(x)$ (e suas formas com raiz quadrada: $\text{sen}(x) = \sqrt{1 - \cos^2(x)}$ ou $\cos(x) = \sqrt{1 - \text{sen}^2(x)}$).} \\
+\resposta{8cm}
+
+
+\item (Itame - 2024 / Prefeitura de Hidrolândia - GO) A soma dos coeficientes do binômio de Newton $(x + y)^7$ é igual a:
+\begin{enumerate}[label=\Alph*)]
+    \item 147.
+    \item 135.
+    \item 128.
+    \item 116.
+\end{enumerate}
+
+
+\item Um servidor PHP recebe 5 requisições distintas simultaneamente que precisam ser processadas de forma sequencial. De quantas maneiras diferentes o servidor pode organizar a fila de execução para processar todas as requisições?
+
+    \begin{center}
+    \begin{tikzpicture}[node distance=1.2cm, thick, scale=0.9, every node/.style={scale=0.9}]
+        % Servidor
+        \node (server) [draw, rectangle, minimum width=2.5cm, minimum height=1.2cm, fill=gray!10, rounded corners] {\textbf{Servidor PHP}};
+        
+        % Requisições
+        \node (r1) [draw, circle, left=1.5cm of server, fill=blue!5] {$R_1$};
+        \node (r2) [draw, circle, left=0.5cm of r1, fill=blue!5] {$R_2$};
+        \node (r3) [draw, circle, left=0.5cm of r2, fill=blue!5] {$R_3$};
+        \node (r4) [draw, circle, left=0.5cm of r3, fill=blue!5] {$R_4$};
+        \node (r5) [draw, circle, left=0.5cm of r4, fill=blue!5] {$R_5$};
+        
+        % Setas de fluxo
+        \draw[->] (r5) -- (r4);
+        \draw[->] (r4) -- (r3);
+        \draw[->] (r3) -- (r2);
+        \draw[->] (r2) -- (r1);
+        \node[below=0.2cm of r3] {\small \textit{Fila de requisições simultâneas}};
+    \end{tikzpicture}
+    \end{center}
+    \begin{enumerate}[label=\Alph*)]
+        \item 25
+        \item 60
+        \item 120
+        \item 240
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+% ------------------------------------------------
+% ANEXO: FORMULÁRIO INTEGRADO
+% ------------------------------------------------
+\begin{center}
+  {\Large \textbf{Formulário de Apoio}}
+\end{center}
+
+\vspace{-0.2cm}
+
+\noindent \textbf{1. Propriedades da Álgebra Booleana}
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\footnotesize
+\begin{tabular}{
+  >{\centering\arraybackslash}m{0.4cm}
+  >{\centering\arraybackslash}m{4.3cm}
+  >{\centering\arraybackslash}m{4.3cm}
+  >{\centering\arraybackslash}m{4.5cm}
+}
+\toprule
+\textbf{N°} & \textbf{Forma AND (·)} & \textbf{Forma OR (+)} & \textbf{Nome da Propriedade} \\
+\midrule
+1 & $A \cdot 0 = 0$ & $A + 1 = 1$ & Elemento Nulo \\
+\midrule
+2 & $A \cdot 1 = A$ & $A + 0 = A$ & Elemento Neutro (Identidade) \\
+\midrule
+3 & $A \cdot A = A$ & $A + A = A$ & Idempotência \\
+\midrule
+4 & $A \cdot \overline{A} = 0$ & $A + \overline{A} = 1$ & Complemento \\
+\midrule
+5 & $A \cdot B = B \cdot A$ & $A + B = B + A$ & Comutatividade \\
+\midrule
+6 & $A \cdot (B \cdot C) = (A \cdot B) \cdot C$ & $A + (B + C) = (A + B) + C$ & Associatividade \\
+\midrule
+7 & $\overline{A \cdot B \cdot C} = \overline{A} + \overline{B} + \overline{C}$ & $\overline{A + B + C} = \overline{A} \cdot \overline{B} \cdot \overline{C}$ & Teorema de De Morgan \\
+\midrule
+8 & $A \cdot (B + C) = A \cdot B + A \cdot C$ & $(A+B)\cdot(A+C) = A + B \cdot C$ & Distributividade \\
+\midrule
+9 & $A + A \cdot B = A$ & $A \cdot (A + B) = A$ & Absorção \\
+\midrule
+10 & $A + \overline{A} \cdot B = A + B$ & $A \cdot (\overline{A} + B) = A \cdot B$ & Cobertura (Absorção Complementar) \\
+\midrule
+11 & $\overline{\overline{A}} = A$ & $\overline{\overline{A}} = A$ & Dupla Negação (Involução) \\
+\midrule
+12 & $A \cdot B + \overline{A} \cdot C + B \cdot C = A \cdot B + \overline{A} \cdot C$ & $(A+B) \cdot (\overline{A}+C) \cdot (B+C) = (A+B) \cdot (\overline{A}+C)$ & Teorema do Consenso \\
+\midrule
+13 & $C \cdot A + C \cdot \overline{A} \cdot B = C \cdot A + C \cdot B$ & $(C+A)(C+\overline{A}+B) = (C+A)(C+B)$ & Simplificação por Complemento \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{multicols}{2}
+    \noindent \textbf{2. Análise Combinatória e Binômio}
+
+    
+    \textbf{Binômio:} $(a+b)^n = \sum_{k=0}^n \binom{n}{k} a^{n-k} b^k$ \\[0.15cm]
+    \textbf{Termo Geral:} $T_{k+1} = \binom{n}{k} a^{n-k} b^k$ \\[0.15cm]
+    \textbf{Permutação Simples:} $P_n = n!$ \\[0.15cm]
+    \textbf{Permutação (Rep.):} $P_n^{k_1, \dots, k_m} = \frac{n!}{k_1! \dots k_m!}$ \\[0.15cm]
+    \textbf{Arranjo Simples:} $A_{n,k} = \frac{n!}{(n-k)!}$ \\[0.15cm]
+    \textbf{Arranjo (Rep.):} $AR_{n,k} = n^k$ \\[0.15cm]
+    \textbf{Combinação Simples:} $C_{n,k} = \binom{n}{k} = \frac{n!}{k!(n-k)!}$ \\[0.15cm]
+    \textbf{Combinação (Rep.):} $CR_{n,k} = \binom{n+k-1}{k}$ \\[0.15cm]
+    \textbf{Multinômio:} $\frac{n!}{k_1! \dots k_m!} x_1^{k_1} \dots x_m^{k_m}$
+
+    \vspace{0.3cm}
+    \noindent \textbf{4. Funções e Relações}\\
+    
+    Relação ($R: A \to B$): $R \subseteq A \times B$ \\[0.1cm]
+    Função ($f: A \to B$): $\forall x \in A, \exists! y \in B \mid (x, y) \in f$ \\[0.1cm]
+    Injetora:$\forall x_1, x_2 \in A, f(x_1) = f(x_2) \implies x_1 = x_2$ \\[0.1cm]
+    Sobrejetora: $\forall y \in B, \exists x \in A \mid f(x) = y$ \\[0.1cm]
+    Bijetora: $\forall x_1, x_2 \in A, f(x_1) = f(x_2) \implies x_1 = x_2$ $\land$ $\forall y \in B, \exists x \in A \mid f(x) = y$
+
+    \columnbreak
+
+    \noindent \textbf{3. Triângulo de Pascal}
+    \begin{center}
+        \begin{tikzpicture}[x=0.42cm, y=0.38cm, font=\small,scale=1.9]
+        \node at (0,0) {1};
+        \node at (-0.5,-1) {1}; \node at (0.5,-1) {1};
+        \node at (-1,-2) {1}; \node at (0,-2) {2}; \node at (1,-2) {1};
+        \node at (-1.5,-3) {1}; \node at (-0.5,-3) {3}; \node at (0.5,-3) {3}; \node at (1.5,-3) {1};
+        \node at (-2,-4) {1}; \node at (-1,-4) {4}; \node at (0,-4) {6}; \node at (1,-4) {4}; \node at (2,-4) {1};
+        \node at (-2.5,-5) {1}; \node at (-1.5,-5) {5}; \node at (-0.5,-5) {10}; \node at (0.5,-5) {10}; \node at (1.5,-5) {5}; \node at (2.5,-5) {1};
+        \node at (-3,-6) {1}; \node at (-2,-6) {6}; \node at (-1,-6) {15}; \node at (0,-6) {20}; \node at (1,-6) {15}; \node at (2,-6) {6}; \node at (3,-6) {1};
+        \node at (-3.5,-7) {1}; \node at (-2.5,-7) {7}; \node at (-1.5,-7) {21}; \node at (-0.5,-7) {35}; \node at (0.5,-7) {35}; \node at (1.5,-7) {21}; \node at (2.5,-7) {7}; \node at (3.5,-7) {1};
+        \node at (-4,-8) {1}; \node at (-3,-8) {8}; \node at (-2,-8) {28}; \node at (-1,-8) {56}; \node at (0,-8) {70}; \node at (1,-8) {56}; \node at (2,-8) {28}; \node at (3,-8) {8}; \node at (4,-8) {1};
+        \node at (-4.5,-9) {1}; \node at (-3.5,-9) {9}; \node at (-2.5,-9) {36}; \node at (-1.5,-9) {84}; \node at (-0.5,-9) {126}; \node at (0.5,-9) {126}; \node at (1.5,-9) {84}; \node at (2.5,-9) {36}; \node at (3.5,-9) {9}; \node at (4.5,-9) {1};
+        \node at (-5,-10) {1}; \node at (-4,-10) {10}; \node at (-3,-10) {45}; \node at (-2,-10) {120}; \node at (-1,-10) {210}; \node at (0,-10) {252}; \node at (1,-10) {210}; \node at (2,-10) {120}; \node at (3,-10) {45}; \node at (4,-10) {10}; \node at (5,-10) {1};
+                    \end{tikzpicture}
+    \end{center}
+\end{multicols}
+
+\end{document}

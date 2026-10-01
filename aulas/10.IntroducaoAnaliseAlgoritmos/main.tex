@@ -1,0 +1,986 @@
+\documentclass[9pt]{beamer}
+\mode<presentation>
+
+% Theme choice:
+\usetheme{Madrid}%Darmstadt 
+
+\usecolortheme[RGB={0,100,50}]{structure}
+ \usefonttheme{structurebold} 
+\setbeamercovered{invisible}
+%\setbeamertemplate{navigation symbols}{}
+\usepackage{dynblocks}
+\usepackage{textpos}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{teorema}{Teorema}\usepackage{mathtools}
+\renewcommand{\proofname}{Prova} 
+\usepackage[portuguese]{babel}
+
+\uselanguage{Portuguese}
+\languagepath{Portuguese}
+
+\deftranslation[to=Portuguese]{Theorem}{Teorema}
+\deftranslation[to=Portuguese]{Lemma}{Lema}
+\deftranslation[to=Portuguese]{Corollary}{Corolário}
+\deftranslation[to=Portuguese]{Proof}{Prova}
+
+\usepackage{dutchcal}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsthm}
+
+\usepackage[affil-it]{authblk} 
+\usepackage{etoolbox} 
+\usepackage{lmodern}
+
+% TikZ e CircuiTikZ
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{circuitikz}
+\usetikzlibrary{arrows.meta, positioning, circuits.logic.US, calc}
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE \@title}{\fontsize{18}{19.2}\selectfont\@title}{}{}
+\makeatother
+
+\renewcommand\Authfont{\fontsize{12}{14.4}\selectfont}
+\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+
+% Title page details: 
+\title[Presentation]{Lógica para Engenharia de Software} %add title
+
+
+\institute[UniRV]{\textbf{\large  \textcolor{structure}{\textbf{\large
+Introdução à Análise de Algoritmos
+}}} %add name 
+% \hspace{0.5pt}
+\\ \qquad
+\\Professor: Me. Sergio Souza Novak 
+\\Faculdade de Engenharia de Software}
+
+% \titlegraphic{\includegraphics[width=5cm]{msu.eps}}
+\titlegraphic{\includegraphics[width=5cm]{Universidade_de_Rio_Verde.jpg}}
+\date{}
+
+% Logo only on title page
+%\logo{\includegraphics[width=1cm,keepaspectratio]{Logo.png}}
+\usepackage[pscoord]{eso-pic}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Introdução}
+
+\begin{frame}{O que é um Algoritmo?}
+    \begin{block}{Definição Informal}
+        Um \textbf{algoritmo} é qualquer procedimento computacional bem definido que toma algum valor (ou conjunto de valores) como \textbf{entrada} e produz algum valor (ou conjunto de valores) como \textbf{saída}.
+    \end{block}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item É uma sequência de etapas computacionais que transformam a entrada na saída.
+        \item Pode ser visto como uma ferramenta para resolver um problema computacional bem especificado.
+    \end{itemize}
+    \begin{center}
+        \begin{tikzpicture}[node distance=2cm, auto, >=stealth]
+            \node[draw, rounded corners, fill=blue!10] (in) {Entrada};
+            \node[draw, fill=green!20, minimum width=3cm, minimum height=1.2cm, right of=in, xshift=1cm] (alg) {ALGORITMO};
+            \node[draw, rounded corners, fill=red!10, right of=alg, xshift=1cm] (out) {Saída};
+            \draw[->, thick] (in) -- (alg);
+            \draw[->, thick] (alg) -- (out);
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{O Algoritmo como Ferramenta}
+    \begin{itemize}
+        \item O \textbf{enunciado do problema} especifica a relação desejada entre entrada e saída.
+        \item O \textbf{algoritmo} descreve o procedimento específico para alcançar essa relação.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{exampleblock}{Exemplo: Ordenação}
+        Necessidade de ordenar uma sequência de números em ordem não decrescente.
+        \begin{itemize}
+            \item \textbf{Entrada}: Uma sequência de $n$ números $\langle a_1, a_2, \dots, a_n \rangle$.
+            \item \textbf{Saída}: Uma reordenação $\langle a'_1, a'_2, \dots, a'_n \rangle$ tal que $a'_1 \leq a'_2 \leq \dots \leq a'_n$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Instâncias e Problemas}
+    \begin{block}{Instância de um Problema}
+        Consiste na entrada necessária para calcular uma solução para o problema (desde que satisfaça as restrições impostas).
+    \end{block}
+    \vspace{0.4cm}
+    \textbf{Exemplo de Instância de Ordenação}:
+    \begin{itemize}
+        \item \textbf{Entrada}: $\langle 31, 41, 59, 26, 41, 58 \rangle$
+        \item \textbf{Saída}: $\langle 26, 31, 41, 41, 58, 59 \rangle$
+    \end{itemize}
+    \vspace{0.3cm}
+    A ordenação é fundamental: muitos programas a utilizam como etapa intermediária.
+\end{frame}
+
+\begin{frame}{Fatores na Escolha de um Algoritmo}
+    Não existe um "melhor" algoritmo universal. A escolha depende de:
+    \vspace{0.3cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Número de itens a ordenar.
+                \item Grau de ordenação inicial.
+                \item Restrições aos valores.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Arquitetura do computador.
+                \item Tipo de dispositivo de armazenamento (RAM, disco, fita).
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    \vspace{0.5cm}
+    \begin{alertblock}{Análise de Algoritmos}
+        Nos ajuda a escolher a ferramenta certa para cada solo fértil de projeto.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Correção de Algoritmos}
+    \begin{block}{Algoritmo Correto}
+        Diz-se que um algoritmo é \textbf{correto} se, para toda instância de entrada, ele parar com a saída correta.
+    \end{block}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Algoritmo Incorreto}: Poderia não parar em algumas instâncias ou parar com uma resposta errada.
+        \item \textbf{Utilidade}: Algoritmos incorretos podem ser úteis se pudermos controlar sua \textit{taxa de erro} (ex: teste de primalidade para grandes números).
+    \end{itemize}
+    \vspace{0.3cm}
+    A especificação pode ser em linguagem comum, código de computador ou projeto de hardware.
+\end{frame}
+
+\begin{frame}{Aplicações Práticas (I)}
+    Os algoritmos estão por toda parte:
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item \textbf{Projeto Genoma Humano}: Identificar 100.000 genes no DNA humano e analisar 3 bilhões de pares de bases químicas.
+        \item \textbf{Internet}: Gerenciamento de grandes volumes de dados, determinação de boas rotas de transmissão e mecanismos de busca rápida.
+        \item \textbf{Comércio Eletrônico}: Criptografia de chave pública e assinaturas digitais para garantir o sigilo de senhas e cartões.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Aplicações Práticas (II)}
+    \begin{itemize}
+        \item \textbf{Alocação de Recursos}: Programação linear para maximizar lucros ou minimizar custos (ex: localização de poços de petróleo, escalas de tripulação aérea).
+        \item \textbf{Mapas e GPS}: Determinar a rota mais curta entre duas interseções em um grafo rodoviário.
+        \item \textbf{Similaridade de DNA}: Determinar a \textit{subsequência comum mais longa} entre duas sequências genéticas.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{center}
+        \textbf{Economia de tempo (humano e máquina) e dinheiro!}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Características de Problemas Algorítmicos}
+    A maioria dos problemas interessantes compartilha duas características:
+    \vspace{0.3cm}
+    \begin{enumerate}
+        \item \textbf{Escala de Soluções}: Possuem muitas soluções candidatas, mas a grande maioria não resolve o problema. Encontrar a "melhor" é o desafio.
+        \item \textbf{Utilidade Prática}: Resolvem questões reais de eficiência, segurança e logística.
+    \end{enumerate}
+    \vspace{0.4cm}
+    \begin{exampleblock}{Exemplos Avançados}
+        Ordenação Topológica, Envoltória Convexa, Transformada Rápida de Fourier (FFT).
+    \end{exampleblock}
+\end{frame}
+
+\section{Estruturas de Dados}
+
+\begin{frame}{O que é uma Estrutura de Dados?}
+    \begin{block}{Definição}
+        Uma \textbf{estrutura de dados} é um modo de armazenar e organizar dados com o objetivo de facilitar acesso e modificações.
+    \end{block}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Nenhuma estrutura única funciona bem para todas as finalidades
+        \item Conhecer pontos fortes e limitações é essencial
+        \item A escolha afeta diretamente a eficiência dos algoritmos
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Estruturas de Dados: Array (Vetor)}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.8, transform shape]
+            \tikzstyle{caixa}=[rectangle, draw, minimum width=2cm, minimum height=0.8cm, font=\small]
+            \tikzstyle{indice}=[font=\small]
+            
+            \foreach \x/\valor in {0/10, 1/25, 2/37, 3/42, 4/58, 5/89, 6/12, 7/55}
+            {
+                \node[caixa] at (\x*2.2, 0) {\valor};
+                \node[indice] at (\x*2.2, -1) {\x};
+            }
+            
+            \draw[->, thick] (0.4, -1.5) -- (1.1, -2) node[below] {Índice};
+            \draw[->, thick] (3, -0) -- (3.3, -2.5) node[below] {Valor};
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    \begin{block}{Características}
+        \begin{itemize}
+            \item Acesso direto por índice: $O(1)$
+            \item Inserção/Deleção: $O(n)$
+            \item Tamanho fixo
+            \item Memória contínua
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Estruturas de Dados: Lista Encadeada}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.75, transform shape, >=stealth]
+            \tikzstyle{no}=[rectangle, draw, minimum width=1.5cm, minimum height=1cm]
+            \tikzstyle{ptr}=[->, thick]
+            
+            \node[no] (n1) {10};
+            \node[no] (n2) [right=0.5cm of n1] {25};
+            \node[no] (n3) [right=0.5cm of n2] {37};
+            \node[no] (n4) [right=0.5cm of n3] {42};
+            
+            \draw[ptr] (n1.east) -- (n2.west);
+            \draw[ptr] (n2.east) -- (n3.west);
+            \draw[ptr] (n3.east) -- (n4.west);
+            
+            \node[draw, circle, minimum size=0.4cm] (nulo) [right=0.5cm of n4] {};
+            \draw[ptr] (n4.east) -- (nulo.west);
+            \node[right=0.2cm of nulo] {NULL};
+            
+            \node at (-1, 0.5) {HEAD};
+            \draw[->, thick] (-1, 0.5) -- (n1.west);
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.2cm}
+    \begin{block}{Características}
+        \begin{itemize}
+            \item Acesso sequencial: $O(n)$
+            \item Inserção/Deleção: $O(1)$ no início/meio
+            \item Tamanho dinâmico
+            \item Memória não contínua
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Estruturas de Dados: Árvore Binária}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.9, transform shape, >=stealth, 
+            level 1/.style={sibling distance=4cm},
+            level 2/.style={sibling distance=2cm},
+            level distance=1.5cm,
+            every node/.style={circle, draw, font=\small, minimum size=0.6cm}]
+            \node {42}
+                child { node {25}
+                    child { node {10} }
+                    child { node {37} }
+                }
+                child { node {58}
+                    child { node {55} }
+                    child { node {89} }
+                };
+        \end{tikzpicture} 
+    \end{center}
+    \vspace{0.3cm}
+    \begin{block}{Características}
+        \begin{itemize}
+            \item Busca em árvores balanceadas: $O(\log n)$
+            \item Inserção/Deleção: $O(\log n)$
+            \item Estrutura hierárquica
+            \item Uso em bancos de dados, expressões, Huffman
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\section{Análise de Busca e Complexidade}
+
+\begin{frame}{Busca em Vetor (Busca Linear)}
+    A \textbf{busca linear} (ou sequencial) é o método mais simples de encontrar um elemento em uma estrutura de dados linear.
+    \vspace{0.3cm}
+    \begin{block}{Pseudocódigo}
+        \begin{itemize}
+            \item[] \textbf{para} $i \gets 0$ \textbf{até} $n-1$ \textbf{faça}
+            \item[] \hspace{0.5cm} \textbf{se} $vetor[i] == alvo$ \textbf{então}
+            \item[] \hspace{1.0cm} \textbf{retornar} $i$ \textit{(Sucesso)}
+            \item[] \textbf{fim para}
+            \item[] \textbf{retornar} -1 \textit{(Não encontrado)}
+        \end{itemize}
+    \end{block}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.7]
+            \foreach \x/\v in {0/10, 1/25, 2/37, 3/42, 4/58}
+                \node[draw, minimum size=0.8cm, fill=blue!5] at (\x*1,0) {\v};
+            \draw[->, red, thick] (0,-0.8) -- (0,-0.4);
+            \draw[->, red, thick] (1,-0.8) -- (1,-0.4);
+            \node[below, font=\tiny] at (0.5,-0.8) {Comparando sequencialmente...};
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}{Melhor e Pior Caso na Busca em Vetor}
+    A eficiência da busca linear depende de onde o elemento está localizado.
+    \vspace{0.3cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{exampleblock}{Melhor Caso}
+                O elemento buscado está na \textbf{primeira posição}.
+                \begin{itemize}
+                    \item Apenas 1 comparação.
+                    \item Complexidade: $O(1)$.
+                \end{itemize}
+            \end{exampleblock}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{alertblock}{Pior Caso}
+                O elemento está na \textbf{última posição} ou \textbf{não existe}.
+                \begin{itemize}
+                    \item $n$ comparações.
+                    \item Complexidade: $O(n)$.
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Comparação: Crescimento Linear vs Quadrático}
+    Visualização do impacto da complexidade no tempo de execução à medida que o tamanho da entrada ($n$) cresce.
+    \vspace{0.4cm}
+    \begin{center}
+        \begin{tikzpicture}[scale=1]
+            \draw[->, thick] (0,0) -- (6,0) node[right] {$n$};
+            \draw[->, thick] (0,0) -- (0,5) node[above] {Tempo};
+            
+            % Linear: T(n) = n
+            \draw[ultra thick, blue, domain=0:4.5] plot (\x, \x) node[right] {\small $O(n)$ (Linear)};
+            
+            % Quadrático: T(n) = 0.5 * n^2
+            \draw[ultra thick, green!60!black, domain=0:3.1] plot (\x, {0.5*(\x^2)}) node[right] {\small $O(n^2)$ (Quadrático)};
+            
+            \node[font=\tiny, gray] at (3,-0.3) {Tamanho da Entrada};
+        \end{tikzpicture}
+    \end{center}
+    \begin{itemize}
+        \item \textbf{Linear}: O tempo cresce na mesma proporção que a entrada.
+        \item \textbf{Quadrático}: Se a entrada dobra ($2n$), o tempo \textbf{quadruplica} ($4 \times$).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Comparação: Crescimento Logarítmico vs Linear}
+    Visualização da alta eficiência dos algoritmos logarítmicos em comparação aos lineares.
+    \begin{center}
+        \begin{tikzpicture}[scale=0.8]
+            \draw[->, thick] (0,0) -- (6,0) node[right] {$n$};
+            \draw[->, thick] (0,0) -- (0,5) node[above] {Tempo};
+            
+            % Linear: T(n) = n
+            \draw[ultra thick, blue, domain=0:4.5] plot (\x, \x) node[right] {\small $O(n)$ (Linear)};
+            
+            % Logarítmico: T(n) = log2(n)
+            \draw[ultra thick, orange, domain=0.5:5.5, samples=100] plot (\x, {ln(\x)/ln(2)}) node[right] {\small $O(\log n)$ (Logarítmico)};
+            
+            \node[font=\tiny, gray] at (3,-0.3) {Tamanho da Entrada};
+        \end{tikzpicture}
+    \end{center}
+    \begin{itemize}
+        \item \textbf{Linear}: O esforço cresce diretamente com o número de elementos.
+        \item \textbf{Logarítmico}: O esforço cresce de forma mínima, mesmo com entradas massivas (ex: Busca Binária).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{O que é o Pior Caso de um Algoritmo?}
+    \begin{block}{Definição}
+        O \textbf{Pior Caso} representa o tempo máximo de execução de um algoritmo para qualquer entrada de tamanho $n$.
+    \end{block}
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item É a \textbf{garantia} de que o algoritmo nunca demorará mais do que aquele tempo.
+        \item É a métrica mais utilizada na prática, pois permite planejar o sistema para situações críticas.
+        \item Representado pela notação $O$ (Big-O) como um limite superior.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos de Pior Caso ($O$)}
+    Como diferentes algoritmos se comportam no seu cenário mais difícil:
+    \vspace{0.3cm}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|l}
+            \hline
+            \textbf{Algoritmo} & \textbf{Pior Caso} & \textbf{Cenário} \\
+            \hline
+            Busca Linear & $O(n)$ & Elemento no final ou ausente \\
+            Busca Binária & $O(\log n)$ & Elemento no início/fim das divisões \\
+            Bubble Sort & $O(n^2)$ & Vetor em ordem decrescente \\
+            Quick Sort & $O(n^2)$ & Pivô sempre escolhe o maior/menor \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Gráfico de Comparação de Complexidades (Big-O)}
+    Resumo visual de como as funções de custo se comportam à medida que a entrada cresce:
+    \vspace{0.1cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=0.85\textwidth,
+                height=0.65\textheight,
+                axis lines = left,
+                xlabel = {$n$ (Tamanho da Entrada)},
+                ylabel = {$T(n)$ (Custo Computacional)},
+                ymin=0, ymax=100,
+                xmin=0, xmax=15,
+                legend pos=outer north east,
+                legend style={font=\tiny, cells={anchor=west}},
+                grid=both,
+                grid style={line width=.1pt, draw=gray!10},
+                major grid style={line width=.2pt,draw=gray!20},
+                title style={font=\small},
+                xtick={0,5,10,15},
+                ytick={0,25,50,75,100},
+            ]
+                % O(1)
+                \addplot [domain=0:15, thick, gray] {1};
+                \addlegendentry{$O(1)$}
+                
+                % O(log n)
+                \addplot [domain=1:15, thick, orange, samples=100] {ln(x)/ln(2)};
+                \addlegendentry{$O(\log n)$}
+                
+                % O(n)
+                \addplot [domain=0:15, thick, blue] {x};
+                \addlegendentry{$O(n)$}
+                
+                % O(n log n)
+                \addplot [domain=1:15, thick, cyan, samples=100] {x*(ln(x)/ln(2))};
+                \addlegendentry{$O(n \log n)$}
+                
+                % O(n^2)
+                \addplot [domain=0:10, thick, green!60!black] {x^2};
+                \addlegendentry{$O(n^2)$}
+                
+                % O(2^n)
+                \addplot [domain=0:6.7, thick, red, samples=100] {2^x};
+                \addlegendentry{$O(2^n)$}
+                
+                % O(n!) - Aproximado por Gamma
+                \addplot [domain=0:4.5, thick, purple, samples=100] {sqrt(2*pi*x)*(x/e)^x};
+                \addlegendentry{$O(n!)$}
+                
+            \end{axis}
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{O que é o Melhor Caso de um Algoritmo?}
+    \begin{block}{Definição}
+        O \textbf{Melhor Caso} representa o tempo mínimo de execução de um algoritmo para uma entrada de tamanho $n$.
+    \end{block}
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item Ocorre quando a entrada é a mais favorável possível para a lógica do algoritmo.
+        \item É útil para mostrar o potencial de algoritmos otimizados que "desistem" cedo quando o trabalho está feito.
+        \item Representado pela notação $\Omega$ (Ômega) como um limite inferior.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemplos de Melhor Caso ($\Omega$)}
+    O comportamento quando a entrada é ideal:
+    \vspace{0.3cm}
+    \begin{table}
+        \centering
+        \begin{tabular}{l|c|l}
+            \hline
+            \textbf{Algoritmo} & \textbf{Melhor Caso} & \textbf{Cenário} \\
+            \hline
+            Busca Linear & $\Omega(1)$ & Elemento na 1ª posição \\
+            Busca Binária & $\Omega(1)$ & Elemento no meio exato (1ª tentativa) \\
+            Insertion Sort & $\Omega(n)$ & Vetor já ordenado \\
+            Merge Sort & $\Omega(n \log n)$ & Sempre divide e conquista \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Pseudocódigo da Busca Linear}
+    Apresentação do algoritmo no formato clássico para análise:
+    \vspace{0.1cm}
+    \begin{center}
+        \begin{tikzpicture}[scale=1, transform shape]
+            \node[left] at (0.3, 0) {\textbf{A:}};
+            \foreach \x/\v in {1/31, 2/41, 3/59, 4/26, 5/41} {
+                \node[draw, minimum width=0.9cm, minimum height=0.6cm] at (\x*0.9, 0) {\v};
+                \node[font=\tiny, gray] at (\x*0.9, 0.5) {\x};
+            }
+        \end{tikzpicture}
+    \end{center}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{BUSCA-LINEAR($A, v$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{cl}
+                        \hline
+                        & \textbf{instrução} \\
+                        \hline
+                        1 & \textbf{for} $i = 1$ \textbf{to} $A.length$ \\
+                        2 & \quad \textbf{if} $A[i] == v$ \\
+                        3 & \quad \quad \textbf{return} $i$ \\
+                        4 & \textbf{return} NIL \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Cálculo do Custo Computacional}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.6, transform shape]
+            \node[left] at (0.3, 0) {\textbf{A:}};
+            \foreach \x/\v in {1/31, 2/41, 3/59, 4/26, 5/41} {
+                \node[draw, minimum width=0.9cm, minimum height=0.6cm] at (\x*0.9, 0) {\v};
+                \node[font=\tiny, gray] at (\x*0.9, 0.5) {\x};
+            }
+        \end{tikzpicture}
+    \end{center}
+    Para analisar um algoritmo, atribuímos um custo $c_i$ a cada linha:
+    \vspace{0.2cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{BUSCA-LINEAR($A, v$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{clcc}
+                        & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+                        \hline
+                        1 & \textbf{for} $i = 1$ \textbf{to} $A.length$ & $c_1$ & $n+1$ \\
+                        2 & \quad \textbf{if} $A[i] == v$ & $c_2$ & $n$ \\
+                        3 & \quad \quad \textbf{return} $i$ & $c_3$ & $0 \text{ ou } 1$ \\
+                        4 & \textbf{return} NIL & $c_4$ & $1$ \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.3cm}
+    O tempo total $T(n)$ é a soma dos produtos (Custo $\times$ Vezes):
+    \[ T(n) = c_1(n+1) + c_2(n) + c_3(0 \text{ ou } 1) + c_4(1) \]
+\end{frame}
+
+\begin{frame}{A Função de Tempo $T(n)$}
+    No cenário onde o elemento \textbf{não é encontrado} (Pior Caso):
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item A linha 1 executa $n+1$ vezes.
+        \item A linha 2 executa $n$ vezes.
+        \item A linha 3 nunca executa ($0$).
+        \item A linha 4 executa $1$ vez.
+    \end{itemize}
+    \begin{block}{Equação do Tempo}
+        $T(n) = c_1(n+1) + c_2(n) + c_4$ \\
+        $T(n) = (c_1 + c_2)n + (c_1 + c_4)$
+    \end{block}
+    \vspace{0.2cm}
+    Observe que $T(n)$ é uma \textbf{função linear} da forma $f(n) = an + b$.
+\end{frame}
+
+\begin{frame}{Análise do Pior Caso}
+    Ao analisar o custo em larga escala, focamos no termo de \textbf{maior crescimento}:
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item Em $T(n) = (c_1 + c_2)n + (c_1 + c_4)$, o termo dominante é $n$.
+        \item As constantes ($c_1, c_2, c_4$) dependem do hardware e compilador, por isso as ignoramos.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{alertblock}{Conclusão}
+        Dizemos que a complexidade de tempo no pior caso para a busca linear é \textbf{proporcional a $n$}.
+        \[ T(n) \in O(n) \]
+    \end{alertblock}
+\end{frame}
+
+\section{Análise de Algoritmo Quadrático}
+
+\begin{frame}{Pseudocódigo: Insertion Sort}
+    O \textbf{Insertion Sort} (Ordenação por Inserção) é um exemplo clássico de algoritmo com custo quadrático.
+    \vspace{0.1cm}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.7, transform shape]
+            \node[left] at (0.3, 0) {\textbf{A:}};
+            \foreach \x/\v in {1/5, 2/2, 3/4, 4/6, 5/1, 6/3} {
+                \node[draw, minimum width=0.8cm, minimum height=0.6cm] at (\x*0.8, 0) {\v};
+                \node[font=\tiny, gray] at (\x*0.8, 0.5) {\x};
+            }
+        \end{tikzpicture}
+    \end{center}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{INSERTION-SORT($A$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{cl}
+                        \hline
+                        & \textbf{instrução} \\
+                        \hline
+                        1 & \textbf{for} $j = 2$ \textbf{to} $A.length$ \\
+                        2 & \quad $key = A[j]$ \\
+                        3 & \quad \textit{// Insere $A[j]$ na sequência ordenada $A[1 \dots j-1]$} \\
+                        4 & \quad $i = j - 1$ \\
+                        5 & \quad \textbf{while} $i > 0$ \textbf{and} $A[i] > key$ \\
+                        6 & \quad \quad $A[i+1] = A[i]$ \\
+                        7 & \quad \quad $i = i - 1$ \\
+                        8 & \quad $A[i+1] = key$ \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Análise de Custo (Pior Caso)}
+    No pior caso (vetor em ordem decrescente), o laço \textbf{while} executa o máximo de vezes.
+    \vspace{0.2cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=8pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \centering
+                    \small
+                    \begin{tabular}{clcc}
+                        \hline
+                        & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+                        \hline
+                        1 & \textbf{for} $j = 2$ \textbf{to} $n$ & $c_1$ & $n$ \\
+                        2 & \quad $key = A[j]$ & $c_2$ & $n-1$ \\
+                        4 & \quad $i = j - 1$ & $c_4$ & $n-1$ \\
+                        5 & \quad \textbf{while} $i > 0$ \textbf{and} $A[i] > key$ & $c_5$ & $\sum_{j=2}^n j$ \\
+                        6 & \quad \quad $A[i+1] = A[i]$ & $c_6$ & $\sum_{j=2}^n (j-1)$ \\
+                        8 & \quad $A[i+1] = key$ & $c_8$ & $n-1$ \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.1cm}
+    No pior caso, temos: $\sum_{j=2}^n j = \frac{n^2+n}{2}-1$ e $\sum_{j=2}^n (j-1) = \frac{n^2-n}{2}$.
+    \begin{block}{Cálculo de $T(n)$}
+        \small
+        $T(n) = c_1 n + c_2(n-1) + c_4(n-1) + c_5(\frac{n^2+n}{2}-1) + c_6(\frac{n^2-n}{2}) + c_8(n-1)$ \\
+        $T(n) = \left( \frac{c_5+c_6}{2} \right)n^2 + \left( c_1+c_2+c_4+\frac{c_5-c_6}{2}+c_8 \right)n - (c_2+c_4+c_5+c_8)$
+    \end{block}
+\end{frame}
+
+\begin{frame}{Conclusão: Complexidade Quadrática}
+    Ao somar todos os custos, obtemos uma função polinomial de grau 2:
+    \vspace{0.4cm}
+    \begin{block}{Função de Tempo}
+        \[ T(n) = an^2 + bn + c \]
+    \end{block}
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item O termo dominante é $n^2$.
+        \item Para valores grandes de $n$, os termos $n$ e constantes tornam-se insignificantes.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{alertblock}{Complexidade Final}
+        Dizemos que o \textit{Insertion Sort} possui complexidade de pior caso:
+        \[ T(n) \in O(n^2) \]
+    \end{alertblock}
+\end{frame}
+
+\section{Análise de Algoritmo Logarítmico}
+
+\begin{frame}{Pseudocódigo: Busca Binária}
+    A \textbf{Busca Binária} é o exemplo fundamental de eficiência logarítmica, aplicável em vetores \textbf{ordenados}.
+    \vspace{0.1cm}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.7, transform shape]
+            \node[left] at (0.3, 0) {\textbf{A:}};
+            \foreach \x/\v in {1/10, 2/25, 3/37, 4/42, 5/55, 6/58, 7/89} {
+                \node[draw, minimum width=0.8cm, minimum height=0.6cm] at (\x*0.8, 0) {\v};
+                \node[font=\tiny, gray] at (\x*0.8, 0.5) {\x};
+            }
+        \end{tikzpicture}
+    \end{center}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{BUSCA-BINARIA($A, v, p, r$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{cl}
+                        \hline
+                        & \textbf{instrução} \\
+                        \hline
+                        1 & \textbf{while} $p \leq r$ \\
+                        2 & \quad $q = \lfloor (p+r)/2 \rfloor$ \\
+                        3 & \quad \textbf{if} $A[q] == v$ \textbf{return} $q$ \\
+                        4 & \quad \textbf{else if} $A[q] < v$ \\
+                        5 & \quad \quad $p = q + 1$ \\
+                        6 & \quad \textbf{else} $r = q - 1$ \\
+                        7 & \textbf{return} NIL \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Análise de Custo (Logarítmica)}
+    Diferente da busca linear, a cada iteração o "espaço de busca" é reduzido pela \textbf{metade}.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Iteração 0}: tamanho do vetor é $n$.
+        \item \textbf{Iteração 1}: tamanho do vetor é $n/2$.
+        \item \textbf{Iteração 2}: tamanho do vetor é $n/4$ (ou $n/2^2$).
+        \item \textbf{Iteração $k$}: tamanho do vetor é $n/2^k$.
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{block}{Quando o algoritmo para?}
+        No pior caso, a busca continua até que o espaço de busca seja 1:
+        \[ \frac{n}{2^k} = 1 \implies 2^k = n \implies k = \log_2 n \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Conclusão: Complexidade Logarítmica}
+    O número de comparações cresce de forma extremamente lenta em relação ao tamanho da entrada $n$.
+    \vspace{0.4cm}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{c|c}
+            \hline
+            \textbf{Tamanho $n$} & \textbf{Comparações ($\approx \log_2 n$)} \\
+            \hline
+            10 & 4 \\
+            1.000 & 10 \\
+            1.000.000 & 20 \\
+            1.000.000.000 & 30 \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \vspace{0.4cm}
+    \begin{alertblock}{Complexidade de Pior Caso}
+        Dizemos que a busca binária possui complexidade:
+        \[ T(n) \in O(\log n) \]
+    \end{alertblock}
+\end{frame}
+
+\section{Análise de Algoritmo Exponencial}
+
+\begin{frame}{Pseudocódigo: Fibonacci Recursivo}
+    O cálculo recursivo da sequência de Fibonacci é um exemplo clássico de algoritmo com custo \textbf{exponencial}.
+    \vspace{0.3cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{FIBONACCI($n$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{cl}
+                        \hline
+                        & \textbf{instrução} \\
+                        \hline
+                        1 & \textbf{if} $n \leq 1$ \\
+                        2 & \quad \textbf{return} $n$ \\
+                        3 & \textbf{else} \\
+                        4 & \quad \textbf{return} FIBONACCI($n-1$) + FIBONACCI($n-2$) \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Cálculo do Custo (Fibonacci)}
+    Para algoritmos recursivos, o custo é expresso através de uma \textbf{Equação de Recorrência}.
+    \vspace{0.2cm}
+    \begin{block}{Análise de Instruções}
+        \centering
+        \small
+        \begin{tabular}{clcc}
+            \hline
+            & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+            \hline
+            1 & \textbf{if} $n \leq 1$ & $c_1$ & 1 \\
+            2 & \quad \textbf{return} $n$ & $c_2$ & $0 \text{ ou } 1$ \\
+            4 & \quad \textbf{return} FIB($n-1$) + FIB($n-2$) & $c_3$ & $T(n-1) + T(n-2)$ \\
+            \hline
+        \end{tabular}
+    \end{block}
+    \vspace{0.1cm}
+    Para analisar o crescimento, usamos a substituição simplificada:
+    \begin{block}{Expansão da Recorrência}
+        \small
+        Como $T(n-1) > T(n-2)$, podemos dizer que $T(n) \approx 2 \cdot T(n-1)$:
+        \begin{itemize}
+            \item $T(n) = 2 \cdot T(n-1) + c$
+            \item $T(n) = 2 \cdot (2 \cdot T(n-2) + c) + c = 2^2 T(n-2) + 3c$
+            \item $T(n) = 2^3 T(n-3) + 7c$
+            \item \dots
+            \item $T(n) = 2^n T(0) + (2^n - 1)c$
+        \end{itemize}
+    \end{block}
+    \vspace{0.1cm}
+    Isso prova que o custo total é \textbf{proporcional a $2^n$}.
+\end{frame}
+
+\begin{frame}{Análise de Custo (Exponencial)}
+    A cada chamada da função, o algoritmo gera outras \textbf{duas chamadas} recursivas, criando uma árvore de execução.
+    \vspace{0.2cm}
+    \begin{center}
+        \begin{tikzpicture}[scale=0.6, every node/.style={circle, draw, font=\tiny}, level distance=1cm, sibling distance=2.5cm]
+            \node {F(4)}
+                child { node {F(3)} 
+                    child { node {F(2)} child {node {F(1)}} child {node {F(0)}} }
+                    child { node {F(1)} }
+                }
+                child { node {F(2)}
+                    child { node {F(1)} }
+                    child { node {F(0)} }
+                };
+        \end{tikzpicture}
+    \end{center}
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item A árvore de chamadas cresce em largura à medida que aumenta a profundidade $n$.
+        \item O número total de operações dobra aproximadamente a cada incremento em $n$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusão: Complexidade Exponencial}
+    Algoritmos exponenciais são considerados \textbf{inviáveis} para entradas de tamanho médio ou grande.
+    \vspace{0.4cm}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{c|c}
+            \hline
+            \textbf{Tamanho $n$} & \textbf{Operações ($\approx 2^n$)} \\
+            \hline
+            10 & 1.024 \\
+            20 & $\approx$ 1 milhão \\
+            40 & $\approx$ 1 trilhão \\
+            100 & Mais que átomos no universo \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \vspace{0.4cm}
+    \begin{alertblock}{Complexidade de Pior Caso}
+        Dizemos que o Fibonacci recursivo possui complexidade:
+        \[ T(n) \in O(2^n) \]
+    \end{alertblock}
+\end{frame}
+
+\section{Análise de Força Bruta (Custo Fatorial)}
+
+\section{Análise de Força Bruta (Custo Fatorial)}
+
+\begin{frame}{Segurança: Teste de Força Bruta (Brute Force)}
+    Em segurança de software, um ataque de \textbf{força bruta} tenta todas as combinações possíveis para encontrar uma chave ou senha secreta.
+    \vspace{0.2cm}
+    \begin{exampleblock}{Exemplo: Senha com $\{A, B, C\}$ ($n=3$)}
+        \centering
+        \begin{tikzpicture}[scale=0.8, every node/.style={draw, rounded corners, fill=blue!10, font=\tiny}]
+            \node (start) at (0,2) {Início};
+            \node (p1) at (2,3.5) {ABC}; \node (p2) at (2,2.9) {ACB};
+            \node (p3) at (2,2.3) {BAC}; \node (p4) at (2,1.7) {BCA};
+            \node (p5) at (2,1.1) {CAB}; \node (p6) at (2,0.5) {CBA};
+            \foreach \i in {1,...,6} \draw[->] (start) -- (p\i);
+            \node[draw=none, fill=none, right] at (3, 2) {\textbf{3! = 6 combinações}};
+        \end{tikzpicture}
+    \end{exampleblock}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=10pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \flushleft
+                    \textbf{QUEBRA-SENHA($S, n$)} \\[0.2cm]
+                    \small
+                    \begin{tabular}{cl}
+                        \hline
+                        1 & \textbf{para cada} permutação $P$ de $S$: \\
+                        2 & \quad \textbf{se} TentaLogin($P$) == SUCESSO: \\
+                        3 & \quad \quad \textbf{return} $P$ \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Cálculo do Custo Computacional}
+    Para analisar o custo, atribuímos $c_i$ a cada linha e contamos as execuções no \textbf{pior caso}.
+    \vspace{0.1cm}
+    \begin{center}
+        \begin{tikzpicture}
+            \node[draw=black, fill=white, thick, inner sep=8pt, rounded corners=0pt] (box){
+                \begin{minipage}{0.85\textwidth}
+                    \centering
+                    \small
+                    \begin{tabular}{clcc}
+                        \hline
+                        & \textbf{instrução} & \textbf{custo} & \textbf{vezes} \\
+                        \hline
+                        1 & \textbf{para cada} permutação $P$ & $c_1$ & $n!$ \\
+                        2 & \quad \textbf{se} TentaLogin($P$) & $c_2$ & $n!$ \\
+                        3 & \quad \quad \textbf{return} $P$ & $c_3$ & 1 \\
+                        \hline
+                    \end{tabular}
+                \end{minipage}
+            };
+        \end{tikzpicture}
+    \end{center}
+    \begin{block}{Custo Total $T(n)$}
+        No pior caso (senha é a última permutação testada):
+        \[ T(n) = c_1(n!) + c_2(n!) + c_3(1) \implies O(n!) \]
+    \end{block}
+
+\end{frame}
+
+\begin{frame}{Análise do Pior Caso ($O(n!)$)}
+    O crescimento fatorial é o mais agressivo de todos. Pequenos aumentos em $n$ tornam o sistema \textbf{impenetrável}.
+    \vspace{0.2cm}
+    \begin{itemize}
+        \item \textbf{Cenário $n=10$}: $3.628.800$ tentativas. (Segundos)
+        \item \textbf{Cenário $n=13$}: $6.227.020.800$ tentativas. (Horas)
+        \item \textbf{Cenário $n=20$}: $2,4 \times 10^{18}$ tentativas. (\textbf{Séculos})
+    \end{itemize}
+    \vspace{0.3cm}
+    \begin{alertblock}{Conclusão de Engenharia}
+        Quanto maior o número de caracteres ($n$) em uma senha sem repetição, maior a barreira contra ataques de força bruta, devido à natureza do $O(n!)$.
+    \end{alertblock}
+    \begin{center}
+        \textit{A segurança moderna depende da inviabilidade computacional de testar todas as chaves.}
+    \end{center}
+\end{frame}
+
+\end{document}
